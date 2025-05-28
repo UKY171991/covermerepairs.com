@@ -35,10 +35,10 @@
 
             <div class="container mt-4">
                 <div class="text-center">
-                    <h2><?=$branch[0]->name?></h2>
-                    <p>Phone: <?=$branch[0]->phone?></p>
+                    <h2><?=!empty($branch) ? $branch[0]->name : ''?></h2>
+                    <p>Phone: <?=!empty($branch) ? $branch[0]->phone : ''?></p>
                     <p>Email: barnch1@gmail.com</p>
-                    <p>Address: <?=$branch[0]->address?></p>
+                    <p>Address: <?=!empty($branch) ? $branch[0]->address : ''?></p>
                     <!-- <p>Website: <a href="#">mobilemonk.co.nz</a></p> -->
                     <h4 class="mt-3">REPAIR FORM</h4>
                 </div>
@@ -46,15 +46,15 @@
                 <div class="row mt-1">
                   <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"><p><strong>Date:</strong> <?=date('d M Y h:i:s A')?></p></div>
                   <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"></div>
-                  <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"><p><strong>Job ID:</strong> <?=$jobs[0]->id?></p></div>
+                  <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"><p><strong>Job ID:</strong> <?=!empty($jobs) ? $jobs[0]->id : ''?></p></div>
                 </div>
                 <hr>
                 
                 <h5><strong>Customer Details:</strong></h5>
                 <div class="row mt-1">
-                  <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"><p><strong>Name:</strong> <?=$jobs[0]->customer_name?></p></div>
-                  <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"><p><strong>Email Address:</strong> <?=$jobs[0]->email?></p></div>
-                  <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"><p><strong>Contact Number:</strong> <?=$jobs[0]->mobile?></p></div>
+                  <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"><p><strong>Name:</strong> <?=!empty($jobs) ? $jobs[0]->customer_name : ''?></p></div>
+                  <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"><p><strong>Email Address:</strong> <?=!empty($jobs) ? $jobs[0]->email : ''?></p></div>
+                  <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"><p><strong>Contact Number:</strong> <?=!empty($jobs) ? $jobs[0]->mobile : ''?></p></div>
                 </div>
                 <hr>
 
@@ -62,7 +62,7 @@
 
                 <h5><strong>Device Information:</strong></h5>
                 <div class="row mt-1">
-                  <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"><p><strong>Make & Model:</strong> <?=$brand[0]->name?> <?=$model[0]->name?></p></div>
+                  <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"><p><strong>Make & Model:</strong> <?=!empty($brand) ? $brand[0]->name : ''?> <?=!empty($model) ? $model[0]->name : ''?></p></div>
                   <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"><p><strong>Security Code:</strong> asdsaSdasd</p></div>
                   <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"><p><strong>IMEI or S/N:</strong> fdq3dq3wd</p></div>
                   <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"><p><strong>Fault Description:</strong> sasdasdas</p></div>
@@ -98,7 +98,7 @@
                 <div class="row border p-3 mt-4">
                     <div class="col-md-6">
                         <h5>Terms & Conditions:</h5>
-                        <p>During the repair process, your device’s data, applications, or personal information may be lost. A full backup is recommended.</p>
+                        <p>During the repair process, your device's data, applications, or personal information may be lost. A full backup is recommended.</p>
                         <p>Repair time estimates are provided at booking but may vary.</p>
                         <p>We take responsibility for any unexpected damage during repair.</p>
                         <p>Third-party parts may be used if originals are unavailable.</p>
