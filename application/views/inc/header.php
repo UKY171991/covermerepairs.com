@@ -135,12 +135,6 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="<?=base_url('technicians')?>" class="nav-link <?= $uri == 'technicians' ? 'active' : '' ?>">
-              <i class="nav-icon fas fa-user-cog"></i>
-              <p>Technicians</p>
-            </a>
-          </li>
-          <li class="nav-item">
             <a href="<?=base_url('branches')?>" class="nav-link <?= $uri == 'branches' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-code-branch"></i>
               <p>Branches</p>
