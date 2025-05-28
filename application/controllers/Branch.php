@@ -149,11 +149,31 @@ class Branch extends CI_Controller {
 				$depname = $user_type[0]->name;
 			}
 
+			// Added By name
+			$added_by_name = '';
+			if (!empty($all_datas->added_by)) {
+				$added_by = $this->user->single_data('user', $all_datas->added_by);
+				if (!empty($added_by) && isset($added_by[0]->name)) {
+					$added_by_name = $added_by[0]->name;
+				}
+			}
+
+			// Profile Picture (assuming a 'profile_pic' field, adjust if needed)
+			$profile_pic = '';
+			if (!empty($all_datas->profile_pic)) {
+				$profile_pic = '<img src="'.base_url('uploads/profile/'.$all_datas->profile_pic).'" alt="Profile" width="40" height="40" style="object-fit:cover;border-radius:50%;">';
+			}
+
 			$row[] =  $i++;
 			$row[] =  $all_datas->name;
 			$row[] =  $all_datas->username;
 			$row[] =  $all_datas->email;
 			$row[] =  $all_datas->phone;
+			$row[] =  $all_datas->dob;
+			$row[] =  $all_datas->address;
+			$row[] =  $added_by_name;
+			$row[] =  $depname;
+			$row[] =  $profile_pic;
 			$row[] =  $action;
 			$data[] = $row;
 		}

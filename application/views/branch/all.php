@@ -41,6 +41,11 @@
                     <th>Username</th>
                     <th>Email</th>
                     <th>Phone</th>
+                    <th>DOB</th>
+                    <th>Address</th>
+                    <th>Added By</th>
+                    <th>User Type</th>
+                    <th>Profile Picture</th>
                     <th>Action</th>
                   </tr>
                   </thead>
@@ -54,6 +59,11 @@
                     <th>Username</th>
                     <th>Email</th>
                     <th>Phone</th>
+                    <th>DOB</th>
+                    <th>Address</th>
+                    <th>Added By</th>
+                    <th>User Type</th>
+                    <th>Profile Picture</th>
                     <th>Action</th>
                   </tr>
                   </tfoot>
