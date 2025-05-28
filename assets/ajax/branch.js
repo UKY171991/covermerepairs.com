@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
   all_data();
  });
@@ -32,7 +31,11 @@ $(document).ready(function() {
             { data: 3 },
             { data: 4 },
             { data: 5 },
-            // Add more columns as needed
+            { data: 6 },
+            { data: 7 },
+            { data: 8 },
+            { data: 9 },
+            { data: 10 }
         ],
     });
 
