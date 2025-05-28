@@ -188,7 +188,7 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a href="<?=base_url('part_order')?>" class="nav-link <?= $uri == 'part_order' ? 'active' : '' ?>">
+            <a href="<?=base_url('part/order')?>" class="nav-link <?= $uri == 'part' && $this->uri->segment(2) == 'order' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-shopping-cart"></i>
               <p>Part order</p>
             </a>
