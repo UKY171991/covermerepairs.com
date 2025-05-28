@@ -4,6 +4,13 @@
   .main-footer {
     display: none;
   }
+  .pdf-header { text-align: center; font-weight: bold; font-size: 18px; }
+  .pdf-subheader { text-align: center; font-size: 14px; }
+  .section-title { font-weight: bold; margin-top: 20px; }
+  .info-table, .device-table, .condition-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+  .info-table td, .device-table td, .condition-table td { border: 1px solid #ccc; padding: 4px; }
+  .signature-box { height: 40px; border-bottom: 1px solid #000; width: 200px; display: inline-block; margin-right: 40px; }
+  .small-text { font-size: 12px; }
 </style>
 
 <div class="content-wrapper">
