@@ -103,6 +103,12 @@
   </nav>
   <!-- /.navbar -->
 
+  <?php if ($this->uri->segment(1) == 'branches' && $this->session->userdata('user_type') == '4'): ?>
+    <div class="alert alert-info text-center m-0" style="border-radius:0;">
+      <strong>User type:</strong> Branch
+    </div>
+  <?php endif; ?>
+
   <?php $uri = $this->uri->segment(1); ?>
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
