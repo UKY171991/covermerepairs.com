@@ -584,4 +584,12 @@ class Part extends CI_Controller {
 		$all_data = $this->part->single_data('part_type',$id);
 		echo json_encode($all_data);
 	}
+
+	public function order() {
+		$data = [];
+		$data['ajax'] = 'order';
+		$this->load->view('inc/header');
+		$this->load->view('part/order', $data);
+		$this->load->view('inc/footer');
+	}
 }
