@@ -147,7 +147,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="<?=base_url('part_control')?>" class="nav-link <?= $uri == 'part_control' ? 'active' : '' ?>">
+            <a href="<?=base_url('part_corntroller')?>" class="nav-link <?= $uri == 'part_corntroller' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-cogs"></i>
               <p>Part control</p>
             </a>
