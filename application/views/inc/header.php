@@ -103,6 +103,7 @@
   </nav>
   <!-- /.navbar -->
 
+  <?php $uri = $this->uri->segment(1); ?>
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
@@ -116,67 +117,67 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">
-            <a href="<?=base_url()?>" class="nav-link">
+            <a href="<?=base_url()?>" class="nav-link <?= $uri == '' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>Dashboard</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="<?=base_url('technicians')?>" class="nav-link">
+            <a href="<?=base_url('technicians')?>" class="nav-link <?= $uri == 'technicians' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-user-cog"></i>
               <p>Technicians</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="<?=base_url('staff')?>" class="nav-link">
+            <a href="<?=base_url('staff')?>" class="nav-link <?= $uri == 'staff' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-users"></i>
               <p>Staff</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="<?=base_url('technicians')?>" class="nav-link">
+            <a href="<?=base_url('technicians')?>" class="nav-link <?= $uri == 'technicians' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-user-cog"></i>
               <p>Technicians</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="<?=base_url('branches')?>" class="nav-link">
+            <a href="<?=base_url('branches')?>" class="nav-link <?= $uri == 'branches' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-code-branch"></i>
               <p>Branches</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="<?=base_url('part_control')?>" class="nav-link">
+            <a href="<?=base_url('part_control')?>" class="nav-link <?= $uri == 'part_control' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-cogs"></i>
               <p>Part control</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="<?=base_url('part')?>" class="nav-link">
+            <a href="<?=base_url('part')?>" class="nav-link <?= $uri == 'part' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-cube"></i>
               <p>Part</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="<?=base_url('part_order')?>" class="nav-link">
+            <a href="<?=base_url('part_order')?>" class="nav-link <?= $uri == 'part_order' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-shopping-cart"></i>
               <p>Part order</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="<?=base_url('job')?>" class="nav-link">
+            <a href="<?=base_url('job')?>" class="nav-link <?= $uri == 'job' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-briefcase"></i>
               <p>Job</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="<?=base_url('stock_in')?>" class="nav-link">
+            <a href="<?=base_url('stock_in')?>" class="nav-link <?= $uri == 'stock_in' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-arrow-down"></i>
               <p>Stock in</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="<?=base_url('stock_out')?>" class="nav-link">
+            <a href="<?=base_url('stock_out')?>" class="nav-link <?= $uri == 'stock_out' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-arrow-up"></i>
               <p>Stock out</p>
             </a>
