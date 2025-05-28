@@ -4,13 +4,22 @@
   .main-footer {
     display: none;
   }
-  .pdf-header { text-align: center; font-weight: bold; font-size: 18px; }
-  .pdf-subheader { text-align: center; font-size: 14px; }
-  .section-title { font-weight: bold; margin-top: 20px; }
-  .info-table, .device-table, .condition-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
-  .info-table td, .device-table td, .condition-table td { border: 1px solid #ccc; padding: 4px; }
-  .signature-box { height: 40px; border-bottom: 1px solid #000; width: 200px; display: inline-block; margin-right: 40px; }
+  .pdf-header-table { width: 100%; border-collapse: collapse; margin-bottom: 0; }
+  .pdf-header-table td { vertical-align: top; }
+  .logo-cell { width: 120px; }
+  .center-cell { text-align: center; font-size: 16px; font-weight: bold; }
+  .right-cell { text-align: right; font-size: 13px; }
+  .form-title { text-align: center; font-size: 18px; font-weight: bold; margin: 10px 0; }
+  .meta-table, .info-table, .fault-table, .device-table, .condition-table, .signature-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+  .meta-table td, .info-table td, .fault-table td, .device-table td, .condition-table td, .signature-table td { border: 1px solid #000; padding: 4px; font-size: 13px; }
+  .meta-table th, .info-table th, .fault-table th { border: 1px solid #000; padding: 4px; font-size: 13px; background: #f5f5f5; }
+  .section-title { font-weight: bold; margin-top: 18px; font-size: 15px; }
   .small-text { font-size: 12px; }
+  .bullet-list { margin: 0 0 0 18px; padding: 0; }
+  .bullet-list li { margin-bottom: 4px; }
+  .signature-line { border-bottom: 1px solid #000; width: 180px; display: inline-block; margin-bottom: 2px; }
+  .signature-table td { border: none; font-size: 13px; }
+  .no-border { border: none !important; }
 </style>
 
 <div class="content-wrapper">
