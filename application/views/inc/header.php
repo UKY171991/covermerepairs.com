@@ -141,7 +141,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="<?=base_url('branches')?>" class="nav-link <?= $uri == 'branches' ? 'active' : '' ?>">
+            <a href="<?=base_url('branch')?>" class="nav-link <?= $uri == 'branch' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-code-branch"></i>
               <p>Branches</p>
             </a>
