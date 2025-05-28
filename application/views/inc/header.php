@@ -104,24 +104,94 @@
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar" style="background: #ff6f2c; color: #fff; width: 240px; position: fixed; height: 100vh;">
-    <div class="sidebar-header" style="padding: 20px 0; font-size: 22px; font-weight: bold; text-align: center; background: #ff6f2c; letter-spacing: 2px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-      <span class="sidebar-title">DOUBLE</span>
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="<?=base_url()?>" class="brand-link">
+      <img src="<?= base_url();?>assets/dist/img/new_logo.jpg" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light">DOUBLE</span>
+    </a>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-item">
+            <a href="<?=base_url()?>" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?=base_url('technicians')?>" class="nav-link">
+              <i class="nav-icon fas fa-user-cog"></i>
+              <p>Technicians</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?=base_url('staff')?>" class="nav-link">
+              <i class="nav-icon fas fa-users"></i>
+              <p>Staff</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?=base_url('technicians')?>" class="nav-link">
+              <i class="nav-icon fas fa-user-cog"></i>
+              <p>Technicians</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?=base_url('branches')?>" class="nav-link">
+              <i class="nav-icon fas fa-code-branch"></i>
+              <p>Branches</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?=base_url('part_control')?>" class="nav-link">
+              <i class="nav-icon fas fa-cogs"></i>
+              <p>Part control</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?=base_url('part')?>" class="nav-link">
+              <i class="nav-icon fas fa-cube"></i>
+              <p>Part</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?=base_url('part_order')?>" class="nav-link">
+              <i class="nav-icon fas fa-shopping-cart"></i>
+              <p>Part order</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?=base_url('job')?>" class="nav-link">
+              <i class="nav-icon fas fa-briefcase"></i>
+              <p>Job</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?=base_url('stock_in')?>" class="nav-link">
+              <i class="nav-icon fas fa-arrow-down"></i>
+              <p>Stock in</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?=base_url('stock_out')?>" class="nav-link">
+              <i class="nav-icon fas fa-arrow-up"></i>
+              <p>Stock out</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="<?=base_url('login/logout')?>" class="nav-link">
+              <i class="nav-icon fas fa-sign-out-alt"></i>
+              <p>Log out</p>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
     </div>
-    <ul class="sidebar-menu" style="list-style: none; padding: 0; margin: 0;">
-      <li><a href="<?=base_url()?>" style="display: flex; align-items: center; color: #fff; text-decoration: none; padding: 15px 25px; font-size: 16px;"><i class="fa fa-tachometer-alt" style="margin-right: 12px; font-size: 18px; width: 22px; text-align: center;"></i> Dashboard</a></li>
-      <li><a href="<?=base_url('technicians')?>" style="display: flex; align-items: center; color: #fff; text-decoration: none; padding: 15px 25px; font-size: 16px;"><i class="fa fa-user-cog" style="margin-right: 12px; font-size: 18px; width: 22px; text-align: center;"></i> Technicians</a></li>
-      <li><a href="<?=base_url('staff')?>" style="display: flex; align-items: center; color: #fff; text-decoration: none; padding: 15px 25px; font-size: 16px;"><i class="fa fa-users" style="margin-right: 12px; font-size: 18px; width: 22px; text-align: center;"></i> Staff</a></li>
-      <li><a href="<?=base_url('technicians')?>" style="display: flex; align-items: center; color: #fff; text-decoration: none; padding: 15px 25px; font-size: 16px;"><i class="fa fa-user-cog" style="margin-right: 12px; font-size: 18px; width: 22px; text-align: center;"></i> Technicians</a></li>
-      <li><a href="<?=base_url('branches')?>" style="display: flex; align-items: center; color: #fff; text-decoration: none; padding: 15px 25px; font-size: 16px;"><i class="fa fa-code-branch" style="margin-right: 12px; font-size: 18px; width: 22px; text-align: center;"></i> Branches</a></li>
-      <li><a href="<?=base_url('part_control')?>" style="display: flex; align-items: center; color: #fff; text-decoration: none; padding: 15px 25px; font-size: 16px;"><i class="fa fa-cogs" style="margin-right: 12px; font-size: 18px; width: 22px; text-align: center;"></i> Part control</a></li>
-      <li><a href="<?=base_url('part')?>" style="display: flex; align-items: center; color: #fff; text-decoration: none; padding: 15px 25px; font-size: 16px;"><i class="fa fa-cube" style="margin-right: 12px; font-size: 18px; width: 22px; text-align: center;"></i> Part</a></li>
-      <li><a href="<?=base_url('part_order')?>" style="display: flex; align-items: center; color: #fff; text-decoration: none; padding: 15px 25px; font-size: 16px;"><i class="fa fa-shopping-cart" style="margin-right: 12px; font-size: 18px; width: 22px; text-align: center;"></i> Part order</a></li>
-      <li class="active"><a href="<?=base_url('job')?>" style="display: flex; align-items: center; color: #fff; text-decoration: none; padding: 15px 25px; font-size: 16px; background: #00bcd4;"><i class="fa fa-briefcase" style="margin-right: 12px; font-size: 18px; width: 22px; text-align: center;"></i> Job</a></li>
-      <li><a href="<?=base_url('stock_in')?>" style="display: flex; align-items: center; color: #fff; text-decoration: none; padding: 15px 25px; font-size: 16px;"><i class="fa fa-arrow-down" style="margin-right: 12px; font-size: 18px; width: 22px; text-align: center;"></i> Stock in</a></li>
-      <li><a href="<?=base_url('stock_out')?>" style="display: flex; align-items: center; color: #fff; text-decoration: none; padding: 15px 25px; font-size: 16px;"><i class="fa fa-arrow-up" style="margin-right: 12px; font-size: 18px; width: 22px; text-align: center;"></i> Stock out</a></li>
-      <li><a href="<?=base_url('login/logout')?>" style="display: flex; align-items: center; color: #fff; text-decoration: none; padding: 15px 25px; font-size: 16px;"><i class="fa fa-sign-out-alt" style="margin-right: 12px; font-size: 18px; width: 22px; text-align: center;"></i> Log out</a></li>
-    </ul>
+    <!-- /.sidebar -->
   </aside>
 
 
