@@ -152,11 +152,40 @@
               <p>Part control</p>
             </a>
           </li>
-          <li class="nav-item">
-            <a href="<?=base_url('part')?>" class="nav-link <?= $uri == 'part' ? 'active' : '' ?>">
+          <li class="nav-item has-treeview <?= in_array($uri, ['part', 'brand', 'model', 'part_type']) ? 'menu-open' : '' ?>">
+            <a href="#" class="nav-link <?= in_array($uri, ['part', 'brand', 'model', 'part_type']) ? 'active' : '' ?>">
               <i class="nav-icon fas fa-cube"></i>
-              <p>Part</p>
+              <p>
+                Part
+                <i class="right fas fa-angle-left"></i>
+              </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="<?=base_url('part/brand')?>" class="nav-link <?= $uri == 'part' && $this->uri->segment(2) == 'brand' ? 'active' : '' ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Brand name</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?=base_url('part/model')?>" class="nav-link <?= $uri == 'part' && $this->uri->segment(2) == 'model' ? 'active' : '' ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Model name</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?=base_url('part/part_type')?>" class="nav-link <?= $uri == 'part' && $this->uri->segment(2) == 'part_type' ? 'active' : '' ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Part type</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?=base_url('part')?>" class="nav-link <?= $uri == 'part' && ($this->uri->segment(2) == '' || $this->uri->segment(2) == null) ? 'active' : '' ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Part name & Price</p>
+                </a>
+              </li>
+            </ul>
           </li>
           <li class="nav-item">
             <a href="<?=base_url('part_order')?>" class="nav-link <?= $uri == 'part_order' ? 'active' : '' ?>">
