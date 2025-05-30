@@ -1,3 +1,4 @@
+<?php $ajax = 'part_corntroller'; ?>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">

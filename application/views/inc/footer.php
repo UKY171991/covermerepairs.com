@@ -73,6 +73,39 @@
 <?php if(isset($ajax) && $ajax == 'technicians'){ ?>
 <script src="<?= base_url();?>assets/ajax/technicians.js"></script>
 <?php } ?>
+<?php if(isset($ajax) && $ajax == 'staff'){ ?>
+<script src="<?= base_url();?>assets/ajax/staff.js"></script>
+<?php } ?>
+<?php if(isset($ajax) && $ajax == 'users'){ ?>
+<script src="<?= base_url();?>assets/ajax/user.js"></script>
+<?php } ?>
+<?php if(isset($ajax) && $ajax == 'branch'){ ?>
+<script src="<?= base_url();?>assets/ajax/branch.js"></script>
+<?php } ?>
+<?php if(isset($ajax) && $ajax == 'part_corntroller'){ ?>
+<script src="<?= base_url();?>assets/ajax/part_corntroller.js"></script>
+<?php } ?>
+<?php if(isset($ajax) && $ajax == 'part'){ ?>
+<script src="<?= base_url();?>assets/ajax/part.js"></script>
+<?php } ?>
+<?php if(isset($ajax) && $ajax == 'part_type'){ ?>
+<script src="<?= base_url();?>assets/ajax/part_type.js"></script>
+<?php } ?>
+<?php if(isset($ajax) && $ajax == 'model'){ ?>
+<script src="<?= base_url();?>assets/ajax/model.js"></script>
+<?php } ?>
+<?php if(isset($ajax) && $ajax == 'billty'){ ?>
+<script src="<?= base_url();?>assets/ajax/billty.js"></script>
+<?php } ?>
+<?php if(isset($ajax) && $ajax == 'challan'){ ?>
+<script src="<?= base_url();?>assets/ajax/challan.js"></script>
+<?php } ?>
+<?php if(isset($ajax) && $ajax == 'permission'){ ?>
+<script src="<?= base_url();?>assets/ajax/permission.js"></script>
+<?php } ?>
+<?php if(isset($ajax) && $ajax == 'user_type'){ ?>
+<script src="<?= base_url();?>assets/ajax/user_type.js"></script>
+<?php } ?>
 
 <!-- Custom JS for Part Order page (ensure this is after all other scripts) -->
 <script>
