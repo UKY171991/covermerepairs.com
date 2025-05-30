@@ -588,8 +588,29 @@ class Part extends CI_Controller {
 	public function order() {
 		$data = [];
 		$data['ajax'] = 'order';
-		$this->load->view('inc/header');
+		// Example dynamic data, replace with DB fetch in production
+		$data['orders'] = [
+			[
+				'id' => 1,
+				'order_id' => 'ORD-001',
+				'part_name' => 'Example Part',
+				'quantity' => 20,
+				'order_date' => '2025-05-30',
+				'status' => 'Pending',
+				'remarks' => 'Sample remark',
+			],
+			[
+				'id' => 2,
+				'order_id' => 'ORD-002',
+				'part_name' => 'Battery',
+				'quantity' => 10,
+				'order_date' => '2025-05-29',
+				'status' => 'Completed',
+				'remarks' => 'Delivered',
+			],
+		];
+		$this->load->view('inc/header', $data);
 		$this->load->view('part/order', $data);
-		$this->load->view('inc/footer');
+		$this->load->view('inc/footer', $data);
 	}
 }

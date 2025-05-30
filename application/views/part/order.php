@@ -34,18 +34,25 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>ORD-001</td>
-                <td>Example Part</td>
-                <td>20</td>
-                <td>2025-05-30</td>
-                <td>Pending</td>
-                <td>Sample remark</td>
-              </tr>
+              <?php if (!empty($orders)) : ?>
+                <?php foreach ($orders as $order) : ?>
+                  <tr>
+                    <td><?= htmlspecialchars($order['id']) ?></td>
+                    <td><?= htmlspecialchars($order['order_id']) ?></td>
+                    <td><?= htmlspecialchars($order['part_name']) ?></td>
+                    <td><?= htmlspecialchars($order['quantity']) ?></td>
+                    <td><?= htmlspecialchars($order['order_date']) ?></td>
+                    <td><?= htmlspecialchars($order['status']) ?></td>
+                    <td><?= htmlspecialchars($order['remarks']) ?></td>
+                  </tr>
+                <?php endforeach; ?>
+              <?php else : ?>
+                <tr>
+                  <td colspan="7" class="text-center text-muted">No part order records found.</td>
+                </tr>
+              <?php endif; ?>
             </tbody>
           </table>
-          <div class="text-center mt-3 text-muted">No part order records found.</div>
         </div>
       </div>
     </div>
