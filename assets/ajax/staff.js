@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
   all_data();
  });
@@ -40,6 +39,8 @@ $(document).ready(function() {
 
 $("#submit_data").on('submit',function(e){
   e.preventDefault();
+  var $btn = $(this).find('button[type=submit]');
+  $btn.prop('disabled', true);
   var action = $(this).attr('action');
   var data = $(this).serialize();
   $.ajax({
@@ -53,12 +54,15 @@ $("#submit_data").on('submit',function(e){
           alert(obj['message']);
           $("#submit_data")[0].reset();
           $(".id").val('');
-		  $('input').prop('checked', false);
-		  $('.select2').val(null).trigger('change');
+	  $('input').prop('checked', false);
+	  $('.select2').val(null).trigger('change');
         }else{
           alert(obj['message']);
         }
-        
+        $btn.prop('disabled', false);
+      },
+      error: function() {
+        $btn.prop('disabled', false);
       }
     });
 });

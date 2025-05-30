@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
     all_data();
    });
@@ -31,6 +30,8 @@ $(document).ready(function() {
   
   $("#submit_data").on('submit',function(e){
     e.preventDefault();
+    var $btn = $(this).find('button[type=submit]');
+    $btn.prop('disabled', true);
     var action = $(this).attr('action');
     var data = $(this).serialize();
     $.ajax({
@@ -47,7 +48,10 @@ $(document).ready(function() {
           }else{
             alert(obj['message']);
           }
-          
+          $btn.prop('disabled', false);
+        },
+        error: function() {
+          $btn.prop('disabled', false);
         }
       });
   });

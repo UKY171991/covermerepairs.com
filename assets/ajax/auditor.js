@@ -28,6 +28,8 @@ function all_data(){
 
 $("#submit_data").on('submit',function(e){
   e.preventDefault();
+  var $btn = $(this).find('button[type=submit]');
+  $btn.prop('disabled', true);
   var action = $(this).attr('action');
   var data = $(this).serialize();
   var base_url = $(".base_url").val();
@@ -47,6 +49,10 @@ $("#submit_data").on('submit',function(e){
         }else{
           alert(obj['message']);
         }
+        $btn.prop('disabled', false);
+      },
+      error: function() {
+        $btn.prop('disabled', false);
       }
     });
 });
