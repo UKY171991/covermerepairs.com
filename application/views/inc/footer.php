@@ -67,7 +67,7 @@
 <script src="<?= base_url();?>assets/custom/custom.js"></script>
 
 <?php if($ajax !='none'){ ?>
-<script src="<?= base_url();?>assets/ajax/<?=$ajax?>.js"></script>
+<!-- <script src="<?= base_url();?>assets/ajax/<?=$ajax?>.js"></script> -->
 <?php } ?>
 
 
