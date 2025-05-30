@@ -85,3 +85,10 @@ function edit(id){
       }
     });  
 }
+
+function reset() {
+  $("#submit_data")[0].reset();
+  $(".id").val("");
+  $('input').prop('checked', false);
+  $('.select2').val(null).trigger('change');
+}
