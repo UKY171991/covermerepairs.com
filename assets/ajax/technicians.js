@@ -52,10 +52,7 @@ $("#submit_data").on('submit',function(e){
         if(obj['status'] =='success'){
           all_data();
           alert(obj['message']);
-          $("#submit_data")[0].reset();
-          $(".id").val('');
-	  $('input').prop('checked', false);
-	  $('.select2').val(null).trigger('change');
+          reset();
         }else{
           alert(obj['message']);
         }
@@ -147,4 +144,11 @@ function view(id){
         $('.view_table').html(res);
       }
     });  
+}
+
+function reset() {
+  $("#submit_data")[0].reset();
+  $(".id").val("");
+  $('input').prop('checked', false);
+  $('.select2').val(null).trigger('change');
 }
