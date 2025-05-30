@@ -17,11 +17,12 @@
     <section class="content">
         <div class="container-fluid">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="card-title">Stock Out List</h3>
+                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#stockOutModal" onclick="openAddStockOutModal()">Add Stock Out</button>
                 </div>
                 <div class="card-body">
-                    <table class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped" id="stockOutTable">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -30,23 +31,28 @@
                                 <th>Date</th>
                                 <th>Issued By</th>
                                 <th>Remarks</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php if (!empty($stock_out)) : ?>
                                 <?php foreach ($stock_out as $item) : ?>
-                                    <tr>
+                                    <tr data-id="<?= $item['id'] ?>">
                                         <td><?= htmlspecialchars($item['id']) ?></td>
                                         <td><?= htmlspecialchars($item['part_name']) ?></td>
                                         <td><?= htmlspecialchars($item['quantity']) ?></td>
                                         <td><?= htmlspecialchars($item['date']) ?></td>
                                         <td><?= htmlspecialchars($item['issued_by']) ?></td>
                                         <td><?= htmlspecialchars($item['remarks']) ?></td>
+                                        <td>
+                                            <button class="btn btn-info btn-xs edit-btn" onclick="openEditStockOutModal(<?= $item['id'] ?>, this)">Edit</button>
+                                            <button class="btn btn-danger btn-xs delete-btn" onclick="deleteStockOut(<?= $item['id'] ?>, this)">Delete</button>
+                                        </td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else : ?>
                                 <tr>
-                                    <td colspan="6" class="text-center text-muted">No stock out records found.</td>
+                                    <td colspan="7" class="text-center text-muted">No stock out records found.</td>
                                 </tr>
                             <?php endif; ?>
                         </tbody>
@@ -55,4 +61,100 @@
             </div>
         </div>
     </section>
+
+    <!-- Stock Out Modal -->
+    <div class="modal fade" id="stockOutModal" tabindex="-1" role="dialog" aria-labelledby="stockOutModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="stockOutForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="stockOutModalLabel">Add Stock Out</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="stockOutId">
+                        <div class="form-group">
+                            <label for="part_name">Part Name</label>
+                            <input type="text" class="form-control" name="part_name" id="part_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" class="form-control" name="quantity" id="quantity" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <input type="date" class="form-control" name="date" id="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="issued_by">Issued By</label>
+                            <input type="text" class="form-control" name="issued_by" id="issued_by" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="remarks">Remarks</label>
+                            <input type="text" class="form-control" name="remarks" id="remarks">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="saveStockOutBtn">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function openAddStockOutModal() {
+        $('#stockOutModalLabel').text('Add Stock Out');
+        $('#stockOutForm')[0].reset();
+        $('#stockOutId').val('');
+        $('#stockOutModal').modal('show');
+    }
+
+    function openEditStockOutModal(id, btn) {
+        var row = $(btn).closest('tr');
+        $('#stockOutModalLabel').text('Edit Stock Out');
+        $('#stockOutId').val(id);
+        $('#part_name').val(row.find('td:eq(1)').text());
+        $('#quantity').val(row.find('td:eq(2)').text());
+        $('#date').val(row.find('td:eq(3)').text());
+        $('#issued_by').val(row.find('td:eq(4)').text());
+        $('#remarks').val(row.find('td:eq(5)').text());
+        $('#stockOutModal').modal('show');
+    }
+
+    $('#stockOutForm').submit(function(e) {
+        e.preventDefault();
+        var id = $('#stockOutId').val();
+        var url = id ? '<?=base_url('stock_out/edit_stock_out/')?>' + id : '<?=base_url('stock_out/add_stock_out')?>';
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(res) {
+                if(res.status === 'success') {
+                    location.reload(); // For simplicity, reload. For SPA, update table dynamically.
+                }
+            }
+        });
+    });
+
+    function deleteStockOut(id, btn) {
+        if(confirm('Are you sure you want to delete this record?')) {
+            $.ajax({
+                url: '<?=base_url('stock_out/delete_stock_out/')?>' + id,
+                type: 'POST',
+                dataType: 'json',
+                success: function(res) {
+                    if(res.status === 'success') {
+                        location.reload(); // For simplicity, reload. For SPA, remove row dynamically.
+                    }
+                }
+            });
+        }
+    }
+    </script>
 </div> 
