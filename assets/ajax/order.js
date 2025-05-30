@@ -33,6 +33,8 @@ window.deleteOrder = function(id, btn) {
 $(document).ready(function() {
   $('#orderForm').submit(function(e) {
     e.preventDefault();
+    var $btn = $(this).find('button[type=submit]');
+    $btn.prop('disabled', true);
     var id = $('#orderId').val();
     var url = id ? BASE_URL + 'part/edit_order/' + id : BASE_URL + 'part/add_order';
     $.ajax({
@@ -44,6 +46,10 @@ $(document).ready(function() {
         if(res.status === 'success') {
           location.reload();
         }
+        $btn.prop('disabled', false);
+      },
+      error: function() {
+        $btn.prop('disabled', false);
       }
     });
   });
