@@ -17,8 +17,35 @@
   <section class="content">
     <div class="container-fluid">
       <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Part Order List</h3>
+        </div>
         <div class="card-body">
-          <p>This is the Part Order page. Customize this page as needed.</p>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Order ID</th>
+                <th>Part Name</th>
+                <th>Quantity</th>
+                <th>Order Date</th>
+                <th>Status</th>
+                <th>Remarks</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>ORD-001</td>
+                <td>Example Part</td>
+                <td>20</td>
+                <td>2025-05-30</td>
+                <td>Pending</td>
+                <td>Sample remark</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="text-center mt-3 text-muted">No part order records found.</div>
         </div>
       </div>
     </div>
