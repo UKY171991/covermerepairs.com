@@ -594,4 +594,22 @@ class Part extends CI_Controller {
 		$this->load->view('part/order', $data);
 		$this->load->view('inc/footer', $data);
 	}
+
+	public function add_order() {
+		$this->load->model('Stock_model', 'stock');
+		$data = $this->input->post();
+		$id = $this->stock->insert_order($data);
+		echo json_encode(['status' => 'success', 'id' => $id]);
+	}
+	public function edit_order($id) {
+		$this->load->model('Stock_model', 'stock');
+		$data = $this->input->post();
+		$this->stock->update_order($id, $data);
+		echo json_encode(['status' => 'success']);
+	}
+	public function delete_order($id) {
+		$this->load->model('Stock_model', 'stock');
+		$this->stock->delete_order($id);
+		echo json_encode(['status' => 'success']);
+	}
 }
