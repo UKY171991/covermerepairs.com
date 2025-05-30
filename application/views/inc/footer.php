@@ -66,8 +66,9 @@
 
 <script src="<?= base_url();?>assets/custom/custom.js"></script>
 
-<?php if($ajax !='none'){ ?>
-<!-- <script src="<?= base_url();?>assets/ajax/<?=$ajax?>.js"></script> -->
+<script>var BASE_URL = '<?= base_url() ?>';</script>
+<?php if($ajax == 'order'){ ?>
+<script src="<?= base_url();?>assets/ajax/order.js"></script>
 <?php } ?>
 
 <!-- Custom JS for Part Order page (ensure this is after all other scripts) -->
