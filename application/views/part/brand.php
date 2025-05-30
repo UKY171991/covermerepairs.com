@@ -32,6 +32,8 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
+                            <input type="hidden" class="base_url" value="<?= base_url() ?>" />
+                            <div id="brand-message"></div>
                             <table id="all_data" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
@@ -42,7 +44,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Dynamic Data -->
+                                    <!-- DataTables will populate this -->
                                 </tbody>
                                 <tfoot>
                                     <tr>
