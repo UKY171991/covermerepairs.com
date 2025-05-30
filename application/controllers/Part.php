@@ -6,6 +6,7 @@ class Part extends CI_Controller {
 	  parent::__construct();
 	  date_default_timezone_set('NZ');
 	  $this->load->model('part_model','part');
+	  $this->load->model('Stock_model', 'stock');
 	  
 	  
 	  $permission = explode("--",$_SESSION['permission']);
@@ -586,29 +587,9 @@ class Part extends CI_Controller {
 	}
 
 	public function order() {
-		$data = [];
+		$this->load->model('Stock_model', 'stock');
 		$data['ajax'] = 'order';
-		// Example dynamic data, replace with DB fetch in production
-		$data['orders'] = [
-			[
-				'id' => 1,
-				'order_id' => 'ORD-001',
-				'part_name' => 'Example Part',
-				'quantity' => 20,
-				'order_date' => '2025-05-30',
-				'status' => 'Pending',
-				'remarks' => 'Sample remark',
-			],
-			[
-				'id' => 2,
-				'order_id' => 'ORD-002',
-				'part_name' => 'Battery',
-				'quantity' => 10,
-				'order_date' => '2025-05-29',
-				'status' => 'Completed',
-				'remarks' => 'Delivered',
-			],
-		];
+		$data['orders'] = $this->stock->get_all_orders();
 		$this->load->view('inc/header', $data);
 		$this->load->view('part/order', $data);
 		$this->load->view('inc/footer', $data);
