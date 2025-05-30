@@ -112,56 +112,61 @@
   </div>
 
   <script>
-  function openAddOrderModal() {
-    $('#orderModalLabel').text('Add Part Order');
-    $('#orderForm')[0].reset();
-    $('#orderId').val('');
-    $('#orderModal').modal('show');
-  }
+  $(function() {
+    function openAddOrderModal() {
+      $('#orderModalLabel').text('Add Part Order');
+      $('#orderForm')[0].reset();
+      $('#orderId').val('');
+      $('#orderModal').modal('show');
+    }
+    window.openAddOrderModal = openAddOrderModal;
 
-  function openEditOrderModal(id, btn) {
-    var row = $(btn).closest('tr');
-    $('#orderModalLabel').text('Edit Part Order');
-    $('#orderId').val(id);
-    $('#order_id').val(row.find('td:eq(1)').text());
-    $('#part_name').val(row.find('td:eq(2)').text());
-    $('#quantity').val(row.find('td:eq(3)').text());
-    $('#order_date').val(row.find('td:eq(4)').text());
-    $('#status').val(row.find('td:eq(5)').text());
-    $('#remarks').val(row.find('td:eq(6)').text());
-    $('#orderModal').modal('show');
-  }
+    function openEditOrderModal(id, btn) {
+      var row = $(btn).closest('tr');
+      $('#orderModalLabel').text('Edit Part Order');
+      $('#orderId').val(id);
+      $('#order_id').val(row.find('td:eq(1)').text());
+      $('#part_name').val(row.find('td:eq(2)').text());
+      $('#quantity').val(row.find('td:eq(3)').text());
+      $('#order_date').val(row.find('td:eq(4)').text());
+      $('#status').val(row.find('td:eq(5)').text());
+      $('#remarks').val(row.find('td:eq(6)').text());
+      $('#orderModal').modal('show');
+    }
+    window.openEditOrderModal = openEditOrderModal;
 
-  $('#orderForm').submit(function(e) {
-    e.preventDefault();
-    var id = $('#orderId').val();
-    var url = id ? '<?=base_url('part/edit_order/')?>' + id : '<?=base_url('part/add_order')?>';
-    $.ajax({
-      url: url,
-      type: 'POST',
-      data: $(this).serialize(),
-      dataType: 'json',
-      success: function(res) {
-        if(res.status === 'success') {
-          location.reload(); // For simplicity, reload. For SPA, update table dynamically.
-        }
-      }
-    });
-  });
-
-  function deleteOrder(id, btn) {
-    if(confirm('Are you sure you want to delete this record?')) {
+    $('#orderForm').submit(function(e) {
+      e.preventDefault();
+      var id = $('#orderId').val();
+      var url = id ? '<?=base_url('part/edit_order/')?>' + id : '<?=base_url('part/add_order')?>';
       $.ajax({
-        url: '<?=base_url('part/delete_order/')?>' + id,
+        url: url,
         type: 'POST',
+        data: $(this).serialize(),
         dataType: 'json',
         success: function(res) {
           if(res.status === 'success') {
-            location.reload(); // For simplicity, reload. For SPA, remove row dynamically.
+            location.reload(); // For simplicity, reload. For SPA, update table dynamically.
           }
         }
       });
+    });
+
+    function deleteOrder(id, btn) {
+      if(confirm('Are you sure you want to delete this record?')) {
+        $.ajax({
+          url: '<?=base_url('part/delete_order/')?>' + id,
+          type: 'POST',
+          dataType: 'json',
+          success: function(res) {
+            if(res.status === 'success') {
+              location.reload(); // For simplicity, reload. For SPA, remove row dynamically.
+            }
+          }
+        });
+      }
     }
-  }
+    window.deleteOrder = deleteOrder;
+  });
   </script>
 </div> 
