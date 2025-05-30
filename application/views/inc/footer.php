@@ -70,6 +70,9 @@
 <?php if($ajax == 'order'){ ?>
 <script src="<?= base_url();?>assets/ajax/order.js"></script>
 <?php } ?>
+<?php if(isset($ajax) && $ajax == 'technicians'){ ?>
+<script src="<?= base_url();?>assets/ajax/technicians.js"></script>
+<?php } ?>
 
 <!-- Custom JS for Part Order page (ensure this is after all other scripts) -->
 <script>
