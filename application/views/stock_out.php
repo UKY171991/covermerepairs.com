@@ -33,17 +33,24 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Example Part</td>
-                                <td>5</td>
-                                <td>2025-05-30</td>
-                                <td>Admin</td>
-                                <td>Sample remark</td>
-                            </tr>
+                            <?php if (!empty($stock_out)) : ?>
+                                <?php foreach ($stock_out as $item) : ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($item['id']) ?></td>
+                                        <td><?= htmlspecialchars($item['part_name']) ?></td>
+                                        <td><?= htmlspecialchars($item['quantity']) ?></td>
+                                        <td><?= htmlspecialchars($item['date']) ?></td>
+                                        <td><?= htmlspecialchars($item['issued_by']) ?></td>
+                                        <td><?= htmlspecialchars($item['remarks']) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">No stock out records found.</td>
+                                </tr>
+                            <?php endif; ?>
                         </tbody>
                     </table>
-                    <div class="text-center mt-3 text-muted">No stock out records found.</div>
                 </div>
             </div>
         </div>
