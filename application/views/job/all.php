@@ -358,3 +358,15 @@
     </div>
   </div>
 </div>
+
+<script>
+function openJobStockOutModal(jobId) {
+    // Open the Stock Out modal and set the job_id
+    $('#stockOutModalLabel').text('Issue Part for Job');
+    $('#stockOutForm')[0].reset();
+    $('#stockOutId').val('');
+    $('#job_id').remove(); // Remove if already present
+    $('#stockOutForm').append('<input type="hidden" name="job_id" id="job_id" value="'+jobId+'">');
+    $('#stockOutModal').modal('show');
+}
+</script>
