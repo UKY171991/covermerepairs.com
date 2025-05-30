@@ -1,94 +1,115 @@
 $(document).ready(function() {
-  all_data()
-});
+  loadBrandTable();
 
-function all_data(){
-
-    if ( $.fn.dataTable.isDataTable('#all_data') ) {
-      $('#all_data').DataTable().destroy();
-    } 
-	var base_url = $(".base_url").val();
-        $('#all_data').DataTable({
-          "bSortCellsTop": true,
-          "processing": true, //Feature control the processing indicator.
-            ajax: {
-                url: base_url+'part/all_brand_ajax', // URL to your PHP script for fetching data
-                type: 'POST'
-            },
-            columns: [
-                { data: 0 },
-                { data: 1 },
-                { data: 2 },
-                { data: 3 },
-            ]
-        });
-  }
-
-$("#submit_data").on('submit',function(e){
-  e.preventDefault();
-  var action = $(this).attr('action');
-  var data = $(this).serialize();
-  var base_url = $(".base_url").val();
-  $.ajax({
-      url:action,
-      type:'post',
-      data:data,
-      success:function(res){
-        const obj = JSON.parse(res);
-        if(obj['status'] =='success'){
-          all_data();
-          alert(obj['message']);
-          $("#submit_data")[0].reset();
-          $('.branch').val(null).trigger('change');
-          $(".id").val('');
-          //window.location.replace(base_url+'technicians');
-        }else{
-          alert(obj['message']);
-        }
-      }
-    });
-});
-    
-
-function del(id){
-  var base_url = $(".base_url").val();
-  var conf = confirm('Arey sure  you want to  delete ?');
-  if(conf){
+  // Add/Edit Brand
+  $('#submit_data').on('submit', function(e) {
+    e.preventDefault();
+    var $btn = $(this).find('button[type=submit]');
+    $btn.prop('disabled', true);
+    var action = $(this).attr('action');
+    var data = $(this).serialize();
     $.ajax({
-      url:base_url+'part/delete_brand',
-      type:'post',
-      data:{'id':id},
-      success:function(res){
-        all_data();
-        alert(res);
-        
+      url: action,
+      type: 'POST',
+      data: data,
+      dataType: 'json',
+      success: function(res) {
+        if (res.status === 'success') {
+          $('#edit_data').modal('hide');
+          showBrandMessage('success', res.message);
+          $('#submit_data')[0].reset();
+          $('.id').val('');
+          reloadBrandTable();
+        } else {
+          showBrandMessage('danger', res.message || 'Error saving brand.');
+        }
+        $btn.prop('disabled', false);
+      },
+      error: function(xhr) {
+        showBrandMessage('danger', xhr.responseText || 'Server error.');
+        $btn.prop('disabled', false);
       }
     });
+  });
+});
+
+function loadBrandTable() {
+  if ($.fn.DataTable.isDataTable('#all_data')) {
+    $('#all_data').DataTable().destroy();
   }
-  
+  var base_url = $('.base_url').val();
+  $('#all_data').DataTable({
+    processing: true,
+    ajax: {
+      url: base_url + 'part/all_brand_ajax',
+      type: 'POST',
+      dataSrc: function(json) {
+        if (typeof json.data === 'undefined' && json.status === 'error') {
+          showBrandMessage('danger', json.message || 'Session expired. Please login again.');
+          return [];
+        }
+        return json.data;
+      }
+    },
+    columns: [
+      { data: 0 },
+      { data: 1 },
+      { data: 2 },
+      { data: 3 }
+    ]
+  });
 }
 
+function reloadBrandTable() {
+  $('#all_data').DataTable().ajax.reload(null, false);
+}
 
-function edit(id){
-  var base_url = $(".base_url").val();
-  //$('.branch').val(null).trigger('change');
+function showBrandMessage(type, message) {
+  $('#brand-message').html('<div class="alert alert-' + type + ' alert-dismissible">' +
+    '<button type="button" class="close" data-dismiss="alert">&times;</button>' + message + '</div>');
+}
+
+function del(id) {
+  var base_url = $('.base_url').val();
+  if (confirm('Are you sure you want to delete this brand?')) {
     $.ajax({
-      url:base_url+'part/edit_brand',
-      type:'post',
-      data:{'id':id},
-      success:function(res){
-        const obj = JSON.parse(res);
+      url: base_url + 'part/delete_brand',
+      type: 'POST',
+      data: { id: id },
+      success: function(res) {
+        reloadBrandTable();
+        showBrandMessage('success', 'Brand deleted successfully.');
+      },
+      error: function(xhr) {
+        showBrandMessage('danger', xhr.responseText || 'Delete failed.');
+      }
+    });
+  }
+}
+
+function edit(id) {
+  var base_url = $('.base_url').val();
+  $.ajax({
+    url: base_url + 'part/edit_brand',
+    type: 'POST',
+    data: { id: id },
+    dataType: 'json',
+    success: function(obj) {
+      if (obj && obj[0]) {
         $('.id').val(obj[0]['id']);
         $('.name').val(obj[0]['name']);
-        //$('.address').val(obj[0]['address']);
-        //$('.phone').val(obj[0]['phone']);
+        $('#edit_data').modal('show');
+      } else {
+        showBrandMessage('danger', 'Brand not found.');
       }
-    });  
+    },
+    error: function(xhr) {
+      showBrandMessage('danger', xhr.responseText || 'Error loading brand.');
+    }
+  });
 }
 
 function reset() {
-  $("#submit_data")[0].reset();
-  $(".id").val("");
-  $('input').prop('checked', false);
-  $('.select2').val(null).trigger('change');
+  $('#submit_data')[0].reset();
+  $('.id').val('');
 }
