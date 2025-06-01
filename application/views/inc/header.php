@@ -110,6 +110,7 @@
   <?php endif; ?>
 
   <?php $uri = $this->uri->segment(1); ?>
+  <?php $user_type = $this->session->userdata('user_type'); ?>
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
@@ -128,6 +129,7 @@
               <p>Dashboard</p>
             </a>
           </li>
+          <?php if($user_type != '5'){ ?>
           <li class="nav-item">
             <a href="<?=base_url('technicians')?>" class="nav-link <?= $uri == 'technicians' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-user-cog"></i>
@@ -141,15 +143,16 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="<?=base_url('branch')?>" class="nav-link <?= $uri == 'branch' ? 'active' : '' ?>">
-              <i class="nav-icon fas fa-code-branch"></i>
-              <p>Branches</p>
-            </a>
-          </li>
-          <li class="nav-item">
             <a href="<?=base_url('part_corntroller')?>" class="nav-link <?= $uri == 'part_corntroller' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-cogs"></i>
               <p>Part control</p>
+            </a>
+          </li>
+          <?php } ?>
+          <li class="nav-item">
+            <a href="<?=base_url('branch')?>" class="nav-link <?= $uri == 'branch' ? 'active' : '' ?>">
+              <i class="nav-icon fas fa-code-branch"></i>
+              <p>Branches</p>
             </a>
           </li>
           <li class="nav-item has-treeview <?= in_array($uri, ['part', 'brand', 'model', 'part_type']) ? 'menu-open' : '' ?>">
