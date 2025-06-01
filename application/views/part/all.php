@@ -27,7 +27,7 @@
             <div class="card">
               <div class="card-header">
                  <!-- <h3 class="card-title">DataTable with default features</h3> -->
-                 <?php if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){ ?>
+                 <?php if($this->session->userdata('user_type') =='1' || $this->session->userdata('user_type') =='5'){ ?>
                  <button class="card-btn btn btn-info btn-sm" data-toggle='modal' data-target='#edit_data'  onclick="reset()">Add</button>
                  <?php } ?>
               </div>
