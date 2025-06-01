@@ -24,7 +24,9 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
+              <?php if($this->session->userdata('user_type') == '1' || $this->session->userdata('user_type') == '4'){ ?>
               <button class="card-btn btn btn-info btn-sm" data-toggle='modal' data-target='#edit_data' onclick="reset()">Add Job</button>
+              <?php } ?>
             </div>
             <!-- Card Body -->
             <div class="card-body">
