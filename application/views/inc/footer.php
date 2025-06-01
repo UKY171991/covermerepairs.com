@@ -109,6 +109,9 @@
 <?php if(isset($ajax) && $ajax == 'brand'){ ?>
 <script src="<?= base_url();?>assets/ajax/brand.js"></script>
 <?php } ?>
+<?php if(isset($ajax) && $ajax == 'job'){ ?>
+<script src="<?= base_url();?>assets/ajax/job.js"></script>
+<?php } ?>
 
 <!-- Custom JS for Part Order page (ensure this is after all other scripts) -->
 <script>
