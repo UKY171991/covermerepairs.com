@@ -75,6 +75,7 @@
                     </div>
                     <div class="modal-body">
                         <input type="hidden" name="id" id="stockInId">
+                        <input type="hidden" class="base_url" value="<?= base_url() ?>" />
                         <div class="form-group">
                             <label for="part_name">Part Name</label>
                             <input type="text" class="form-control" name="part_name" id="part_name" required>
@@ -104,57 +105,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-    function openAddStockInModal() {
-        $('#stockInModalLabel').text('Add Stock In');
-        $('#stockInForm')[0].reset();
-        $('#stockInId').val('');
-        $('#stockInModal').modal('show');
-    }
-
-    function openEditStockInModal(id, btn) {
-        var row = $(btn).closest('tr');
-        $('#stockInModalLabel').text('Edit Stock In');
-        $('#stockInId').val(id);
-        $('#part_name').val(row.find('td:eq(1)').text());
-        $('#quantity').val(row.find('td:eq(2)').text());
-        $('#date').val(row.find('td:eq(3)').text());
-        $('#received_by').val(row.find('td:eq(4)').text());
-        $('#remarks').val(row.find('td:eq(5)').text());
-        $('#stockInModal').modal('show');
-    }
-
-    $('#stockInForm').submit(function(e) {
-        e.preventDefault();
-        var id = $('#stockInId').val();
-        var url = id ? '<?=base_url('stock_in/edit_stock_in/')?>' + id : '<?=base_url('stock_in/add_stock_in')?>';
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: $(this).serialize(),
-            dataType: 'json',
-            success: function(res) {
-                if(res.status === 'success') {
-                    location.reload(); // For simplicity, reload. For SPA, update table dynamically.
-                }
-            }
-        });
-    });
-
-    function deleteStockIn(id, btn) {
-        if(confirm('Are you sure you want to delete this record?')) {
-            $.ajax({
-                url: '<?=base_url('stock_in/delete_stock_in/')?>' + id,
-                type: 'POST',
-                dataType: 'json',
-                success: function(res) {
-                    if(res.status === 'success') {
-                        location.reload(); // For simplicity, reload. For SPA, remove row dynamically.
-                    }
-                }
-            });
-        }
-    }
-    </script>
 </div> 
