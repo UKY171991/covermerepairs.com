@@ -106,6 +106,9 @@
 <?php if(isset($ajax) && $ajax == 'user_type'){ ?>
 <script src="<?= base_url();?>assets/ajax/user_type.js"></script>
 <?php } ?>
+<?php if(isset($ajax) && $ajax == 'brand'){ ?>
+<script src="<?= base_url();?>assets/ajax/brand.js"></script>
+<?php } ?>
 
 <!-- Custom JS for Part Order page (ensure this is after all other scripts) -->
 <script>
