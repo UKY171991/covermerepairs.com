@@ -421,24 +421,29 @@ class Part extends CI_Controller {
 		$i =1;
 		$data = array();
 		foreach($all_data as $key => $all_datas){
-			if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){
-				$action = "<button data-toggle='modal' data-target='#edit_data' onclick='return edit(".$all_datas->id.")' class='btn btn-info btn-xs'>Edit</button>";
-				$action .= "<button href='' onclick='return del(".$all_datas->id.")' class='btn btn-danger btn-xs'>Delete</button>"; 
-			}elseif($this->session->userdata('user_type') =='3'){
-				if($all_datas->added_by == $this->session->userdata('user_id')){
-					$action = "<button data-toggle='modal' data-target='#edit_data' onclick='return edit(".$all_datas->id.")' class='btn btn-info btn-xs'>Edit</button>";
-					$action .= "<button href='' onclick='return del(".$all_datas->id.")' class='btn btn-danger btn-xs'>Delete</button>"; 
-				}else{
-					$action = "<button  class='btn btn-info btn-xs' disabled>Edit</button>";
-					$action .= "<button class='btn btn-danger btn-xs' disabled>Delete</button>";
+			$brand_name='';
+			$brand = $this->part->single_data('brand',$all_datas->brand);
+			foreach($brand as $brands){
+				$brand_name = $brands->name;
 			}
-			}else{
-				$action = "<button  class='btn btn-info btn-xs' disabled>Edit</button>";
-				$action .= "<button class='btn btn-danger btn-xs' disabled>Delete</button>";
+			$model_name='';
+			$model = $this->part->single_data('model',$all_datas->model);
+			foreach($model as $models){
+				$model_name = $models->name;
 			}
-
+			$part_t='';
+			$part_type = $this->part->single_data('part_type',$all_datas->type);
+			foreach($part_type as $part_types){
+				$part_t = $part_types->name;
+			}
+			if($all_datas->price_min !='0.00' AND $all_datas->price_max != '0.00'){
+				$price = $all_datas->price_min.' - '.$all_datas->price_max;
+			}elseif($all_datas->price_min !='0.00'){
+				$price = $all_datas->price_min;
+			}elseif($all_datas->price_max !='0.00'){
+				$price = $all_datas->price_max;
+			}
 			$user = $this->part->single_data('user',$all_datas->added_by);
-
 			$user_type ='';
 			foreach($user as $users){
 				if($users->type =='0'){
@@ -454,52 +459,23 @@ class Part extends CI_Controller {
 				}
 				$username = $users->name.$user_type;
 			}
-
-			$branch_name='';
-			$branch = $this->part->single_data('branch',$all_datas->branch);
-			foreach($branch as $branchs){
-				$branch_name = $branchs->name;
+			if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){
+				$action = "<button data-toggle='modal' data-target='#edit_data' onclick='return edit(".$all_datas->id.")' class='btn btn-info btn-xs'>Edit</button>";
+				$action .= "<button href='' onclick='return del(".$all_datas->id.")' class='btn btn-danger btn-xs'>Delete</button>"; 
+			}elseif($this->session->userdata('user_type') =='3'){
+				if($all_datas->added_by == $this->session->userdata('user_id')){
+					$action = "<button data-toggle='modal' data-target='#edit_data' onclick='return edit(".$all_datas->id.")' class='btn btn-info btn-xs'>Edit</button>";
+					$action .= "<button href='' onclick='return del(".$all_datas->id.")' class='btn btn-danger btn-xs'>Delete</button>"; 
+				}else{
+					$action = "<button  class='btn btn-info btn-xs' disabled>Edit</button>";
+					$action .= "<button class='btn btn-danger btn-xs' disabled>Delete</button>";
+				}
+			}else{
+				$action = "<button  class='btn btn-info btn-xs' disabled>Edit</button>";
+				$action .= "<button class='btn btn-danger btn-xs' disabled>Delete</button>";
 			}
-
-			$brand_name='';
-			$brand = $this->part->single_data('brand',$all_datas->brand);
-			foreach($brand as $brands){
-				$brand_name = $brands->name;
-			}
-
-			$model_name='';
-			$model = $this->part->single_data('model',$all_datas->model);
-			foreach($model as $models){
-				$model_name = $models->name;
-			}
-
-			$part_t='';
-			$part_type = $this->part->single_data('part_type',$all_datas->type);
-			foreach($part_type as $part_types){
-				$part_t = $part_types->name;
-			}
-
-			if($all_datas->price_min !='0.00' AND $all_datas->price_max != '0.00'){
-				$price = $all_datas->price_min.' - '.$all_datas->price_max;
-			}elseif($all_datas->price_min !='0.00'){
-				$price = $all_datas->price_min;
-			}elseif($all_datas->price_max !='0.00'){
-				$price = $all_datas->price_max;
-			}
-
-			$p['model'] =$all_datas->model;
-			$p['type'] =$all_datas->type;
-			$p['brand'] =$all_datas->brand;
-
-			// $stock_all ='0';
-			// $stock = $this->part->single_stock('stock',$p);
-			// foreach($stock as $stocks){
-			// 	$stock_all = $stocks->volume;
-			// }
-
 			$row = array();
 			$row[] =  $i++;
-			$row[] =  $branch_name;
 			$row[] =  $brand_name;
 			$row[] =  $model_name;
 			$row[] =  $part_t;
@@ -509,16 +485,12 @@ class Part extends CI_Controller {
 			$row[] =  $action;
 			$data[] = $row;
 		}
-
 		$output = array(
-                   // "draw" 						=> $_POST['draw'],
-                    "recordsTotal" 		=> $this->part->count_all('part','DESC'),
-                    "recordsFiltered" => $this->part->count_all('part','DESC'),
-                    "data" 						=> $data,
-            	);
-   
-    echo json_encode($output);
-
+			"recordsTotal" => $this->part->count_all('part','DESC'),
+			"recordsFiltered" => $this->part->count_all('part','DESC'),
+			"data" => $data,
+		);
+		echo json_encode($output);
 	}
 
 

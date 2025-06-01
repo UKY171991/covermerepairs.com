@@ -37,13 +37,12 @@
                   <thead>
                   <tr>
                     <th>#</th>
-                    <th>Branch Name</th>
                     <th>Brand Name</th>
-                    <th>Model name</th>
+                    <th>Model Name</th>
                     <th>Part type</th>
                     <th>Price</th>
-                    <th>Stock all</th>
-                    <th>User name</th>
+                    <th>Qty.</th>
+                    <th>Added by</th>
                     <th>Action</th>
                   </tr>
                   </thead>
@@ -53,13 +52,12 @@
                   <tfoot>
                   <tr>
                     <th>#</th>
-                    <th>Branch Name</th>
                     <th>Brand Name</th>
-                    <th>Model name</th>
+                    <th>Model Name</th>
                     <th>Part type</th>
                     <th>Price</th>
-                    <th>Stock all</th>
-                    <th>User name</th>
+                    <th>Qty.</th>
+                    <th>Added by</th>
                     <th>Action</th>
                   </tr>
                   </tfoot>
