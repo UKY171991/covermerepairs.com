@@ -115,6 +115,9 @@
 <?php if(isset($ajax) && $ajax == 'stock_in'){ ?>
 <script src="<?= base_url();?>assets/ajax/stock_in.js"></script>
 <?php } ?>
+<?php if(isset($ajax) && $ajax == 'stock_out'){ ?>
+<script src="<?= base_url();?>assets/ajax/stock_out.js"></script>
+<?php } ?>
 
 <!-- Custom JS for Part Order page (ensure this is after all other scripts) -->
 <script>
