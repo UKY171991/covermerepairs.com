@@ -15,8 +15,8 @@ class Part_corntroller extends CI_Controller {
 	  $permission = explode("--",$_SESSION['permission']);
 	  $segment1 = $this->uri->segment(1);
 	  if(!in_array($segment1,$permission)){
-		  // permission not allow
-		  redirect(base_url('login'));
+	      // permission not allow
+	      redirect(base_url('login'));
 	  }
 	  
 	}

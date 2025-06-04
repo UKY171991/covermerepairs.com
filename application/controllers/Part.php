@@ -46,6 +46,7 @@ class Part extends CI_Controller {
 		$this->load->view('part/model',$data);
 		$this->load->view('inc/footer');
 	} 
+	
 	public function part_type(){
 		$data['brand'] = $this->part->all_data('brand');
 		$data['ajax']='part_type';
