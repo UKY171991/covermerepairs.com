@@ -27,7 +27,7 @@
             <div class="card">
               <div class="card-header">
                  <!-- <h3 class="card-title">DataTable with default features</h3> -->
-                 <?php if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){ ?>
+                 <?php if($this->session->userdata('user_type') =='1' || $this->session->userdata('user_type') =='5'){ ?>
                  <button class="card-btn btn btn-info btn-sm" data-toggle='modal' data-target='#edit_data'  onclick="reset()">Add</button>
                  <?php } ?>
               </div>
@@ -37,13 +37,12 @@
                   <thead>
                   <tr>
                     <th>#</th>
-                    <th>Branch Name</th>
                     <th>Brand Name</th>
-                    <th>Model name</th>
+                    <th>Model Name</th>
                     <th>Part type</th>
                     <th>Price</th>
-                    <th>Stock all</th>
-                    <th>User name</th>
+                    <th>Qty.</th>
+                    <th>Added by</th>
                     <th>Action</th>
                   </tr>
                   </thead>
@@ -53,13 +52,12 @@
                   <tfoot>
                   <tr>
                     <th>#</th>
-                    <th>Branch Name</th>
                     <th>Brand Name</th>
-                    <th>Model name</th>
+                    <th>Model Name</th>
                     <th>Part type</th>
                     <th>Price</th>
-                    <th>Stock all</th>
-                    <th>User name</th>
+                    <th>Qty.</th>
+                    <th>Added by</th>
                     <th>Action</th>
                   </tr>
                   </tfoot>

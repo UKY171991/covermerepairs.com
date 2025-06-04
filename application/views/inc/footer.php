@@ -106,6 +106,18 @@
 <?php if(isset($ajax) && $ajax == 'user_type'){ ?>
 <script src="<?= base_url();?>assets/ajax/user_type.js"></script>
 <?php } ?>
+<?php if(isset($ajax) && $ajax == 'brand'){ ?>
+<script src="<?= base_url();?>assets/ajax/brand.js"></script>
+<?php } ?>
+<?php if(isset($ajax) && $ajax == 'job'){ ?>
+<script src="<?= base_url();?>assets/ajax/job.js"></script>
+<?php } ?>
+<?php if(isset($ajax) && $ajax == 'stock_in'){ ?>
+<script src="<?= base_url();?>assets/ajax/stock_in.js"></script>
+<?php } ?>
+<?php if(isset($ajax) && $ajax == 'stock_out'){ ?>
+<script src="<?= base_url();?>assets/ajax/stock_out.js"></script>
+<?php } ?>
 
 <!-- Custom JS for Part Order page (ensure this is after all other scripts) -->
 <script>
