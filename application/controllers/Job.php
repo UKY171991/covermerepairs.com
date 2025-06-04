@@ -163,7 +163,7 @@ class Job extends CI_Controller {
 
             $bwher = array('id'=>$all_datas->brand);
             $brand = $this->user->all_data('brand','DESC',$bwher);
-            if(count($tec) == 0){
+            if(count($brand) == 0){
                 $brands = "None";
             }else{
                 $brands = $brand[0]->name;
@@ -171,7 +171,7 @@ class Job extends CI_Controller {
 
             $mwher = array('id'=>$all_datas->model_no);
             $model = $this->user->all_data('model','DESC',$mwher);
-            if(count($tec) == 0){
+            if(count($model) == 0){
                 $models = "";
             }else{
                 $models = $model[0]->name;
