@@ -32,71 +32,21 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table class="table table-bordered table-striped">
+                            <table class="table table-bordered table-striped" id="model-table">
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Model Name</th>
-                                        <th>Brand Name</th>
-                                        <th>User Name</th>
+                                        <th>Model Name<br><input type="text" class="form-control form-control-sm search-col" data-col="name" placeholder="Search Model"></th>
+                                        <th>Brand Name<br><input type="text" class="form-control form-control-sm search-col" data-col="brand" placeholder="Search Brand ID"></th>
+                                        <th>User Name<br><input type="text" class="form-control form-control-sm search-col" data-col="user" placeholder="Search User ID"></th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <?php if(!empty($models)): ?>
-                                        <?php $i = 1; foreach($models as $model): ?>
-                                            <tr>
-                                                <td><?= $i++ ?></td>
-                                                <td><?= $model->name ?></td>
-                                                <td>
-                                                    <?php 
-                                                    $brand = $this->part->single_data('brand', $model->brand_id);
-                                                    echo $brand[0]->name ?? '';
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <?php 
-                                                    $user = $this->part->single_data('user', $model->added_by);
-                                                    $user_type = '';
-                                                    if($user[0]->type == '1') $user_type = " (Admin)";
-                                                    elseif($user[0]->type == '2') $user_type = " (Staff)";
-                                                    elseif($user[0]->type == '3') $user_type = " (Technician)";
-                                                    elseif($user[0]->type == '4') $user_type = " (Branch)";
-                                                    elseif($user[0]->type == '5') $user_type = " (Part controller)";
-                                                    echo $user[0]->name . $user_type;
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <?php if($this->session->userdata('user_type') == '1' OR $this->session->userdata('user_type') == '4'): ?>
-                                                        <button data-toggle='modal' data-target='#edit_data' onclick='return edit(<?= $model->id ?>)' class='btn btn-info btn-xs m-1'><i class='fas fa-pencil-alt'></i></button>
-                                                        <button onclick='return del(<?= $model->id ?>)' class='btn btn-danger btn-xs m-1'><i class='fa fa-trash' aria-hidden='true'></i></button>
-                                                    <?php elseif($this->session->userdata('user_type') == '3'): ?>
-                                                        <?php if($model->added_by == $this->session->userdata('user_id')): ?>
-                                                            <button data-toggle='modal' data-target='#edit_data' onclick='return edit(<?= $model->id ?>)' class='btn btn-info btn-xs m-1'><i class='fas fa-pencil-alt'></i></button>
-                                                            <button onclick='return del(<?= $model->id ?>)' class='btn btn-danger btn-xs m-1'><i class='fa fa-trash' aria-hidden='true'></i></button>
-                                                        <?php else: ?>
-                                                            <button class='btn btn-info btn-xs m-1' disabled><i class='fas fa-pencil-alt'></i></button>
-                                                            <button class='btn btn-danger btn-xs m-1' disabled><i class='fa fa-trash' aria-hidden='true'></i></button>
-                                                        <?php endif; ?>
-                                                    <?php else: ?>
-                                                        <button class='btn btn-info btn-xs m-1' disabled><i class='fas fa-pencil-alt'></i></button>
-                                                        <button class='btn btn-danger btn-xs m-1' disabled><i class='fa fa-trash' aria-hidden='true'></i></button>
-                                                    <?php endif; ?>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    <?php else: ?>
-                                        <tr>
-                                            <td colspan="5" class="text-center">No models found</td>
-                                        </tr>
-                                    <?php endif; ?>
+                                <tbody id="model-tbody">
+                                    <!-- Data will be loaded here by JS -->
                                 </tbody>
                             </table>
-                            
-                            <!-- Pagination -->
-                            <div class="mt-3">
-                                <?= $pagination ?>
-                            </div>
+                            <div class="mt-3" id="pagination-links"></div>
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -144,3 +94,87 @@
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    let currentPage = 1;
+    let perPage = 10;
+    let search = { name: '', brand: '', user: '' };
+
+    function fetchData(page = 1) {
+        let params = {
+            page: page,
+            limit: perPage,
+            name: search.name,
+            brand: search.brand,
+            user: search.user
+        };
+        $.getJSON('<?= base_url('part/model_ajax') ?>', params, function(res) {
+            let rows = '';
+            if (res.data.length > 0) {
+                let i = (page - 1) * perPage + 1;
+                res.data.forEach(function(row) {
+                    rows += `<tr>
+                        <td>${i++}</td>
+                        <td>${row.name}</td>
+                        <td>${row.brand}</td>
+                        <td>${row.user}</td>
+                        <td>`;
+                    if (row.can_edit) {
+                        rows += `<button data-toggle='modal' data-target='#edit_data' onclick='return edit(${row.id})' class='btn btn-info btn-xs m-1'><i class='fas fa-pencil-alt'></i></button>`;
+                        rows += `<button onclick='return del(${row.id})' class='btn btn-danger btn-xs m-1'><i class='fa fa-trash' aria-hidden='true'></i></button>`;
+                    } else {
+                        rows += `<button class='btn btn-info btn-xs m-1' disabled><i class='fas fa-pencil-alt'></i></button>`;
+                        rows += `<button class='btn btn-danger btn-xs m-1' disabled><i class='fa fa-trash' aria-hidden='true'></i></button>`;
+                    }
+                    rows += `</td></tr>`;
+                });
+            } else {
+                rows = `<tr><td colspan="5" class="text-center">No models found</td></tr>`;
+            }
+            $('#model-tbody').html(rows);
+            renderPagination(res.total, page);
+        });
+    }
+
+    function renderPagination(total, page) {
+        let totalPages = Math.ceil(total / perPage);
+        let html = '<ul class="pagination">';
+        if (page > 1) {
+            html += `<li class="page-item"><a class="page-link" href="#" data-page="1">First</a></li>`;
+            html += `<li class="page-item"><a class="page-link" href="#" data-page="${page-1}">&laquo;</a></li>`;
+        }
+        for (let i = 1; i <= totalPages; i++) {
+            html += `<li class="page-item${i === page ? ' active' : ''}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
+        }
+        if (page < totalPages) {
+            html += `<li class="page-item"><a class="page-link" href="#" data-page="${page+1}">&raquo;</a></li>`;
+            html += `<li class="page-item"><a class="page-link" href="#" data-page="${totalPages}">Last</a></li>`;
+        }
+        html += '</ul>';
+        $('#pagination-links').html(html);
+    }
+
+    // Pagination click
+    $('#pagination-links').on('click', 'a.page-link', function(e) {
+        e.preventDefault();
+        let page = parseInt($(this).data('page'));
+        if (!isNaN(page)) {
+            currentPage = page;
+            fetchData(currentPage);
+        }
+    });
+
+    // Search input
+    $('.search-col').on('input', function() {
+        let col = $(this).data('col');
+        search[col] = $(this).val();
+        currentPage = 1;
+        fetchData(currentPage);
+    });
+
+    // Initial load
+    fetchData(currentPage);
+});
+</script>

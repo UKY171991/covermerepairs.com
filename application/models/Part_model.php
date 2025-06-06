@@ -87,4 +87,34 @@ class Part_model extends CI_Model {
 		$query = $this->db->get($table);
 		return $query->result();
 	}
+
+	public function get_models_ajax($limit, $offset, $search = []) {
+		$this->db->select('*');
+		if (!empty($search['name'])) {
+			$this->db->like('name', $search['name']);
+		}
+		if (!empty($search['brand'])) {
+			$this->db->like('brand_id', $search['brand']);
+		}
+		if (!empty($search['user'])) {
+			$this->db->like('added_by', $search['user']);
+		}
+		$this->db->order_by('id', 'DESC');
+		$this->db->limit($limit, $offset);
+		$query = $this->db->get('model');
+		return $query->result();
+	}
+
+	public function count_models_ajax($search = []) {
+		if (!empty($search['name'])) {
+			$this->db->like('name', $search['name']);
+		}
+		if (!empty($search['brand'])) {
+			$this->db->like('brand_id', $search['brand']);
+		}
+		if (!empty($search['user'])) {
+			$this->db->like('added_by', $search['user']);
+		}
+		return $this->db->count_all_results('model');
+	}
 }

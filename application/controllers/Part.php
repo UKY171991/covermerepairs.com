@@ -619,4 +619,42 @@ class Part extends CI_Controller {
 		$this->stock->delete_order($id);
 		echo json_encode(['status' => 'success']);
 	}
+
+	public function model_ajax() {
+		$limit = $this->input->get('limit') ?: 10;
+		$page = $this->input->get('page') ?: 1;
+		$offset = ($page - 1) * $limit;
+		$search = [
+			'name' => $this->input->get('name'),
+			'brand' => $this->input->get('brand'),
+			'user' => $this->input->get('user'),
+		];
+		$models = $this->part->get_models_ajax($limit, $offset, $search);
+		$total = $this->part->count_models_ajax($search);
+		$result = [];
+		foreach ($models as $model) {
+			$brand = $this->part->single_data('brand', $model->brand_id);
+			$user = $this->part->single_data('user', $model->added_by);
+			$user_type = '';
+			if (!empty($user)) {
+				if($user[0]->type == '1') $user_type = ' (Admin)';
+				elseif($user[0]->type == '2') $user_type = ' (Staff)';
+				elseif($user[0]->type == '3') $user_type = ' (Technician)';
+				elseif($user[0]->type == '4') $user_type = ' (Branch)';
+				elseif($user[0]->type == '5') $user_type = ' (Part controller)';
+			}
+			$result[] = [
+				'id' => $model->id,
+				'name' => $model->name,
+				'brand' => !empty($brand) ? $brand[0]->name : '',
+				'user' => !empty($user) ? $user[0]->name . $user_type : '',
+				'can_edit' => ($this->session->userdata('user_type') == '1' || $this->session->userdata('user_type') == '4' || ($this->session->userdata('user_type') == '3' && $model->added_by == $this->session->userdata('user_id'))),
+			];
+		}
+		echo json_encode([
+			'data' => $result,
+			'total' => $total
+		]);
+		exit;
+	}
 }
