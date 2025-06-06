@@ -34,6 +34,7 @@
               <!-- /.card-header -->
               <div class="card-body">  <!--example1-->
               
+                <div class="table-responsive">
                 <table id="all_data" class="table table-bordered table-striped">
                   <thead>
                   <tr>
@@ -69,6 +70,7 @@
                   </tr>
                   </tfoot>
                 </table>
+                </div>
               </div>
               <!-- /.card-body -->
             </div>
