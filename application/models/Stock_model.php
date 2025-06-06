@@ -47,5 +47,19 @@ class Stock_model extends CI_Model {
         $this->db->where('id', $id)->delete('stock_out');
         return $this->db->affected_rows();
     }
+    public function get_orders_paginated($limit, $offset, $search = []) {
+        if (!empty($search['order_id'])) $this->db->like('order_id', $search['order_id']);
+        if (!empty($search['part_name'])) $this->db->like('part_name', $search['part_name']);
+        if (!empty($search['status'])) $this->db->like('status', $search['status']);
+        $this->db->order_by('id', 'DESC');
+        $query = $this->db->get('part_orders', $limit, $offset);
+        return $query->result_array();
+    }
+    public function count_orders($search = []) {
+        if (!empty($search['order_id'])) $this->db->like('order_id', $search['order_id']);
+        if (!empty($search['part_name'])) $this->db->like('part_name', $search['part_name']);
+        if (!empty($search['status'])) $this->db->like('status', $search['status']);
+        return $this->db->count_all_results('part_orders');
+    }
     // Add insert/update/delete methods as needed
 } 

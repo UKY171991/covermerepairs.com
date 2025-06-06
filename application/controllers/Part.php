@@ -657,4 +657,41 @@ class Part extends CI_Controller {
 		]);
 		exit;
 	}
+
+	public function order_ajax() {
+		$this->load->model('Stock_model', 'stock');
+		$limit = $this->input->get('limit') ?: 10;
+		$page = $this->input->get('page') ?: 1;
+		$offset = ($page - 1) * $limit;
+		$search = [
+			'order_id' => $this->input->get('order_id'),
+			'part_name' => $this->input->get('part_name'),
+			'status' => $this->input->get('status')
+		];
+		$orders = $this->stock->get_orders_paginated($limit, $offset, $search);
+		$total = $this->stock->count_orders($search);
+		echo json_encode(['data' => $orders, 'total' => $total]);
+		exit;
+	}
+
+	public function add_order_ajax() {
+		$this->load->model('Stock_model', 'stock');
+		$data = $this->input->post();
+		if (empty($data['id'])) {
+			$id = $this->stock->insert_order($data);
+		} else {
+			$this->stock->update_order($data['id'], $data);
+			$id = $data['id'];
+		}
+		echo json_encode(['status' => 'success', 'id' => $id]);
+		exit;
+	}
+
+	public function delete_order_ajax() {
+		$this->load->model('Stock_model', 'stock');
+		$id = $this->input->post('id');
+		$this->stock->delete_order($id);
+		echo json_encode(['status' => 'success']);
+		exit;
+	}
 }
