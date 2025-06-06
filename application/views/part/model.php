@@ -174,6 +174,35 @@ $(document).ready(function() {
         fetchData(currentPage);
     });
 
+    // AJAX form submit for add/edit
+    $('#submit_data').on('submit', function(e) {
+        e.preventDefault();
+        var form = $(this);
+        $.ajax({
+            url: form.attr('action'),
+            method: 'POST',
+            data: form.serialize(),
+            success: function(response) {
+                // Optionally show a message here
+                currentPage = 1; // Always show latest
+                fetchData(currentPage);
+                $('#edit_data').modal('hide');
+                form[0].reset();
+            }
+        });
+    });
+
+    // AJAX delete
+    window.del = function(id) {
+        if (confirm('Are you sure you want to delete this record?')) {
+            $.post('<?= base_url('part/delete_model') ?>', { id: id }, function(response) {
+                // Optionally show a message here
+                fetchData(currentPage);
+            });
+        }
+        return false;
+    };
+
     // Initial load
     fetchData(currentPage);
 });
