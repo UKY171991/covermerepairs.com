@@ -32,7 +32,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="all_data" class="table table-bordered table-striped">
+                            <table class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -43,18 +43,60 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Dynamic Data -->
+                                    <?php if(!empty($models)): ?>
+                                        <?php $i = 1; foreach($models as $model): ?>
+                                            <tr>
+                                                <td><?= $i++ ?></td>
+                                                <td><?= $model->name ?></td>
+                                                <td>
+                                                    <?php 
+                                                    $brand = $this->part->single_data('brand', $model->brand_id);
+                                                    echo $brand[0]->name ?? '';
+                                                    ?>
+                                                </td>
+                                                <td>
+                                                    <?php 
+                                                    $user = $this->part->single_data('user', $model->added_by);
+                                                    $user_type = '';
+                                                    if($user[0]->type == '1') $user_type = " (Admin)";
+                                                    elseif($user[0]->type == '2') $user_type = " (Staff)";
+                                                    elseif($user[0]->type == '3') $user_type = " (Technician)";
+                                                    elseif($user[0]->type == '4') $user_type = " (Branch)";
+                                                    elseif($user[0]->type == '5') $user_type = " (Part controller)";
+                                                    echo $user[0]->name . $user_type;
+                                                    ?>
+                                                </td>
+                                                <td>
+                                                    <?php if($this->session->userdata('user_type') == '1' OR $this->session->userdata('user_type') == '4'): ?>
+                                                        <button data-toggle='modal' data-target='#edit_data' onclick='return edit(<?= $model->id ?>)' class='btn btn-info btn-xs m-1'><i class='fas fa-pencil-alt'></i></button>
+                                                        <button onclick='return del(<?= $model->id ?>)' class='btn btn-danger btn-xs m-1'><i class='fa fa-trash' aria-hidden='true'></i></button>
+                                                    <?php elseif($this->session->userdata('user_type') == '3'): ?>
+                                                        <?php if($model->added_by == $this->session->userdata('user_id')): ?>
+                                                            <button data-toggle='modal' data-target='#edit_data' onclick='return edit(<?= $model->id ?>)' class='btn btn-info btn-xs m-1'><i class='fas fa-pencil-alt'></i></button>
+                                                            <button onclick='return del(<?= $model->id ?>)' class='btn btn-danger btn-xs m-1'><i class='fa fa-trash' aria-hidden='true'></i></button>
+                                                        <?php else: ?>
+                                                            <button class='btn btn-info btn-xs m-1' disabled><i class='fas fa-pencil-alt'></i></button>
+                                                            <button class='btn btn-danger btn-xs m-1' disabled><i class='fa fa-trash' aria-hidden='true'></i></button>
+                                                        <?php endif; ?>
+                                                    <?php else: ?>
+                                                        <button class='btn btn-info btn-xs m-1' disabled><i class='fas fa-pencil-alt'></i></button>
+                                                        <button class='btn btn-danger btn-xs m-1' disabled><i class='fa fa-trash' aria-hidden='true'></i></button>
+                                                    <?php endif; ?>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td colspan="5" class="text-center">No models found</td>
+                                        </tr>
+                                    <?php endif; ?>
                                 </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Model Name</th>
-                                        <th>Brand Name</th>
-                                        <th>User Name</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </tfoot>
                             </table>
+                            
+                            <!-- Pagination -->
+                            <div class="mt-3">
+                                <?= $pagination ?>
+                            </div>
                         </div>
                         <!-- /.card-body -->
                     </div>

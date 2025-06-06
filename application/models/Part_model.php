@@ -75,4 +75,16 @@ class Part_model extends CI_Model {
         $query = $this->db->get($table);
         return $query->result();
     }
+
+	public function get_paginated_data($table='', $limit=10, $offset=0, $order='DESC', $where='')
+	{
+		$this->db->select('*');
+		if($where != ''){
+			$this->db->where($where);
+		}
+		$this->db->order_by('id', $order);
+		$this->db->limit($limit, $offset);
+		$query = $this->db->get($table);
+		return $query->result();
+	}
 }

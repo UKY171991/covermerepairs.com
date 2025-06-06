@@ -41,9 +41,42 @@ class Part extends CI_Controller {
 	public function model()
 	{
 		$data['brand'] = $this->part->all_data('brand');
-		$data['ajax']='model';
+		$data['ajax'] = 'model';
+		
+		// Pagination settings
+		$config['base_url'] = base_url('part/model');
+		$config['total_rows'] = $this->part->count_all('model', 'DESC');
+		$config['per_page'] = 10;
+		$config['uri_segment'] = 3;
+		$config['num_links'] = 5;
+		$config['full_tag_open'] = '<ul class="pagination">';
+		$config['full_tag_close'] = '</ul>';
+		$config['first_link'] = 'First';
+		$config['last_link'] = 'Last';
+		$config['first_tag_open'] = '<li class="page-item">';
+		$config['first_tag_close'] = '</li>';
+		$config['prev_link'] = '&laquo';
+		$config['prev_tag_open'] = '<li class="page-item">';
+		$config['prev_tag_close'] = '</li>';
+		$config['next_link'] = '&raquo';
+		$config['next_tag_open'] = '<li class="page-item">';
+		$config['next_tag_close'] = '</li>';
+		$config['last_tag_open'] = '<li class="page-item">';
+		$config['last_tag_close'] = '</li>';
+		$config['cur_tag_open'] = '<li class="page-item active"><a class="page-link" href="#">';
+		$config['cur_tag_close'] = '</a></li>';
+		$config['num_tag_open'] = '<li class="page-item">';
+		$config['num_tag_close'] = '</li>';
+		$config['attributes'] = array('class' => 'page-link');
+
+		$this->pagination->initialize($config);
+		
+		$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		$data['models'] = $this->part->get_paginated_data('model', $config['per_page'], $page, 'DESC');
+		$data['pagination'] = $this->pagination->create_links();
+		
 		$this->load->view('inc/header');
-		$this->load->view('part/model',$data);
+		$this->load->view('part/model', $data);
 		$this->load->view('inc/footer');
 	} 
 	
