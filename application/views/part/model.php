@@ -174,8 +174,8 @@ $(document).ready(function() {
         fetchData(currentPage);
     });
 
-    // AJAX form submit for add/edit
-    $('#submit_data').on('submit', function(e) {
+    // AJAX form submit for add/edit (fix double submit)
+    $('#submit_data').off('submit').on('submit', function(e) {
         e.preventDefault();
         var form = $(this);
         $.ajax({
@@ -183,7 +183,6 @@ $(document).ready(function() {
             method: 'POST',
             data: form.serialize(),
             success: function(response) {
-                // Optionally show a message here
                 currentPage = 1; // Always show latest
                 fetchData(currentPage);
                 $('#edit_data').modal('hide');
