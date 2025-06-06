@@ -23,41 +23,43 @@
                 </div>
                 <div class="card-body">
                     <input type="hidden" class="base_url" value="<?= base_url() ?>" />
-                    <table class="table table-bordered table-striped" id="stockOutTable">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Part Name</th>
-                                <th>Quantity</th>
-                                <th>Date</th>
-                                <th>Issued By</th>
-                                <th>Remarks</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (!empty($stock_out)) : ?>
-                                <?php foreach ($stock_out as $item) : ?>
-                                    <tr data-id="<?= $item['id'] ?>">
-                                        <td><?= htmlspecialchars($item['id']) ?></td>
-                                        <td><?= htmlspecialchars($item['part_name']) ?></td>
-                                        <td><?= htmlspecialchars($item['quantity']) ?></td>
-                                        <td><?= htmlspecialchars($item['date']) ?></td>
-                                        <td><?= htmlspecialchars($item['issued_by']) ?></td>
-                                        <td><?= htmlspecialchars($item['remarks']) ?></td>
-                                        <td>
-                                            <button class="btn btn-info btn-xs edit-btn" onclick="openEditStockOutModal(<?= $item['id'] ?>, this)">Edit</button>
-                                            <button class="btn btn-danger btn-xs delete-btn" onclick="deleteStockOut(<?= $item['id'] ?>, this)">Delete</button>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php else : ?>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped" id="stockOutTable">
+                            <thead>
                                 <tr>
-                                    <td colspan="7" class="text-center text-muted">No stock out records found.</td>
+                                    <th>#</th>
+                                    <th>Part Name</th>
+                                    <th>Quantity</th>
+                                    <th>Date</th>
+                                    <th>Issued By</th>
+                                    <th>Remarks</th>
+                                    <th>Actions</th>
                                 </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($stock_out)) : ?>
+                                    <?php foreach ($stock_out as $item) : ?>
+                                        <tr data-id="<?= $item['id'] ?>">
+                                            <td><?= htmlspecialchars($item['id']) ?></td>
+                                            <td><?= htmlspecialchars($item['part_name']) ?></td>
+                                            <td><?= htmlspecialchars($item['quantity']) ?></td>
+                                            <td><?= htmlspecialchars($item['date']) ?></td>
+                                            <td><?= htmlspecialchars($item['issued_by']) ?></td>
+                                            <td><?= htmlspecialchars($item['remarks']) ?></td>
+                                            <td>
+                                                <button class="btn btn-info btn-xs edit-btn" onclick="openEditStockOutModal(<?= $item['id'] ?>, this)">Edit</button>
+                                                <button class="btn btn-danger btn-xs delete-btn" onclick="deleteStockOut(<?= $item['id'] ?>, this)">Delete</button>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else : ?>
+                                    <tr>
+                                        <td colspan="7" class="text-center text-muted">No stock out records found.</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
