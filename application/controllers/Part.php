@@ -668,8 +668,9 @@ class Part extends CI_Controller {
 			'part_name' => $this->input->get('part_name'),
 			'status' => $this->input->get('status')
 		];
-		$orders = $this->stock->get_orders_paginated($limit, $offset, $search);
-		$total = $this->stock->count_orders($search);
+		$id = $this->input->get('id');
+		$orders = $this->stock->get_orders_paginated($limit, $offset, $search, $id);
+		$total = $id ? 1 : $this->stock->count_orders($search);
 		echo json_encode(['data' => $orders, 'total' => $total]);
 		exit;
 	}

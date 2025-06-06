@@ -5,19 +5,12 @@ $(document).ready(function() {
     let editingId = null;
 
     function fetchOrders(page = 1) {
-        let params = {
-            page: page,
-            limit: perPage,
-            order_id: search.order_id,
-            part_name: search.part_name,
-            status: search.status
-        };
-        $.getJSON(BASE_URL + 'part/order_ajax', params, function(res) {
+        $.getJSON(BASE_URL + 'part/order_ajax', { page, limit: perPage }, function(res) {
             let rows = '';
             if (res.data.length > 0) {
                 let i = (page - 1) * perPage + 1;
                 res.data.forEach(function(order) {
-                    rows += `<tr data-id="${order.id}">
+                    rows += `<tr>
                         <td>${i++}</td>
                         <td>${order.order_id}</td>
                         <td>${order.part_name}</td>
@@ -26,8 +19,8 @@ $(document).ready(function() {
                         <td>${order.status}</td>
                         <td>${order.remarks}</td>
                         <td>
-                            <button class="btn btn-info btn-xs edit-btn" onclick="openEditOrderModal(${order.id})">Edit</button>
-                            <button class="btn btn-danger btn-xs delete-btn" onclick="deleteOrder(${order.id})">Delete</button>
+                            <button class="btn btn-info btn-xs" onclick="openEditOrderModal(${order.id})">Edit</button>
+                            <button class="btn btn-danger btn-xs" onclick="deleteOrder(${order.id})">Delete</button>
                         </td>
                     </tr>`;
                 });
@@ -57,7 +50,6 @@ $(document).ready(function() {
         $('#pagination-links').html(html);
     }
 
-    // Pagination click
     $('#pagination-links').on('click', 'a.page-link', function(e) {
         e.preventDefault();
         let page = parseInt($(this).data('page'));
@@ -67,17 +59,15 @@ $(document).ready(function() {
         }
     });
 
-    // Add/Edit Order Modal
     window.openAddOrderModal = function() {
-        editingId = null;
         $('#orderForm')[0].reset();
         $('#orderId').val('');
         $('#orderModalLabel').text('Add Part Order');
         $('#orderModal').modal('show');
     };
+
     window.openEditOrderModal = function(id) {
-        editingId = id;
-        $.getJSON(BASE_URL + 'part/order_ajax', { page: 1, limit: 1, id: id }, function(res) {
+        $.getJSON(BASE_URL + 'part/order_ajax', { id: id, page: 1, limit: 1 }, function(res) {
             if (res.data.length > 0) {
                 let order = res.data[0];
                 $('#orderId').val(order.id);
@@ -93,24 +83,22 @@ $(document).ready(function() {
         });
     };
 
-    // AJAX form submit for add/edit
     $('#orderForm').off('submit').on('submit', function(e) {
         e.preventDefault();
-        var form = $(this);
         $.ajax({
             url: BASE_URL + 'part/add_order_ajax',
             method: 'POST',
-            data: form.serialize(),
+            data: $(this).serialize(),
+            dataType: 'json',
             success: function(response) {
                 currentPage = 1;
                 fetchOrders(currentPage);
                 $('#orderModal').modal('hide');
-                form[0].reset();
+                $('#orderForm')[0].reset();
             }
         });
     });
 
-    // AJAX delete
     window.deleteOrder = function(id) {
         if (confirm('Are you sure you want to delete this record?')) {
             $.post(BASE_URL + 'part/delete_order_ajax', { id: id }, function(response) {
@@ -120,6 +108,5 @@ $(document).ready(function() {
         return false;
     };
 
-    // Initial load
     fetchOrders(currentPage);
 });
