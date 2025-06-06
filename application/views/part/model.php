@@ -32,20 +32,22 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table class="table table-bordered table-striped" id="model-table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Model Name<br><input type="text" class="form-control form-control-sm search-col" data-col="name" placeholder="Search Model"></th>
-                                        <th>Brand Name<br><input type="text" class="form-control form-control-sm search-col" data-col="brand" placeholder="Search Brand ID"></th>
-                                        <th>User Name<br><input type="text" class="form-control form-control-sm search-col" data-col="user" placeholder="Search User ID"></th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="model-tbody">
-                                    <!-- Data will be loaded here by JS -->
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped" id="model-table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Model Name<br><input type="text" class="form-control form-control-sm search-col" data-col="name" placeholder="Search Model"></th>
+                                            <th>Brand Name<br><input type="text" class="form-control form-control-sm search-col" data-col="brand" placeholder="Search Brand ID"></th>
+                                            <th>User Name<br><input type="text" class="form-control form-control-sm search-col" data-col="user" placeholder="Search User ID"></th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="model-tbody">
+                                        <!-- Data will be loaded here by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
                             <div class="mt-3" id="pagination-links"></div>
                         </div>
                         <!-- /.card-body -->

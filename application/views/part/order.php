@@ -22,43 +22,45 @@
           <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#orderModal" onclick="openAddOrderModal()">Add</button>
         </div>
         <div class="card-body">
-          <table class="table table-bordered table-striped" id="orderTable">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Order ID</th>
-                <th>Part Name</th>
-                <th>Quantity</th>
-                <th>Order Date</th>
-                <th>Status</th>
-                <th>Remarks</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php if (!empty($orders)) : ?>
-                <?php foreach ($orders as $order) : ?>
-                  <tr data-id="<?= $order['id'] ?>">
-                    <td><?= htmlspecialchars($order['id']) ?></td>
-                    <td><?= htmlspecialchars($order['order_id']) ?></td>
-                    <td><?= htmlspecialchars($order['part_name']) ?></td>
-                    <td><?= htmlspecialchars($order['quantity']) ?></td>
-                    <td><?= htmlspecialchars($order['order_date']) ?></td>
-                    <td><?= htmlspecialchars($order['status']) ?></td>
-                    <td><?= htmlspecialchars($order['remarks']) ?></td>
-                    <td>
-                      <button class="btn btn-info btn-xs edit-btn" onclick="openEditOrderModal(<?= $order['id'] ?>, this)">Edit</button>
-                      <button class="btn btn-danger btn-xs delete-btn" onclick="deleteOrder(<?= $order['id'] ?>, this)">Delete</button>
-                    </td>
-                  </tr>
-                <?php endforeach; ?>
-              <?php else : ?>
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped" id="orderTable">
+              <thead>
                 <tr>
-                  <td colspan="8" class="text-center text-muted">No part order records found.</td>
+                  <th>#</th>
+                  <th>Order ID</th>
+                  <th>Part Name</th>
+                  <th>Quantity</th>
+                  <th>Order Date</th>
+                  <th>Status</th>
+                  <th>Remarks</th>
+                  <th>Actions</th>
                 </tr>
-              <?php endif; ?>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <?php if (!empty($orders)) : ?>
+                  <?php foreach ($orders as $order) : ?>
+                    <tr data-id="<?= $order['id'] ?>">
+                      <td><?= htmlspecialchars($order['id']) ?></td>
+                      <td><?= htmlspecialchars($order['order_id']) ?></td>
+                      <td><?= htmlspecialchars($order['part_name']) ?></td>
+                      <td><?= htmlspecialchars($order['quantity']) ?></td>
+                      <td><?= htmlspecialchars($order['order_date']) ?></td>
+                      <td><?= htmlspecialchars($order['status']) ?></td>
+                      <td><?= htmlspecialchars($order['remarks']) ?></td>
+                      <td>
+                        <button class="btn btn-info btn-xs edit-btn" onclick="openEditOrderModal(<?= $order['id'] ?>, this)">Edit</button>
+                        <button class="btn btn-danger btn-xs delete-btn" onclick="deleteOrder(<?= $order['id'] ?>, this)">Delete</button>
+                      </td>
+                    </tr>
+                  <?php endforeach; ?>
+                <?php else : ?>
+                  <tr>
+                    <td colspan="8" class="text-center text-muted">No part order records found.</td>
+                  </tr>
+                <?php endif; ?>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

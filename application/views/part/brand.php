@@ -34,27 +34,29 @@
                         <div class="card-body">
                             <input type="hidden" class="base_url" value="<?= base_url() ?>" />
                             <div id="brand-message"></div>
-                            <table id="all_data" class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Brand Name</th>
-                                        <th>User Name</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- DataTables will populate this -->
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Brand Name</th>
-                                        <th>User Name</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                            <div class="table-responsive">
+                                <table id="all_data" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Brand Name</th>
+                                            <th>User Name</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- DataTables will populate this -->
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Brand Name</th>
+                                            <th>User Name</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
                         <!-- /.card-body -->
                     </div>
