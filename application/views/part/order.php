@@ -19,7 +19,9 @@
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h3 class="card-title">Part Order List</h3>
-          <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#orderModal" onclick="openAddOrderModal()">Add Part Order</button>
+          <div class="card-header d-flex justify-content-end">
+            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#orderModal" onclick="openAddOrderModal()">Add</button>
+          </div>
         </div>
         <div class="card-body">
           <table class="table table-bordered table-striped" id="orderTable">
