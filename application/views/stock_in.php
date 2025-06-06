@@ -22,41 +22,43 @@
                     <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#stockInModal" onclick="openAddStockInModal()">Add Stock In</button>
                 </div>
                 <div class="card-body">
-                    <table class="table table-bordered table-striped" id="stockInTable">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Part Name</th>
-                                <th>Quantity</th>
-                                <th>Date</th>
-                                <th>Received By</th>
-                                <th>Remarks</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (!empty($stock_in)) : ?>
-                                <?php foreach ($stock_in as $item) : ?>
-                                    <tr data-id="<?= $item['id'] ?>">
-                                        <td><?= htmlspecialchars($item['id']) ?></td>
-                                        <td><?= htmlspecialchars($item['part_name']) ?></td>
-                                        <td><?= htmlspecialchars($item['quantity']) ?></td>
-                                        <td><?= htmlspecialchars($item['date']) ?></td>
-                                        <td><?= htmlspecialchars($item['received_by']) ?></td>
-                                        <td><?= htmlspecialchars($item['remarks']) ?></td>
-                                        <td>
-                                            <button class="btn btn-info btn-xs edit-btn" onclick="openEditStockInModal(<?= $item['id'] ?>, this)">Edit</button>
-                                            <button class="btn btn-danger btn-xs delete-btn" onclick="deleteStockIn(<?= $item['id'] ?>, this)">Delete</button>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php else : ?>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped" id="stockInTable">
+                            <thead>
                                 <tr>
-                                    <td colspan="7" class="text-center text-muted">No stock in records found.</td>
+                                    <th>#</th>
+                                    <th>Part Name</th>
+                                    <th>Quantity</th>
+                                    <th>Date</th>
+                                    <th>Received By</th>
+                                    <th>Remarks</th>
+                                    <th>Actions</th>
                                 </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($stock_in)) : ?>
+                                    <?php foreach ($stock_in as $item) : ?>
+                                        <tr data-id="<?= $item['id'] ?>">
+                                            <td><?= htmlspecialchars($item['id']) ?></td>
+                                            <td><?= htmlspecialchars($item['part_name']) ?></td>
+                                            <td><?= htmlspecialchars($item['quantity']) ?></td>
+                                            <td><?= htmlspecialchars($item['date']) ?></td>
+                                            <td><?= htmlspecialchars($item['received_by']) ?></td>
+                                            <td><?= htmlspecialchars($item['remarks']) ?></td>
+                                            <td>
+                                                <button class="btn btn-info btn-xs edit-btn" onclick="openEditStockInModal(<?= $item['id'] ?>, this)">Edit</button>
+                                                <button class="btn btn-danger btn-xs delete-btn" onclick="deleteStockIn(<?= $item['id'] ?>, this)">Delete</button>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else : ?>
+                                    <tr>
+                                        <td colspan="7" class="text-center text-muted">No stock in records found.</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
