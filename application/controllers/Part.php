@@ -7,6 +7,7 @@ class Part extends CI_Controller {
 	  date_default_timezone_set('NZ');
 	  $this->load->model('part_model','part');
 	  $this->load->model('Stock_model', 'stock');
+	  $this->load->library('pagination');
 	  
 	  
 	  $permission = explode("--",$_SESSION['permission']);
