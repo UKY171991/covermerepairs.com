@@ -30,39 +30,41 @@
             </div>
             <!-- Card Body -->
             <div class="card-body">
-              <table id="all_data" class="table table-bordered table-striped">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Job Code</th>
-                    <th>Customer Name</th>
-                    <th>Brand/Model</th>
-                    <th>From / To</th>
-                    <th>Issue</th>
-                    <th>Found Issue</th>
-                    <th>Assign</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <th>#</th>
-                    <th>Job Code</th>
-                    <th>Customer Name</th>
-                    <th>Brand/Model</th>
-                    <th>From / To</th>
-                    <th>Issue</th>
-                    <th>Found Issue</th>
-                    <th>Assign</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </tfoot>
-              </table>
+              <div class="table-responsive">
+                <table id="all_data" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Job Code</th>
+                      <th>Customer Name</th>
+                      <th>Brand/Model</th>
+                      <th>From / To</th>
+                      <th>Issue</th>
+                      <th>Found Issue</th>
+                      <th>Assign</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <th>#</th>
+                      <th>Job Code</th>
+                      <th>Customer Name</th>
+                      <th>Brand/Model</th>
+                      <th>From / To</th>
+                      <th>Issue</th>
+                      <th>Found Issue</th>
+                      <th>Assign</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
             </div>
           </div>
         </div>
