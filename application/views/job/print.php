@@ -164,20 +164,6 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
           <li>You are happy with the condition of the device and have checked yourself.</li>
         </ul>
       </div>
-      <table class="signature-table" style="margin-top:30px;">
-        <tr>
-          <td>
-            <strong>Drop Off Signature</strong><br>
-            Customer: ______________ Date: ________<br>
-            Staff Name: ____________ Date: ________
-          </td>
-          <td>
-            <strong>Pickup Signature</strong><br>
-            Customer: ______________ Date: ________<br>
-            Staff Name: ____________ Date: ________
-          </td>
-        </tr>
-      </table>
     </div>
   </section>
 </div>
