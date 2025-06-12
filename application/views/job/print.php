@@ -20,12 +20,15 @@
   .static-box { border: 1px solid #000; padding: 8px; margin-bottom: 10px; }
   .signature-line { border-bottom: 1px solid #000; width: 180px; display: inline-block; margin-bottom: 2px; }
   .checkbox { display:inline-block;width:16px;height:16px;border:1px solid #000;vertical-align:middle;margin-right:4px; }
+  @media print {
+    .no-print { display: none !important; }
+  }
 </style>
 
 <div class="content-wrapper" style="background:#fff;">
   <section class="content">
     <div class="container-fluid">
-      <div style="text-align:right; margin: 20px 0 10px 0;">
+      <div class="no-print" style="text-align:right; margin: 20px 0 10px 0;">
         <button onclick="window.print()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
       </div>
       <table class="pdf-header-table" style="margin-top:20px;">
