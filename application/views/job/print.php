@@ -8,6 +8,8 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
         }
     }
 }
+
+print_r($all_branches);
 ?>
 
 <!-- Content Wrapper. Contains page content -->
