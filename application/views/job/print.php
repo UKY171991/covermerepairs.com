@@ -43,8 +43,13 @@
             <a href="mailto:info.covermenz@gmail.com">info.covermenz@gmail.com</a>
           </td>
           <td class="right-cell" style="text-align:right;">
+            <?php
+              $job_id = isset($jobs[0]->id) ? $jobs[0]->id : '';
+              $qr_url = base_url('job/print/' . $job_id);
+              $qr_code_src = 'https://chart.googleapis.com/chart?chs=90x90&cht=qr&chl=' . urlencode($qr_url);
+            ?>
             <div style="margin-bottom:8px;">
-              <img src="https://chart.googleapis.com/chart?chs=90x90&cht=qr&chl=<?=urlencode(base_url('job/print/'.($jobs[0]->id ?? '')))?>" alt="QR Code" style="height:90px;width:90px;">
+              <img src="<?= $qr_code_src ?>" alt="QR Code" style="height:90px;width:90px;">
             </div>
             Website: www.coverme.nz<br>
             FB:<br>
