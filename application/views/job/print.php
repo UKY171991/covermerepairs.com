@@ -1,5 +1,14 @@
-<?php // DEBUG: Remove after testing
-// echo '<pre>'; print_r($branch); echo '</pre>'; ?>
+<?php
+$branch_name = '';
+if (isset($all_branches) && isset($jobs[0]->branch)) {
+    foreach ($all_branches as $b) {
+        if ($b->id == $jobs[0]->branch) {
+            $branch_name = $b->name;
+            break;
+        }
+    }
+}
+?>
 
 <!-- Content Wrapper. Contains page content -->
 
@@ -33,7 +42,7 @@
     <div class="container-fluid">
       <div class="no-print" style="text-align:right; margin: 20px 0 10px 0;">
         <button onclick="window.print()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-      </div>
+                </div>
       <table class="pdf-header-table" style="margin-top:20px;">
         <tr>
           <td class="logo-cell">
@@ -53,14 +62,14 @@
             ?>
             <div style="margin-bottom:8px;">
               <img src="<?= $qr_code_src ?>" alt="QR Code" style="height:90px;width:90px;">
-            </div>
+                </div>
           </td>
         </tr>
       </table>
       <div class="form-title" style="margin-top:10px;">SERVICE REQUEST FORM</div>
       <table class="meta-table">
         <tr>
-          <td><strong>Branch: <?= $branch[0]->name ?? '' ?></strong></td>
+          <td><strong>Branch: <?= $branch_name ?></strong></td>
           <td><strong>Date:</strong> <?= date('d/m/Y') ?></td>
         </tr>
         <tr>
@@ -112,7 +121,7 @@
       <div class="static-box">
         <div style="font-weight:bold;">Cover Me Terms and Conditions</div>
         Please be aware that your device data, applications and other personal information may be irretrievably lost during the service repair process, a backup is recommended before repair. None of the parties associated with the repair process, including Cover Me, the service repair agent or the store shall be responsible for the loss of any data or personal information you may experience.
-      </div>
+                </div>
       <div class="static-box">
         <div style="font-weight:bold;">Service Warranty</div>
         <ul class="bullet-list">
@@ -122,20 +131,20 @@
           <li>We do not have to provide refund for repaired jobs done unless three attempts have been carried out to repair the specific faults; we will meet our obligation under the Fair Trading Act and Consumer Guarantees Act to provide a remedy or provide refund for the cost of repair. Please note that the inspection fee is not refundable under any circumstances once it has been conducted.</li>
           <li>If the product is inspected by any third party repairer, the warranty would be voided.</li>
         </ul>
-      </div>
+                </div>
       <div class="static-box">
         <div style="font-weight:bold;">Warranty Claim</div>
         This only applies to devices repaired by Cover Me which are experiencing the same fault or faults within 6 months after the first repair. A valid proof of purchase or repair from the customer is required.
-      </div>
+                  </div>
       <div class="static-box">
         <div style="font-weight:bold;">Inspection Fee</div>
         $50 inc GST inspection fee will be deducted from final repair cost. <span class="checkbox"></span> Inspection Paid
-      </div>
+                  </div>
       <div class="static-box">
         <div style="font-weight:bold;">Loan Device</div>
         The customer must return the loan device in good condition after the repair. Failing to comply will forfeit the deposit fee.<br>
         [Make: ] [Model: ] [IMEI: ] [Deposit Taken: ] [Accessories: <span class="checkbox"></span> Battery <span class="checkbox"></span> Charger / Other :]
-      </div>
+                  </div>
       <div class="static-box">
         <div style="font-weight:bold;">Cover Me Device Drop Off/ Pickup Conditions</div>
         <ul class="bullet-list">
@@ -143,7 +152,7 @@
           <li>Please check carefully for any mark, scratches, dents or variation to the device before you sign below. This also applies to anyone who drops-off or pickups the device on behalf of the owner.</li>
         </ul>
         Any crack on Screen? Any damage on Screen? Any dents on Screen? Any crack on Back Cover? Any damage on Back Cover? Any dents on Back Cover? Any crack on Frame? Any damage on Frame? Any dents on Frame? Any crack on Back Camera Lens? Any damage on Back Camera Lens? Any dents on Back Camera Lens? Face Recognition/Fingerprint Sensor Accessories/ Others: Working?
-      </div>
+                  </div>
       <div class="static-box">
         <div style="font-weight:bold;">By signing this form you accept all terms and conditions above and agree that</div>
         <ul class="bullet-list">

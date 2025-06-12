@@ -369,6 +369,8 @@ class Job extends CI_Controller {
         $model_id = array('id'=>$data['jobs'][0]->branch);
         $data['branch'] = $this->job->where_data('branch', $model_id);
 
+        $data['all_branches'] = $this->job->where_data('branch');
+
         //$utype = array('type'=>3);
 
        // $data['technicians'] = $this->user->all_data('user','DESC',$utype);
