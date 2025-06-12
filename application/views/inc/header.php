@@ -118,6 +118,19 @@
       <img src="<?= base_url();?>assets/dist/img/new_logo.jpg" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">DOUBLE</span>
     </a>
+    <!-- User Info -->
+    <div class="sidebar-user-info text-center py-2" style="color: #fff;">
+      <strong><?= $this->session->userdata('name'); ?></strong><br>
+      <small>
+        <?php
+          if($user_type == '1') echo 'Admin';
+          elseif($user_type == '2') echo 'Staff';
+          elseif($user_type == '3') echo 'Technician';
+          elseif($user_type == '4') echo 'Branch';
+          elseif($user_type == '5') echo 'Part Controller';
+        ?>
+      </small>
+    </div>
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar Menu -->
