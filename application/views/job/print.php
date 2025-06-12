@@ -42,7 +42,10 @@
             Ph: <?= $branch[0]->phone ?? '00000000' ?><br>
             <a href="mailto:info.covermenz@gmail.com">info.covermenz@gmail.com</a>
           </td>
-          <td class="right-cell">
+          <td class="right-cell" style="text-align:right;">
+            <div style="margin-bottom:8px;">
+              <img src="https://chart.googleapis.com/chart?chs=90x90&cht=qr&chl=<?=urlencode(base_url('job/print/'.($jobs[0]->id ?? '')))?>" alt="QR Code" style="height:90px;width:90px;">
+            </div>
             Website: www.coverme.nz<br>
             FB:<br>
             Tiktok:
