@@ -78,6 +78,7 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
       </table>
       <table class="info-table">
         <tr>
+          <td>Branch Name: <?= $branch_name ?></td>
           <td>Customer Name: <?= $jobs[0]->customer_name ?? '' ?></td>
           <td>Contact(H/M/W): <?= $jobs[0]->mobile ?? '' ?></td>
           <td>Make: <?= $brand[0]->name ?? '' ?></td>
