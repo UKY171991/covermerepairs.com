@@ -1,3 +1,6 @@
+<?php // DEBUG: Remove after testing
+// echo '<pre>'; print_r($branch); echo '</pre>'; ?>
+
 <!-- Content Wrapper. Contains page content -->
 
 <style>
