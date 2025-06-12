@@ -51,9 +51,6 @@
             <div style="margin-bottom:8px;">
               <img src="<?= $qr_code_src ?>" alt="QR Code" style="height:90px;width:90px;">
             </div>
-            Website: www.coverme.nz<br>
-            FB:<br>
-            Tiktok:
           </td>
         </tr>
       </table>
