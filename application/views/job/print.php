@@ -25,6 +25,9 @@
 <div class="content-wrapper" style="background:#fff;">
   <section class="content">
     <div class="container-fluid">
+      <div style="text-align:right; margin: 20px 0 10px 0;">
+        <button onclick="window.print()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+      </div>
       <table class="pdf-header-table" style="margin-top:20px;">
         <tr>
           <td class="logo-cell">
