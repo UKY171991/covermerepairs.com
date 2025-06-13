@@ -54,7 +54,7 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
           </td>
           <td class="center-cell">
             <div style="font-size:18px;font-weight:bold;">
-              <?= $branch[0]->name ?? 'Branch Name' ?>
+              <?= $branch[0]->name ?? $branch_name ?>
             </div>
             <?= $branch[0]->address ?? '' ?><br>
             Ph: <?= $branch[0]->phone ?? '' ?><br>
