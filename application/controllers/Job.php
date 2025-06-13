@@ -370,7 +370,7 @@ class Job extends CI_Controller {
 
         // FIX: Fetch all branches using the correct model/method
         $this->load->model('users_model', 'user');
-        $data['all_branches'] = $this->user->all_data('branch', 'DESC');
+        $data['all_branches'] = $this->user->all_data('user', 'DESC');
 
         $data['ajax'] = 'none';
         $this->load->view('inc/header');
