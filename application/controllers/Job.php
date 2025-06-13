@@ -356,7 +356,6 @@ class Job extends CI_Controller {
     }
 
     public function print($id) {
-
         $where = array('id'=>$id);
         $data['jobs'] = $this->job->where_data('jobs',$where);
 
@@ -369,16 +368,10 @@ class Job extends CI_Controller {
         $model_id = array('id'=>$data['jobs'][0]->branch);
         $data['branch'] = $this->job->where_data('branch', $model_id);
 
-        $data['all_branches'] = $this->job->where_data('branch');
+        // FIX: Fetch all branches using the correct model/method
+        $this->load->model('users_model', 'user');
+        $data['all_branches'] = $this->user->all_data('branch', 'DESC');
 
-        //$utype = array('type'=>3);
-
-       // $data['technicians'] = $this->user->all_data('user','DESC',$utype);
-
-       // $data['branch'] = $this->part->all_data('branch');
-       // $data['brand'] = $this->part->all_data('brand');
-       // $data['type'] = $this->part->all_data('part_type');
-        
         $data['ajax'] = 'none';
         $this->load->view('inc/header');
         $this->load->view('job/print', $data);
