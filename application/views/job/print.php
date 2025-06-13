@@ -69,15 +69,7 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
         </tr>
       </table>
       <!-- <div class="form-title" style="margin-top:10px;">SERVICE REQUEST FORM</div> -->
-      <table class="meta-table">
-        <tr>
-          <td><strong>Branch: <?= $branch_name ?></strong></td>
-          <td><strong>Date:</strong> <?= date('d/m/Y') ?></td>
-        </tr>
-        <tr>
-          <td colspan="2"><strong>Job Number:</strong> <?= $jobs[0]->id ?? '' ?></td>
-        </tr>
-      </table>
+      
       <table class="info-table">
         <tr>
           <td>Branch Name: <?= $branch_name ?></td>
@@ -91,12 +83,14 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
           <td>Model: <?= $model[0]->name ?? '' ?></td>
           <td>IMEI/ESN: <?= $jobs[0]->imei ?? '' ?></td>
           <td>Notify Exceeds: $<?= $jobs[0]->notify_exceeds ?? '500' ?></td>
+          <td><strong>Date:</strong> <?= date('d/m/Y') ?></td>
         </tr>
         <tr>
           <td>Address: <?= $jobs[0]->address ?? '' ?></td>
           <td>Claim No: <?= $jobs[0]->claim_no ?? '' ?></td>
           <td>Insurance: <?= $jobs[0]->insurance ?? '' ?></td>
           <td>Accessories Include: <?= $jobs[0]->accessories ?? '' ?></td>
+          <td colspan="2"><strong>Job Number:</strong> <?= $jobs[0]->id ?? '' ?></td>
         </tr>
         <tr>
           <td>Email: <?= $jobs[0]->email ?? '' ?></td>
