@@ -5,7 +5,7 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
 
       echo $jobs[0]->branch;
       echo "<pre>";
-      print_r($branch);
+      print_r($all_branches);
       echo "</pre>";
 
         if ($b->id == $jobs[0]->branch) {
