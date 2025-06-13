@@ -97,6 +97,7 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
           <td>Estimated Working Days: <?= $jobs[0]->working_days ?? '' ?></td>
           <td>Remove Gmail ID? <?= $jobs[0]->remove_gmail ?? 'Yes' ?></td>
           <td></td>
+          <td></td>
         </tr>
       </table>
       <table class="fault-table">
