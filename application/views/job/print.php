@@ -61,7 +61,7 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
             </div>
             <?= $branch[0]->address ?? $branch_address ?><br>
             Ph: <?= $branch[0]->phone ?? $branch_phone ?><br>
-            <a href="mailto:<?= $branch[0]->email ?? $branch_email ?>"></a>
+            <a href="mailto:<?= $branch[0]->email ?? $branch_email ?>"><?= $branch[0]->email ?? $branch_email ?></a>
             <div class="form-title" style="margin-top:10px;">SERVICE REQUEST FORM</div>
           </td>
           <td class="right-cell" style="text-align:right;">
