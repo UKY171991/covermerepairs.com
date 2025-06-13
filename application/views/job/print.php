@@ -144,7 +144,7 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
                 </div>
       <div class="static-box">
         <div style="font-weight:bold;">Warranty Claim</div>
-        This only applies to devices repaired by Cover Me which are experiencing the same fault or faults within 6 months after the first repair. A valid proof of purchase or repair from the customer is required.
+        This only applies to devices repaired by Cover Me which are experiencing the same fault or faults within 1 year after the first repair. A valid proof of purchase or repair from the customer is required.
                   </div>
       <div class="static-box">
         <div style="font-weight:bold;">Inspection Fee</div>
