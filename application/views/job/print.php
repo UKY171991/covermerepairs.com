@@ -9,6 +9,10 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
     }
 }
 
+echo "<pre>";
+print_r($jobs[0]);
+echo "</pre>";
+
 ?>
 
 <!-- Content Wrapper. Contains page content -->
