@@ -54,6 +54,7 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
             1/326 East Street Ashburton, 7700<br>
             Ph: <?= $branch[0]->phone ?? '00000000' ?><br>
             <a href="mailto:info.covermenz@gmail.com">info.covermenz@gmail.com</a>
+            <div class="form-title" style="margin-top:10px;">SERVICE REQUEST FORM</div>
           </td>
           <td class="right-cell" style="text-align:right;">
             <?php
@@ -67,7 +68,7 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
           </td>
         </tr>
       </table>
-      <div class="form-title" style="margin-top:10px;">SERVICE REQUEST FORM</div>
+      <!-- <div class="form-title" style="margin-top:10px;">SERVICE REQUEST FORM</div> -->
       <table class="meta-table">
         <tr>
           <td><strong>Branch: <?= $branch_name ?></strong></td>
