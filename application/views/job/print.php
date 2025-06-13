@@ -100,6 +100,10 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
           <td></td>
         </tr>
       </table>
+      <div class="static-box">
+        <div style="font-weight:bold;">Issue</div>
+        <?= $jobs[0]->issue ?? '' ?>
+      </div>
       <table class="fault-table">
         <tr>
           <th>Fault Frequency:</th>
