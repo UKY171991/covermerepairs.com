@@ -2,6 +2,12 @@
 $branch_name = isset($branch[0]->name) ? $branch[0]->name : 'N/A';
 if (isset($all_branches) && isset($jobs[0]->branch)) {
     foreach ($all_branches as $b) {
+
+      echo $jobs[0]->branch;
+      echo "<pre>";
+      print_r($jobs[0]);
+      echo "</pre>";
+
         if ($b->id == $jobs[0]->branch) {
             $branch_name = $b->name;
             break;
@@ -9,10 +15,7 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
     }
 }
 
-echo $jobs[0]->branch;
-echo "<pre>";
-print_r($jobs[0]);
-echo "</pre>";
+
 
 ?>
 
