@@ -16,10 +16,10 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
 <style>
   body, .content-wrapper { background: #fff !important; }
   .pdf-header-table { width: 100%; border-collapse: collapse; margin-bottom: 0; }
-  .pdf-header-table td { vertical-align: top; }
-  .logo-cell { width: 120px; }
-  .center-cell { text-align: center; font-size: 16px; font-weight: bold; }
-  .right-cell { text-align: right; font-size: 13px; }
+  .pdf-header-table td { vertical-align: middle; }
+  .logo-cell { width: 100px; }
+  .center-cell { width: 60%; text-align: center; font-size: 16px; font-weight: bold; }
+  .right-cell { width: 120px; text-align: right; font-size: 13px; }
   .form-title { text-align: center; font-size: 18px; font-weight: bold; margin: 10px 0; }
   .meta-table, .info-table, .fault-table, .signature-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
   .meta-table td, .info-table td, .fault-table td, .signature-table td { border: 1px solid #000; padding: 4px; font-size: 13px; }
@@ -54,6 +54,7 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
             1/326 East Street Ashburton, 7700<br>
             Ph: <?= $branch[0]->phone ?? '00000000' ?><br>
             <a href="mailto:info.covermenz@gmail.com">info.covermenz@gmail.com</a>
+            <div class="form-title" style="margin-top:10px;">SERVICE REQUEST FORM</div>
           </td>
           <td class="right-cell" style="text-align:right;">
             <?php
