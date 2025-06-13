@@ -53,10 +53,12 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
             <img src="<?= base_url('assets/dist/img/mobile_logo.jpg') ?>" style="height:70px;">
           </td>
           <td class="center-cell">
-            <div style="font-size:18px;font-weight:bold;">Cover Me Ashburton Limited</div>
-            1/326 East Street Ashburton, 7700<br>
-            Ph: <?= $branch[0]->phone ?? '00000000' ?><br>
-            <a href="mailto:info.covermenz@gmail.com">info.covermenz@gmail.com</a>
+            <div style="font-size:18px;font-weight:bold;">
+              <?= $branch[0]->name ?? 'Branch Name' ?>
+            </div>
+            <?= $branch[0]->address ?? '' ?><br>
+            Ph: <?= $branch[0]->phone ?? '' ?><br>
+            <a href="mailto:<?= $branch[0]->email ?? '' ?>"><?= $branch[0]->email ?? '' ?></a>
             <div class="form-title" style="margin-top:10px;">SERVICE REQUEST FORM</div>
           </td>
           <td class="right-cell" style="text-align:right;">
