@@ -369,7 +369,7 @@ class Job extends CI_Controller {
         $data['branch'] = $this->job->where_data('branch', $model_id);
 
         // FIX: Fetch all branches using the correct model/method
-        $this->load->model('type', '3');
+        $this->load->model('users_model', 'user');
         $data['all_branches'] = $this->user->all_data('branch', 'DESC');
 
         $data['ajax'] = 'none';
