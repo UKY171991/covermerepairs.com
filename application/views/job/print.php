@@ -47,7 +47,6 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
       <table class="pdf-header-table" style="margin-top:20px;">
         <tr>
           <td class="logo-cell">
-            <img src="<?= base_url('assets/dist/img/new_logo.jpg') ?>" style="height:70px;"><br>
             <img src="<?= base_url('assets/dist/img/mobile_logo.jpg') ?>" style="height:70px;">
           </td>
           <td class="center-cell">
