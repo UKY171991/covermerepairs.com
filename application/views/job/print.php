@@ -71,7 +71,7 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
       <!-- <div class="form-title" style="margin-top:10px;">SERVICE REQUEST FORM</div> -->
       <table class="meta-table">
         <tr>
-          <td><strong>Branch: <?= $branch_name ?></strong></td>
+          <td><strong>Branch: <?= $branch_name ?: 'N/A' ?></strong></td>
           <td><strong>Date:</strong> <?= date('d/m/Y') ?></td>
         </tr>
         <tr>
@@ -80,7 +80,7 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
       </table>
       <table class="info-table">
         <tr>
-          <td>Branch Name: <?= $branch_name ?></td>
+          <td>Branch Name: <?= $branch_name ?: 'N/A' ?></td>
           <td>Customer Name: <?= $jobs[0]->customer_name ?? '' ?></td>
           <td>Contact(H/M/W): <?= $jobs[0]->mobile ?? '' ?></td>
           <td>Make: <?= $brand[0]->name ?? '' ?></td>
