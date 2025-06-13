@@ -135,7 +135,7 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
       <div class="static-box">
         <div style="font-weight:bold;">Service Warranty</div>
         <ul class="bullet-list">
-          <li>Our service warranty only applies when the manufacturer's replacement part fails, within 6 months from the date of repair.</li>
+          <li>Our service warranty only applies when the manufacturer's replacement part fails, within 1 year from the date of repair.</li>
           <li>Equipment found to be liquid or physically damaged, at discretion of the repairer, may be excluded from warranty.</li>
           <li>The warranty does not cover failure or defects caused by misuse, accidents, physical damage, improper handling or storage, modification, neglect, alteration, removal/repair of parts, exposure of fire, water, food, liquid and failure to follow instructions of proper device usage.</li>
           <li>We do not have to provide refund for repaired jobs done unless three attempts have been carried out to repair the specific faults; we will meet our obligation under the Fair Trading Act and Consumer Guarantees Act to provide a remedy or provide refund for the cost of repair. Please note that the inspection fee is not refundable under any circumstances once it has been conducted.</li>
