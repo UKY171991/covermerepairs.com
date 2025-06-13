@@ -5,6 +5,9 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
 
         if ($b->id == $jobs[0]->branch) {
             $branch_name = $b->name;
+            $branch_address = $b->address;
+            $branch_phone = $b->phone;
+            $branch_email = $b->email;
             break;
         }
     }
@@ -56,9 +59,9 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
             <div style="font-size:18px;font-weight:bold;">
               <?= $branch[0]->name ?? $branch_name ?>
             </div>
-            <?= $branch[0]->address ?? '' ?><br>
-            Ph: <?= $branch[0]->phone ?? '' ?><br>
-            <a href="mailto:<?= $branch[0]->email ?? '' ?>"><?= $branch[0]->email ?? '' ?></a>
+            <?= $branch[0]->address ?? $branch_address ?><br>
+            Ph: <?= $branch[0]->phone ?? $branch_phone ?><br>
+            <a href="mailto:<?= $branch[0]->email ?? $branch_email ?>"></a>
             <div class="form-title" style="margin-top:10px;">SERVICE REQUEST FORM</div>
           </td>
           <td class="right-cell" style="text-align:right;">
