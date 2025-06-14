@@ -142,9 +142,9 @@
                   <select name="model_no" class="form-control model_no" required style="flex:1;">
                     <option value="">Select Model</option>
                   </select>
-                  <button type="button" class="btn btn-outline-primary ml-2" data-toggle="modal" data-target="#modelModal" title="Add Model" style="height:38px;">
+                  <a type="button" class="btn btn-outline-primary ml-2" data-toggle="modal" data-target="#modelModal" title="Add Model" style="height:38px;">
                     <i class="fa fa-plus"></i>
-                  </button>
+                      </a>
                 </div>
               </div>
           </div>
