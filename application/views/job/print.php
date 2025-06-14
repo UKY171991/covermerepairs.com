@@ -36,7 +36,7 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
   .no-border { border: none !important; }
   .bullet-list { margin: 0 0 0 18px; padding: 0; }
   .bullet-list li { margin-bottom: 4px; }
-  .static-box { border: 1px solid #000; padding: 8px; margin-bottom: 10px; }
+  .static-box { border: 1px solid #000; padding: 8px; margin-bottom: 10px; font-size: 18px;}
   .signature-line { border-bottom: 1px solid #000; width: 260px; display: inline-block; margin-bottom: 2px; }
   .checkbox { display:inline-block;width:16px;height:16px;border:1px solid #000;vertical-align:middle;margin-right:4px; }
   @media print {
