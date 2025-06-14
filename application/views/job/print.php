@@ -32,7 +32,7 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
   .meta-table th, .info-table th, .fault-table th { border: 1px solid #000; padding: 4px; font-size: 18px; background: #f5f5f5; }
   .section-title { font-weight: bold; margin-top: 18px; font-size: 18px; color: #222; }
   .small-text { font-size: 12px; }
-  .signature-table td { border: none; font-size: 13px; }
+  .signature-table td { border: none; font-size: 15px; }
   .no-border { border: none !important; }
   .bullet-list { margin: 0 0 0 18px; padding: 0; }
   .bullet-list li { margin-bottom: 4px; }
