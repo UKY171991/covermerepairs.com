@@ -119,5 +119,14 @@
 <script src="<?= base_url();?>assets/ajax/stock_out.js"></script>
 <?php } ?>
 
+
+<script>
+$(document).ready(function() {
+  $('select').select2({
+    width: '100%'
+  });
+});
+</script>
+
 </body>
 </html>
