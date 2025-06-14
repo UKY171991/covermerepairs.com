@@ -98,7 +98,6 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
           <td>Date: <?= date('d/m/Y') ?></td>
           <td>Address: <?= $jobs[0]->address ?? '' ?></td>
           <td>Claim No: <?= $jobs[0]->claim_no ?? '' ?></td>
-          <td>Insurance: <?= $jobs[0]->insurance ?? '' ?></td>
         </tr>
         <tr>
           <td>Accessories Include: <?= $jobs[0]->accessories ?? '' ?></td>
@@ -108,6 +107,7 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
         <tr>
           <td>Estimated Working Days: <?= $jobs[0]->working_days ?? '' ?></td>
           <td>Remove Gmail ID? <?= $jobs[0]->remove_gmail ?? 'Yes' ?></td>
+          <td>Insurance: <?= $jobs[0]->insurance ?? '' ?></td>
         </tr>
       </table>
       <div class="static-box">
