@@ -37,7 +37,7 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
   .bullet-list { margin: 0 0 0 18px; padding: 0; }
   .bullet-list li { margin-bottom: 4px; }
   .static-box { border: 1px solid #000; padding: 8px; margin-bottom: 10px; }
-  .signature-line { border-bottom: 1px solid #000; width: 180px; display: inline-block; margin-bottom: 2px; }
+  .signature-line { border-bottom: 1px solid #000; width: 260px; display: inline-block; margin-bottom: 2px; }
   .checkbox { display:inline-block;width:16px;height:16px;border:1px solid #000;vertical-align:middle;margin-right:4px; }
   @media print {
     .no-print { display: none !important; }
@@ -177,13 +177,13 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
           <tr>
             <td>
               <strong>Drop Off Signature</strong><br>
-              Customer: ______________ Date: ________<br>
-              Staff Name: ____________ Date: ________
+              Customer: <span class="signature-line"></span> Date: <span class="signature-line" style="width:120px;"></span><br>
+              Staff Name: <span class="signature-line"></span> Date: <span class="signature-line" style="width:120px;"></span>
             </td>
             <td>
               <strong>Pickup Signature</strong><br>
-              Customer: ______________ Date: ________<br>
-              Staff Name: ____________ Date: ________
+              Customer: <span class="signature-line"></span> Date: <span class="signature-line" style="width:120px;"></span><br>
+              Staff Name: <span class="signature-line"></span> Date: <span class="signature-line" style="width:120px;"></span>
             </td>
           </tr>
         </table>
