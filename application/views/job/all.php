@@ -137,17 +137,15 @@
 
             <div class="col-md-6">
               <div class="form-group">
-                  <label>Model</label>
-                  <div class="input-group">
-                    <select name="model_no" class="form-control model_no" required>
-                        <option value="">Select Model</option>
-                    </select>
-                    <div class="input-group-append">
-                      <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modelModal" title="Add Model">
-                        <i class="fa fa-plus"></i>
-                      </button>
-                    </div>
-                  </div>
+                <label>Model</label>
+                <div class="d-flex align-items-center">
+                  <select name="model_no" class="form-control model_no" required style="flex:1;">
+                    <option value="">Select Model</option>
+                  </select>
+                  <button type="button" class="btn btn-outline-primary ml-2" data-toggle="modal" data-target="#modelModal" title="Add Model" style="height:38px;">
+                    <i class="fa fa-plus"></i>
+                  </button>
+                </div>
               </div>
           </div>
 
