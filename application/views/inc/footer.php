@@ -122,11 +122,23 @@
 
 <script>
 $(function() {
-  // Only initialize Select2 if the select is visible and not already initialized
+  // Fix for Bootstrap modal focus issue
+  if ($.fn.modal && $.fn.modal.Constructor) {
+    $.fn.modal.Constructor.prototype._enforceFocus = function() {};
+  }
+  // Initialize Select2 with always-on search and proper dropdown parent for modals
   $('select').each(function() {
     if (!$(this).hasClass('select2-hidden-accessible')) {
-      $(this).select2({ width: '100%' });
+      $(this).select2({
+        width: '100%',
+        minimumResultsForSearch: 0,
+        dropdownParent: $(this).closest('.modal').length ? $(this).closest('.modal') : $(document.body)
+      });
     }
+  });
+  // Focus search field when Select2 opens (for modals)
+  $(document).on('select2:open', () => {
+    document.querySelector('.select2-search__field').focus();
   });
 });
 </script>
