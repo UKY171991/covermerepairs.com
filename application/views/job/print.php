@@ -83,29 +83,31 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
           <td>Branch Name: <?= $branch_name ?></td>
           <td>Customer Name: <?= $jobs[0]->customer_name ?? '' ?></td>
           <td>Contact(H/M/W): <?= $jobs[0]->mobile ?? '' ?></td>
-          <td>Make: <?= $brand[0]->name ?? '' ?></td>
-          <td>Security Code: <?= $jobs[0]->security_code ?? '' ?></td>
         </tr>
         <tr>
-          <td>Order ID/Auction: <?= $jobs[0]->order_id ?? '' ?></td>
+          <td>Make: <?= $brand[0]->name ?? '' ?></td>
           <td>Model: <?= $model[0]->name ?? '' ?></td>
           <td>IMEI/ESN: <?= $jobs[0]->imei ?? '' ?></td>
-          <td>Notify Exceeds: $<?= $jobs[0]->notify_exceeds ?? '500' ?></td>
-          <td>Date: <?= date('d/m/Y') ?></td>
         </tr>
         <tr>
+          <td>Security Code: <?= $jobs[0]->security_code ?? '' ?></td>
+          <td>Order ID/Auction: <?= $jobs[0]->order_id ?? '' ?></td>
+          <td>Notify Exceeds: $<?= $jobs[0]->notify_exceeds ?? '500' ?></td>
+        </tr>
+        <tr>
+          <td>Date: <?= date('d/m/Y') ?></td>
           <td>Address: <?= $jobs[0]->address ?? '' ?></td>
           <td>Claim No: <?= $jobs[0]->claim_no ?? '' ?></td>
           <td>Insurance: <?= $jobs[0]->insurance ?? '' ?></td>
-          <td>Accessories Include: <?= $jobs[0]->accessories ?? '' ?></td>
-          <td>Job Number: <?= $jobs[0]->id ?? '' ?></td>
         </tr>
         <tr>
+          <td>Accessories Include: <?= $jobs[0]->accessories ?? '' ?></td>
+          <td>Job Number: <?= $jobs[0]->id ?? '' ?></td>
           <td>Email: <?= $jobs[0]->email ?? '' ?></td>
+        </tr>
+        <tr>
           <td>Estimated Working Days: <?= $jobs[0]->working_days ?? '' ?></td>
           <td>Remove Gmail ID? <?= $jobs[0]->remove_gmail ?? 'Yes' ?></td>
-          <td></td>
-          <td></td>
         </tr>
       </table>
       <div class="static-box">
