@@ -380,7 +380,7 @@ function openJobStockOutModal(jobId) {
 }
 </script>
 
-<!-- Add Model Modal (follows /part/model structure) -->
+<!-- Add Model Modal (AJAX load) -->
 <div class="modal fade" id="modelModal" tabindex="-1" role="dialog" aria-labelledby="modelModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -390,10 +390,19 @@ function openJobStockOutModal(jobId) {
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <!-- You can load the /part/model form here via iframe or AJAX, or replicate the form structure -->
-        <iframe src="/part/model" style="width:100%;height:500px;border:none;"></iframe>
+      <div class="modal-body" id="modelModalBody">
+        <!-- Model form will be loaded here via AJAX -->
+        <div class="text-center"><span class="spinner-border"></span> Loading...</div>
       </div>
     </div>
   </div>
 </div>
+<script>
+$('#modelModal').on('show.bs.modal', function () {
+  $('#modelModalBody').html('<div class="text-center"><span class="spinner-border"></span> Loading...</div>');
+  $.get('/part/model', function(data) {
+    // Extract only the modal/form part if needed, or inject all
+    $('#modelModalBody').html(data);
+  });
+});
+</script>
