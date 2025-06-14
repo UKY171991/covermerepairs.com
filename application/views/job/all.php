@@ -402,7 +402,13 @@ $(function() {
   $('#modelModal').on('show.bs.modal', function () {
     $('#modelModalBody').html('<div class="text-center"><span class="spinner-border"></span> Loading...</div>');
     $.get('/part/model', function(data) {
-      $('#modelModalBody').html(data);
+      var temp = $('<div>').html(data);
+      var form = temp.find('form').first();
+      if (form.length) {
+        $('#modelModalBody').html(form);
+      } else {
+        $('#modelModalBody').html('<div class="alert alert-danger">Could not load form.</div>');
+      }
     });
   });
 });
