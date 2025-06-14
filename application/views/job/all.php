@@ -138,9 +138,16 @@
             <div class="col-md-6">
               <div class="form-group">
                   <label>Model</label>
-                  <select name="model_no" class="form-control model_no" required>
-                      <option value="">Select Model</option>
-                  </select>
+                  <div class="input-group">
+                    <select name="model_no" class="form-control model_no" required>
+                        <option value="">Select Model</option>
+                    </select>
+                    <div class="input-group-append">
+                      <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modelModal" title="Add Model">
+                        <i class="fa fa-plus"></i>
+                      </button>
+                    </div>
+                  </div>
               </div>
           </div>
 
@@ -374,3 +381,21 @@ function openJobStockOutModal(jobId) {
     $('#stockOutModal').modal('show');
 }
 </script>
+
+<!-- Add Model Modal (follows /part/model structure) -->
+<div class="modal fade" id="modelModal" tabindex="-1" role="dialog" aria-labelledby="modelModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modelModalLabel">Add Model</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- You can load the /part/model form here via iframe or AJAX, or replicate the form structure -->
+        <iframe src="/part/model" style="width:100%;height:500px;border:none;"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
