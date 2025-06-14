@@ -121,9 +121,12 @@
 
 
 <script>
-$(document).ready(function() {
-  $('select').select2({
-    width: '100%'
+$(function() {
+  // Only initialize Select2 if the select is visible and not already initialized
+  $('select').each(function() {
+    if (!$(this).hasClass('select2-hidden-accessible')) {
+      $(this).select2({ width: '100%' });
+    }
   });
 });
 </script>
