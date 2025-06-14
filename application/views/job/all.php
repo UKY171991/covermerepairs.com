@@ -398,11 +398,12 @@ function openJobStockOutModal(jobId) {
   </div>
 </div>
 <script>
-$('#modelModal').on('show.bs.modal', function () {
-  $('#modelModalBody').html('<div class="text-center"><span class="spinner-border"></span> Loading...</div>');
-  $.get('/part/model', function(data) {
-    // Extract only the modal/form part if needed, or inject all
-    $('#modelModalBody').html(data);
+$(function() {
+  $('#modelModal').on('show.bs.modal', function () {
+    $('#modelModalBody').html('<div class="text-center"><span class="spinner-border"></span> Loading...</div>');
+    $.get('/part/model', function(data) {
+      $('#modelModalBody').html(data);
+    });
   });
 });
 </script>
