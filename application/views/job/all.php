@@ -142,7 +142,7 @@
                   <select name="model_no" class="form-control model_no" required style="flex:1;">
                     <option value="">Select Model</option>
                   </select>
-                  <a type="button" class="btn btn-outline-primary ml-2" data-toggle="modal" data-target="#modelModal" title="Add Model" style="height:38px;">
+                  <a href="<?=base_url('part/model')?>" target="_blank" class="btn btn-outline-primary ml-2" data-toggle="modal" data-target="#modelModal" title="Add Model" style="height:38px;">
                     <i class="fa fa-plus"></i>
                       </a>
                 </div>
