@@ -21,10 +21,10 @@ class Part extends CI_Controller {
 
 	public function index()
 	{
-		// $user_type = array('type'=>4); // user type 4 is branch
-        // $data['branch'] = $this->part->where_data('user', $user_type);
+		$user_type = array('type'=>4); // user type 4 is branch
+        $data['branch'] = $this->part->where_data('user', $user_type);
         
-		$data['branch'] = $this->part->all_data('user');  // user type 4 is branch
+		//$data['branch'] = $this->part->all_data('user');  // user type 4 is branch
 		$data['brand'] = $this->part->all_data('brand');
 		$data['type'] = $this->part->all_data('part_type');
 		$data['ajax']='part';
