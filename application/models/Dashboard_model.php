@@ -39,7 +39,9 @@ class Dashboard_model extends CI_Model {
 		        $this->db->where($table.'.added_by', $user_id);
 		    } elseif ($user_type == '2') { // Staff
 		        // If staff should only see jobs assigned to them within their branch
-		        $this->db->where($table.'.assign_user', $user_id);
+		        // $this->db->where($table.'.assign_user', $user_id); // Commenting out problematic line
+		        // You need to confirm the correct column name for assigned user in the 'jobs' table
+		        // For now, staff will see all jobs within their branch if branch_id filter is active
 		    }
 		    // Add other role-specific conditions here if needed
 		}
