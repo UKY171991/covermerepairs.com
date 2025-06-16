@@ -147,6 +147,8 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <?php $user_permissions = $this->session->userdata('permission'); ?>
+
+          <?php print_r($user_permissions) ?>
           <?php if (!is_array($user_permissions)) { $user_permissions = []; } // Ensure it's an array ?>
 
           <?php if(in_array('dashboard', $user_permissions)): ?>
