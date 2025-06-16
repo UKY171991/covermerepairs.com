@@ -150,8 +150,7 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
                   </div>
       <div class="static-box">
         <div style="font-weight:bold;">Inspection Fee</div>
-        $50 inc GST inspection fee will be deducted from final repair cost. <br>
-        Status: <strong><?php echo (isset($jobs[0]->inspection_fee_paid) && $jobs[0]->inspection_fee_paid == 1) ? 'Paid' : 'Not Paid'; ?></strong>
+        $50 inc GST inspection fee will be deducted from final repair cost. <input type="checkbox" class="checkbox" <?php echo (isset($jobs[0]->inspection_fee_paid) && $jobs[0]->inspection_fee_paid == 1) ? 'checked' : ''; ?> disabled> Inspection Paid
                   </div>
       <div class="static-box">
         <div style="font-weight:bold;">Loan Device</div>
