@@ -153,7 +153,7 @@
             </a>
           </li>
 
-          <?php if($user_type != '5'){ // For Technicians and Staff ?>
+          <?php if($user_type != '5'){ // For Admin, Staff, Technician, and Branch users ?>
           <li class="nav-item">
             <a href="<?=base_url('technicians')?>" class="nav-link <?= $uri == 'technicians' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-user-cog"></i>
