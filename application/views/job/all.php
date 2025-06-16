@@ -184,8 +184,10 @@
 
             <div class="col-md-6">
               <div class="form-group">
-                <label for="inspection_fee_paid">Inspection Fee Paid</label>
-                <input type="checkbox" name="inspection_fee_paid" id="inspection_fee_paid" value="1" class="form-check-input inspection_fee_paid">
+                <div class="form-check">
+                  <input type="checkbox" name="inspection_fee_paid" id="inspection_fee_paid" value="1" class="form-check-input inspection_fee_paid">
+                  <label class="form-check-label" for="inspection_fee_paid">Inspection Fee Paid</label>
+                </div>
               </div>
             </div>
 
