@@ -152,7 +152,8 @@
               <p>Dashboard</p>
             </a>
           </li>
-          <?php if($user_type != '5'){ ?>
+
+          <?php if($user_type != '5'){ // For Technicians and Staff ?>
           <li class="nav-item">
             <a href="<?=base_url('technicians')?>" class="nav-link <?= $uri == 'technicians' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-user-cog"></i>
@@ -165,6 +166,9 @@
               <p>Staff</p>
             </a>
           </li>
+          <?php } ?>
+
+          <?php if(in_array($user_type, ['1', '5'])){ // For Part control (Admin, Part Controller) ?>
           <li class="nav-item">
             <a href="<?=base_url('part_corntroller')?>" class="nav-link <?= $uri == 'part_corntroller' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-cogs"></i>
@@ -172,12 +176,17 @@
             </a>
           </li>
           <?php } ?>
+
+          <?php if(in_array($user_type, ['1', '2', '4'])){ // For Branches (Admin, Staff, Branch) ?>
           <li class="nav-item">
             <a href="<?=base_url('branch')?>" class="nav-link <?= $uri == 'branch' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-code-branch"></i>
               <p>Branches</p>
             </a>
           </li>
+          <?php } ?>
+
+          <!-- Part (Dropdown Menu) - Visible to All -->
           <li class="nav-item has-treeview <?= in_array($uri, ['part', 'brand', 'model', 'part_type']) ? 'menu-open' : '' ?>">
             <a href="#" class="nav-link <?= in_array($uri, ['part', 'brand', 'model', 'part_type']) ? 'active' : '' ?>">
               <i class="nav-icon fas fa-cube"></i>
@@ -213,30 +222,43 @@
               </li>
             </ul>
           </li>
+
+          <?php if(in_array($user_type, ['1', '2', '4', '5'])){ // For Part order (Admin, Staff, Branch, Part Controller) ?>
           <li class="nav-item">
             <a href="<?=base_url('part/order')?>" class="nav-link <?= $uri == 'part' && $this->uri->segment(2) == 'order' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-shopping-cart"></i>
               <p>Part order</p>
             </a>
           </li>
+          <?php } ?>
+
+          <?php if($user_type != '5'){ // For Job (Admin, Staff, Technician, Branch) ?>
           <li class="nav-item">
             <a href="<?=base_url('job')?>" class="nav-link <?= $uri == 'job' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-briefcase"></i>
               <p>Job</p>
             </a>
           </li>
+          <?php } ?>
+
+          <?php if(in_array($user_type, ['1', '2', '4', '5'])){ // For Stock in (Admin, Staff, Branch, Part Controller) ?>
           <li class="nav-item">
             <a href="<?=base_url('stock_in')?>" class="nav-link <?= $uri == 'stock_in' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-arrow-down"></i>
               <p>Stock in</p>
             </a>
           </li>
+          <?php } ?>
+
+          <!-- Stock out - Visible to All -->
           <li class="nav-item">
             <a href="<?=base_url('stock_out')?>" class="nav-link <?= $uri == 'stock_out' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-arrow-up"></i>
               <p>Stock out</p>
             </a>
           </li>
+
+          <!-- Log out - Visible to All -->
           <li class="nav-item">
             <a href="<?=base_url('login/logout')?>" class="nav-link">
               <i class="nav-icon fas fa-sign-out-alt"></i>
@@ -251,4 +273,3 @@
   </aside>
 
 
-  
