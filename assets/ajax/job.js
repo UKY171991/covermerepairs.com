@@ -91,28 +91,45 @@ function edit(id){
       data:{'id':id},
       success:function(res){
         const obj = JSON.parse(res);
-        console.log(obj);
-        $('.id').val(obj[0]['id']);
-        $('.email').val(obj[0]['email']);
-        $('.mobile').val(obj[0]['mobile']);
-        $('.customer_name').val(obj[0]['customer_name']);
-        $('.issue').val(obj[0]['issue']);
-        $('.date_from').val(obj[0]['date_from']);
-        $('.date_to').val(obj[0]['date_to']);
-        $(".branch option[value="+obj[0]['branch']+"]").prop("selected", "selected");
-        $(".brand option[value="+obj[0]['brand']+"]").prop("selected", "selected");
-        $(".assigned_to option[value="+obj[0]['assigned_to']+"]").prop("selected", "selected");
-        // Populate new fields
-        if(obj[0]['inspection_fee_paid'] == '1'){
-          $('.inspection_fee_paid').prop('checked', true);
-        } else {
-          $('.inspection_fee_paid').prop('checked', false);
-        }
-        $('.loan_device_details').val(obj[0]['loan_device_details']);
+        console.log(obj); // For debugging: check your browser console for this output
+        if (obj && obj[0]) { // Ensure obj and obj[0] are not null/undefined
+            $('.id').val(obj[0]['id']);
+            $('.email').val(obj[0]['email']);
+            $('.mobile').val(obj[0]['mobile']);
+            $('.customer_name').val(obj[0]['customer_name']);
+            $('.issue').val(obj[0]['issue']);
+            $('.date_from').val(obj[0]['date_from']);
+            $('.date_to').val(obj[0]['date_to']);
+            $(".branch option[value="+obj[0]['branch']+"]").prop("selected", "selected");
+            $(".brand option[value="+obj[0]['brand']+"]").prop("selected", "selected");
+            $(".assigned_to option[value="+obj[0]['assigned_to']+"]").prop("selected", "selected");
 
-        load_model();
-        $(".model_no option[value="+obj[0]['model']+"]").prop("selected", "selected");
-       // $(".type option[value="+obj[0]['type']+"]").prop("selected", "selected");
+            // Populate new fields more robustly
+            if(obj[0].hasOwnProperty('inspection_fee_paid') && (obj[0]['inspection_fee_paid'] == '1' || obj[0]['inspection_fee_paid'] == 1)){
+              $('.inspection_fee_paid').prop('checked', true);
+            } else {
+              $('.inspection_fee_paid').prop('checked', false);
+            }
+            $('.loan_device_details').val(obj[0].hasOwnProperty('loan_device_details') ? obj[0]['loan_device_details'] : '');
+
+            load_model(); // Call this before trying to set the model_no value if it populates the dropdown
+            // Correctly set model using model_no
+            // Ensure load_model completes or model_no dropdown is populated before this line is effective.
+            // If load_model is async and repopulates, this might need to be in a callback or delayed.
+            if (obj[0]['model_no']) {
+                 // It's often better to set select value after options are loaded by load_model()
+                 // For now, assuming load_model() is synchronous or options are already there.
+                $(".model_no option[value="+obj[0]['model_no']+"]").prop("selected", "selected");
+                // If model_no is a select2, you might need: $('.model_no').val(obj[0]['model_no']).trigger('change');
+            }
+        } else {
+            console.error("Received no data or malformed data for job edit:", obj);
+            alert("Error: Could not load job details.");
+        }
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.error("AJAX error in edit function:", textStatus, errorThrown);
+        alert("An error occurred while fetching job details.");
       }
     }); 
 }
