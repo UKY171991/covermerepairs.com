@@ -146,10 +146,28 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <?php $user_permissions = $this->session->userdata('permission'); ?>
+          <?php
+            $user_permissions_from_session = $this->session->userdata('permission');
+            // For debugging, you can uncomment the next line to see the raw value:
+            // echo "<!-- Raw permissions: " . htmlspecialchars(print_r($user_permissions_from_session, true)) . " -->";
 
-          <?php print_r($user_permissions) ?>
-          <?php if (!is_array($user_permissions)) { $user_permissions = []; } // Ensure it's an array ?>
+            if (is_string($user_permissions_from_session)) {
+                $permissions_array = explode('--', $user_permissions_from_session);
+                $user_permissions = [];
+                foreach ($permissions_array as $p) {
+                    $trimmed_p = trim($p);
+                    if ($trimmed_p !== '') {
+                        $user_permissions[] = $trimmed_p;
+                    }
+                }
+            } elseif (is_array($user_permissions_from_session)) {
+                $user_permissions = $user_permissions_from_session; // Already an array
+            } else {
+                $user_permissions = []; // Default to empty array if not string or array
+            }
+            // For debugging, you can uncomment the next line to see the processed array:
+            // echo "<!-- Processed permissions: " . htmlspecialchars(print_r($user_permissions, true)) . " -->";
+          ?>
 
           <?php if($user_type == '1' || in_array('dashboard', $user_permissions)): ?>
           <li class="nav-item">
@@ -261,7 +279,7 @@
           </li>
           <?php endif; ?>
 
-          <?php if($user_type != '5' && in_array('Job', $user_permissions)): ?> // Changed 'job' to 'Job'
+          <?php if($user_type != '5' && in_array('job', $user_permissions)): ?>
           <li class="nav-item">
             <a href="<?=base_url('job')?>" class="nav-link <?= $uri == 'job' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-briefcase"></i>
