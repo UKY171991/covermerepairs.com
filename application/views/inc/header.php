@@ -151,7 +151,7 @@
           <?php print_r($user_permissions) ?>
           <?php if (!is_array($user_permissions)) { $user_permissions = []; } // Ensure it's an array ?>
 
-          <?php if(in_array('dashboard', $user_permissions)): ?>
+          <?php if($user_type == '1' || in_array('dashboard', $user_permissions)): ?>
           <li class="nav-item">
             <a href="<?=base_url()?>" class="nav-link <?= $uri == '' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-tachometer-alt"></i>
