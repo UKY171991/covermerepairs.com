@@ -309,6 +309,16 @@
           </li>
           <?php endif; ?>
 
+
+          <?php if($user_type == '1' || in_array('permission', $user_permissions)): ?>
+          <li class="nav-item">
+            <a href="<?=base_url('permission')?>" class="nav-link <?= $uri == 'permission' ? 'active' : '' ?>">
+              <i class="nav-icon fas fa-arrow-up"></i>
+              <p>Permission</p>
+            </a>
+          </li>
+          <?php endif; ?>
+
           <!-- Log out - Visible to All -->
           <li class="nav-item">
             <a href="<?=base_url('login/logout')?>" class="nav-link">
