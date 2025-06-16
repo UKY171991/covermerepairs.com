@@ -150,15 +150,22 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
                   </div>
       <div class="static-box">
         <div style="font-weight:bold;">Inspection Fee</div>
-        $50 inc GST inspection fee will be deducted from final repair cost. <input type="checkbox" class="checkbox" <?php echo (isset($jobs[0]->inspection_fee_paid) && $jobs[0]->inspection_fee_paid == 1) ? 'checked' : ''; ?> disabled> Inspection Paid
+        $50 inc GST inspection fee will be deducted from final repair cost. <br>
+        Status: <strong><?php echo (isset($jobs[0]->inspection_fee_paid) && $jobs[0]->inspection_fee_paid == 1) ? 'Paid' : 'Not Paid'; ?></strong>
                   </div>
       <div class="static-box">
         <div style="font-weight:bold;">Loan Device</div>
         The customer must return the loan device in good condition after the repair. Failing to comply will forfeit the deposit fee.<br>
-        <?php if (isset($jobs[0]->loan_device_details) && !empty($jobs[0]->loan_device_details)): ?>
-          Details: <?= htmlspecialchars($jobs[0]->loan_device_details) ?><br>
+        <?php if (isset($jobs[0]->loan_device_details) && trim((string)$jobs[0]->loan_device_details) !== ''): ?>
+          <strong>Loan Device Specifics:</strong>
+          <div style="padding-left: 10px; border: 1px dashed #eee; margin-top: 5px; margin-bottom: 5px; background: #f9f9f9; padding: 5px;">
+            <?= nl2br(htmlspecialchars(trim((string)$jobs[0]->loan_device_details))) ?>
+          </div>
+        <?php else: ?>
+          <strong>Loan Device Specifics:</strong> <span style="font-style: italic;">Not specified.</span><br>
         <?php endif; ?>
-        [Make: ] [Model: ] [IMEI: ] [Deposit Taken: ] [Accessories: <span class="checkbox"></span> Battery <span class="checkbox"></span> Charger / Other :]
+        <!-- The line below might be for manual entry or a different data source if loan_device_details is not used for structured data -->
+        <!-- [Make: ] [Model: ] [IMEI: ] [Deposit Taken: ] [Accessories: <span class="checkbox"></span> Battery <span class="checkbox"></span> Charger / Other :] -->
                   </div>
       <div class="static-box">
         <div style="font-weight:bold;">Cover Me Device Drop Off/ Pickup Conditions</div>
