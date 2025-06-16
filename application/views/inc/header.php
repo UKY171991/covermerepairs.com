@@ -169,14 +169,12 @@
             // echo "<!-- Processed permissions: " . htmlspecialchars(print_r($user_permissions, true)) . " -->";
           ?>
 
-          <?php if($user_type == '1' || in_array('dashboard', $user_permissions)): ?>
           <li class="nav-item">
             <a href="<?=base_url()?>" class="nav-link <?= $uri == '' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>Dashboard</p>
             </a>
           </li>
-          <?php endif; ?>
 
           <?php if($user_type != '5'){ // For Admin, Staff, Technician, and Branch users ?>
             <?php if(in_array('technicians', $user_permissions)): ?>
