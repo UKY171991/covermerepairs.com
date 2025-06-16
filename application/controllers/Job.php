@@ -66,6 +66,8 @@ class Job extends CI_Controller {
                 //'status' => $this->input->post('status'),
                 'assigned_to' => $this->input->post('assigned_to'),
                 'added_by' => $this->session->userdata('user_id'),
+                'inspection_fee_paid' => $this->input->post('inspection_fee_paid') ? 1 : 0,
+                'loan_device_details' => $this->input->post('loan_device_details'),
             );
 
             $id = $this->input->post('id');
@@ -236,6 +238,9 @@ class Job extends CI_Controller {
     public function edit() {
         $id = $this->input->post('id');
         $job = $this->job->single_data('jobs', $id);
+        // Ensure new fields are included in the response
+        // No specific change needed here if single_data fetches all columns,
+        // but good to be mindful.
         echo json_encode($job);
     }
 
@@ -358,6 +363,10 @@ class Job extends CI_Controller {
     public function print($id) {
         $where = array('id'=>$id);
         $data['jobs'] = $this->job->where_data('jobs',$where);
+
+        // Ensure new fields are fetched and passed to the view
+        // No specific change needed here if where_data fetches all columns,
+        // and $data['jobs'] is passed to the view as is.
 
         $brand_id = array('id'=>$data['jobs'][0]->brand);
         $data['brand'] = $this->job->where_data('brand', $brand_id);

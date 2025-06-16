@@ -182,7 +182,19 @@
               </div>
             </div>
 
-            
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="inspection_fee_paid">Inspection Fee Paid</label>
+                <input type="checkbox" name="inspection_fee_paid" id="inspection_fee_paid" value="1" class="form-check-input inspection_fee_paid">
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="loan_device_details">Loan Device Details</label>
+                <textarea name="loan_device_details" id="loan_device_details" class="form-control loan_device_details"></textarea>
+              </div>
+            </div>
 
           </div>
           <hr>

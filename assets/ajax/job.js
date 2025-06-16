@@ -102,6 +102,14 @@ function edit(id){
         $(".branch option[value="+obj[0]['branch']+"]").prop("selected", "selected");
         $(".brand option[value="+obj[0]['brand']+"]").prop("selected", "selected");
         $(".assigned_to option[value="+obj[0]['assigned_to']+"]").prop("selected", "selected");
+        // Populate new fields
+        if(obj[0]['inspection_fee_paid'] == '1'){
+          $('.inspection_fee_paid').prop('checked', true);
+        } else {
+          $('.inspection_fee_paid').prop('checked', false);
+        }
+        $('.loan_device_details').val(obj[0]['loan_device_details']);
+
         load_model();
         $(".model_no option[value="+obj[0]['model']+"]").prop("selected", "selected");
        // $(".type option[value="+obj[0]['type']+"]").prop("selected", "selected");
