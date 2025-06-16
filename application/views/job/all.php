@@ -198,30 +198,29 @@
               </div>
             </div>
 
+            <div class="col-md-12">
+              <hr>
+              <h5>Fault Details</h5>
+            </div>
+
             <div class="col-md-6">
               <div class="form-group">
-                <label for="fault_frequency" class="col-sm-4 col-form-label">Fault Frequency</label>
-                <div class="col-sm-8">
-                  <input type="text" name="fault_frequency" id="fault_frequency" class="form-control fault_frequency">
-                </div>
+                <label for="fault_frequency">Fault Frequency</label>
+                <input type="text" name="fault_frequency" id="fault_frequency" class="form-control fault_frequency">
               </div>
             </div>
 
             <div class="col-md-6">
               <div class="form-group">
-                <label for="specified_faults" class="col-sm-4 col-form-label">Specified Faults</label>
-                <div class="col-sm-8">
-                  <input type="text" name="specified_faults" id="specified_faults" class="form-control specified_faults">
-                </div>
+                <label for="specified_faults">Specified Faults</label>
+                <input type="text" name="specified_faults" id="specified_faults" class="form-control specified_faults">
               </div>
             </div>
 
             <div class="col-md-12">
               <div class="form-group">
-                <label for="description" class="col-sm-4 col-form-label">Description</label>
-                <div class="col-sm-8">
-                  <textarea name="description" id="description" class="form-control description"></textarea>
-                </div>
+                <label for="description">Description</label>
+                <textarea name="description" id="description" class="form-control description" rows="3"></textarea>
               </div>
             </div>
 
