@@ -161,7 +161,7 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
             <?= nl2br(htmlspecialchars(trim((string)$jobs[0]->loan_device_details))) ?>
           </div>
         <?php endif; ?>
-        [Make: ] [Model: ] [IMEI: ] [Deposit Taken: ] [Accessories: <span class="checkbox"></span> Battery <span class="checkbox"></span> Charger / Other :]
+        <!-- [Make: ] [Model: ] [IMEI: ] [Deposit Taken: ] [Accessories: <span class="checkbox"></span> Battery <span class="checkbox"></span> Charger / Other :] -->
                   </div>
       <div class="static-box">
         <div style="font-weight:bold;">Cover Me Device Drop Off/ Pickup Conditions</div>
