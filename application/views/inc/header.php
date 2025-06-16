@@ -111,12 +111,6 @@
 
   <?php $uri = $this->uri->segment(1); ?>
   <?php $user_type = $this->session->userdata('user_type'); ?>
-  <?php
-    $user_permissions = $this->session->userdata('permission');
-    if (!is_array($user_permissions)) {
-        $user_permissions = []; // Ensure it's an array for in_array checks
-    }
-  ?>
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
@@ -152,7 +146,10 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <?php if(in_array('dashboard', $user_permissions)): // Dashboard Permission ?>
+          <?php $user_permissions = $this->session->userdata('permission'); ?>
+          <?php if (!is_array($user_permissions)) { $user_permissions = []; } // Ensure it's an array ?>
+
+          <?php if(in_array('dashboard', $user_permissions)): ?>
           <li class="nav-item">
             <a href="<?=base_url()?>" class="nav-link <?= $uri == '' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -180,39 +177,34 @@
             <?php endif; ?>
           <?php } ?>
 
-          <?php if(in_array($user_type, ['1', '5'])){ // For Part control (Admin, Part Controller) ?>
-            <?php if(in_array('part_corntroller', $user_permissions)): ?>
-            <li class="nav-item">
-              <a href="<?=base_url('part_corntroller')?>" class="nav-link <?= $uri == 'part_corntroller' ? 'active' : '' ?>">
-                <i class="nav-icon fas fa-cogs"></i>
-                <p>Part control</p>
-              </a>
-            </li>
-            <?php endif; ?>
-          <?php } ?>
+          <?php if(in_array($user_type, ['1', '5']) && in_array('part_corntroller', $user_permissions)): ?>
+          <li class="nav-item">
+            <a href="<?=base_url('part_corntroller')?>" class="nav-link <?= $uri == 'part_corntroller' ? 'active' : '' ?>">
+              <i class="nav-icon fas fa-cogs"></i>
+              <p>Part control</p>
+            </a>
+          </li>
+          <?php endif; ?>
 
-          <?php if(in_array($user_type, ['1', '2', '4'])){ // For Branches (Admin, Staff, Branch) ?>
-            <?php if(in_array('branch', $user_permissions)): ?>
-            <li class="nav-item">
-              <a href="<?=base_url('branch')?>" class="nav-link <?= $uri == 'branch' ? 'active' : '' ?>">
-                <i class="nav-icon fas fa-code-branch"></i>
-                <p>Branches</p>
-              </a>
-            </li>
-            <?php endif; ?>
-          <?php } ?>
+          <?php if(in_array($user_type, ['1', '2', '4']) && in_array('branch', $user_permissions)): ?>
+          <li class="nav-item">
+            <a href="<?=base_url('branch')?>" class="nav-link <?= $uri == 'branch' ? 'active' : '' ?>">
+              <i class="nav-icon fas fa-code-branch"></i>
+              <p>Branches</p>
+            </a>
+          </li>
+          <?php endif; ?>
 
           <?php
-            // Determine if the main "Part" dropdown should be visible.
-            // It should be visible if the user has permission for 'part_main' (a conceptual slug for the section)
-            // OR if they have permission for at least one of its sub-items.
-            $can_see_part_section = in_array('part_main', $user_permissions) || // General permission for the "Part" section
-                                    in_array('brand', $user_permissions) ||
-                                    in_array('model', $user_permissions) ||
-                                    in_array('part_type', $user_permissions) ||
-                                    in_array('part', $user_permissions);
+            $can_see_part_dropdown = (
+                ($user_type != '3') && // Not for Technician
+                (in_array('Brand', $user_permissions) || // Changed 'brand' to 'Brand'
+                in_array('Modal', $user_permissions) || // Changed 'model' to 'Modal'
+                in_array('part_type', $user_permissions) ||
+                in_array('part', $user_permissions))
+            );
           ?>
-          <?php if($can_see_part_section): ?>
+          <?php if($can_see_part_dropdown): ?>
           <li class="nav-item has-treeview <?= in_array($uri, ['part', 'brand', 'model', 'part_type']) ? 'menu-open' : '' ?>">
             <a href="#" class="nav-link <?= in_array($uri, ['part', 'brand', 'model', 'part_type']) ? 'active' : '' ?>">
               <i class="nav-icon fas fa-cube"></i>
@@ -222,7 +214,7 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <?php if(in_array('brand', $user_permissions)): ?>
+              <?php if(in_array('Brand', $user_permissions)): ?> // Changed 'brand' to 'Brand'
               <li class="nav-item">
                 <a href="<?=base_url('part/brand')?>" class="nav-link <?= $uri == 'part' && $this->uri->segment(2) == 'brand' ? 'active' : '' ?>">
                   <i class="far fa-circle nav-icon"></i>
@@ -230,7 +222,7 @@
                 </a>
               </li>
               <?php endif; ?>
-              <?php if(in_array('model', $user_permissions)): ?>
+              <?php if(in_array('Modal', $user_permissions)): ?> // Changed 'model' to 'Modal'
               <li class="nav-item">
                 <a href="<?=base_url('part/model')?>" class="nav-link <?= $uri == 'part' && $this->uri->segment(2) == 'model' ? 'active' : '' ?>">
                   <i class="far fa-circle nav-icon"></i>
@@ -256,42 +248,36 @@
               <?php endif; ?>
             </ul>
           </li>
-          <?php endif; // End of $can_see_part_section ?>
+          <?php endif; // end $can_see_part_dropdown ?>
 
-          <?php if(in_array($user_type, ['1', '2', '4', '5'])){ // For Part order (Admin, Staff, Branch, Part Controller) ?>
-            <?php if(in_array('part_order', $user_permissions)): ?>
-            <li class="nav-item">
-              <a href="<?=base_url('part/order')?>" class="nav-link <?= $uri == 'part' && $this->uri->segment(2) == 'order' ? 'active' : '' ?>">
-                <i class="nav-icon fas fa-shopping-cart"></i>
-                <p>Part order</p>
-              </a>
-            </li>
-            <?php endif; ?>
-          <?php } ?>
+          <?php if(in_array($user_type, ['1', '2', '4', '5']) && in_array('part_order', $user_permissions)): ?>
+          <li class="nav-item">
+            <a href="<?=base_url('part/order')?>" class="nav-link <?= $uri == 'part' && $this->uri->segment(2) == 'order' ? 'active' : '' ?>">
+              <i class="nav-icon fas fa-shopping-cart"></i>
+              <p>Part order</p>
+            </a>
+          </li>
+          <?php endif; ?>
 
-          <?php if($user_type != '5'){ // For Job (Admin, Staff, Technician, Branch) ?>
-            <?php if(in_array('job', $user_permissions)): ?>
-            <li class="nav-item">
-              <a href="<?=base_url('job')?>" class="nav-link <?= $uri == 'job' ? 'active' : '' ?>">
-                <i class="nav-icon fas fa-briefcase"></i>
-                <p>Job</p>
-              </a>
-            </li>
-            <?php endif; ?>
-          <?php } ?>
+          <?php if($user_type != '5' && in_array('Job', $user_permissions)): ?> // Changed 'job' to 'Job'
+          <li class="nav-item">
+            <a href="<?=base_url('job')?>" class="nav-link <?= $uri == 'job' ? 'active' : '' ?>">
+              <i class="nav-icon fas fa-briefcase"></i>
+              <p>Job</p>
+            </a>
+          </li>
+          <?php endif; ?>
 
-          <?php if(in_array($user_type, ['1', '2', '4', '5'])){ // For Stock in (Admin, Staff, Branch, Part Controller) ?>
-            <?php if(in_array('stock_in', $user_permissions)): ?>
-            <li class="nav-item">
-              <a href="<?=base_url('stock_in')?>" class="nav-link <?= $uri == 'stock_in' ? 'active' : '' ?>">
-                <i class="nav-icon fas fa-arrow-down"></i>
-                <p>Stock in</p>
-              </a>
-            </li>
-            <?php endif; ?>
-          <?php } ?>
+          <?php if(in_array($user_type, ['1', '2', '4', '5']) && in_array('stock_in', $user_permissions)): ?>
+          <li class="nav-item">
+            <a href="<?=base_url('stock_in')?>" class="nav-link <?= $uri == 'stock_in' ? 'active' : '' ?>">
+              <i class="nav-icon fas fa-arrow-down"></i>
+              <p>Stock in</p>
+            </a>
+          </li>
+          <?php endif; ?>
 
-          <?php if(in_array('stock_out', $user_permissions)): // Stock out - Permission based ?>
+          <?php if(in_array('stock_out', $user_permissions)): ?>
           <li class="nav-item">
             <a href="<?=base_url('stock_out')?>" class="nav-link <?= $uri == 'stock_out' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-arrow-up"></i>
@@ -300,7 +286,7 @@
           </li>
           <?php endif; ?>
 
-          <!-- Log out - Visible to All (No permission check needed) -->
+          <!-- Log out - Visible to All -->
           <li class="nav-item">
             <a href="<?=base_url('login/logout')?>" class="nav-link">
               <i class="nav-icon fas fa-sign-out-alt"></i>
