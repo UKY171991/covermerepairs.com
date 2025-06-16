@@ -156,7 +156,6 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
         <div style="font-weight:bold;">Loan Device</div>
         The customer must return the loan device in good condition after the repair. Failing to comply will forfeit the deposit fee.<br>
         <?php if (isset($jobs[0]->loan_device_details) && trim((string)$jobs[0]->loan_device_details) !== ''): ?>
-          <strong>Details Provided:</strong>
           <div style="padding-left: 10px; border: 1px dashed #eee; margin-top: 5px; margin-bottom: 5px; background: #f9f9f9; padding: 5px;">
             <?= nl2br(htmlspecialchars(trim((string)$jobs[0]->loan_device_details))) ?>
           </div>
