@@ -97,7 +97,10 @@ function edit(id){
             $('.email').val(obj[0]['email']);
             $('.mobile').val(obj[0]['mobile']);
             $('.customer_name').val(obj[0]['customer_name']);
-            $('.issue').val(obj[0]['issue']);
+            $('.issue').val(obj[0].hasOwnProperty('issue') ? obj[0]['issue'] : '');
+            $('.fault_frequency').val(obj[0].hasOwnProperty('fault_frequency') ? obj[0]['fault_frequency'] : '');
+            $('.specified_faults').val(obj[0].hasOwnProperty('specified_faults') ? obj[0]['specified_faults'] : '');
+            $('.description').val(obj[0].hasOwnProperty('description') ? obj[0]['description'] : '');
             $('.date_from').val(obj[0]['date_from']);
             $('.date_to').val(obj[0]['date_to']);
             $(".branch option[value="+obj[0]['branch']+"]").prop("selected", "selected");
