@@ -201,19 +201,21 @@ function editPart(id) {
         success: function(data) {
             if (data) {
                 console.log('Edit data received:', data); // Debug log
-                
-                // Populate form fields
+                // Set dropdowns after ensuring options are present
+                setTimeout(function() {
+                    $('#branch').val(data.branch).trigger('change');
+                    $('#brand').val(data.brand).trigger('change');
+                    $('#type').val(data.type).trigger('change');
+                }, 100);
+                // Set text fields
                 $('#part_id').val(data.id);
-                $('#branch').val(data.branch);
-                $('#brand').val(data.brand);
-                $('#type').val(data.type);
                 $('#price_min').val(data.price_min);
                 $('#price_max').val(data.price_max);
                 $('#stock').val(data.stock);
-                
-                // Load models with selected model
-                loadModels(data.model);
-                
+                // Load models with selected model after brand is set
+                setTimeout(function() {
+                    loadModels(data.model);
+                }, 200);
                 // Update modal title and show
                 $('#modal_title').text('Edit Part');
                 $('#add_edit_modal').modal('show');
