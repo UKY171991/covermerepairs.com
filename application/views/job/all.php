@@ -330,7 +330,11 @@
       </div>
       <form action="<?=base_url('job/couriereStatus')?>" method="post" id="couriere" enctype="multipart/form-data">
         <div class="modal-body">
-          <!-- ...form fields as before... -->
+          <input type="hidden" name="job" class="form-control job_id">
+          <div class="form-group">
+            <label for="issue_list">Add Couriere Status</label>
+            <textarea name="issue_list" class="form-control" rows="3" placeholder="Enter couriere status update..."></textarea>
+          </div>
         </div>
         <div class="modal-footer justify-content-between">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
