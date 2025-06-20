@@ -20,6 +20,8 @@ $(document).ready(function() {
 
     if ( $.fn.dataTable.isDataTable('#all_data') ) {
       $('#all_data').DataTable().destroy();
+      // Remove any existing search rows to prevent duplicates
+      $('#all_data thead tr.search-row').remove();
     }
 
 	var base_url = $(".base_url").val();
@@ -59,28 +61,30 @@ $(document).ready(function() {
                 { data: 4, title: "Action", searchable: false, orderable: false, width: "20%" }
             ],
             initComplete: function () {
-                // Create a second header row for search inputs
-                var api = this.api();
-                
-                // Clone the header row and add search inputs
-                $('#all_data thead tr').clone(true).addClass('search-row').appendTo('#all_data thead');
-                $('#all_data thead tr:eq(1) th').each(function (i) {
-                    var title = $(this).text();
+                // Only add search row if it doesn't already exist
+                if ($('#all_data thead tr.search-row').length === 0) {
+                    var api = this.api();
                     
-                    // Skip search for # and Action columns
-                    if (i === 0 || i === 4) {
-                        $(this).html('');
-                        return;
-                    }
-                    
-                    $(this).html('<input type="text" class="form-control form-control-sm" placeholder="Search ' + title + '" />');
-                    
-                    $('input', this).on('keyup change clear', function () {
-                        if (api.column(i).search() !== this.value) {
-                            api.column(i).search(this.value).draw();
+                    // Clone the header row and add search inputs
+                    $('#all_data thead tr').clone(true).addClass('search-row').appendTo('#all_data thead');
+                    $('#all_data thead tr:eq(1) th').each(function (i) {
+                        var title = $(this).text();
+                        
+                        // Skip search for # and Action columns
+                        if (i === 0 || i === 4) {
+                            $(this).html('');
+                            return;
                         }
+                        
+                        $(this).html('<input type="text" class="form-control form-control-sm" placeholder="Search ' + title + '" />');
+                        
+                        $('input', this).on('keyup change clear', function () {
+                            if (api.column(i).search() !== this.value) {
+                                api.column(i).search(this.value).draw();
+                            }
+                        });
                     });
-                });
+                }
             }
         });
     
