@@ -241,4 +241,87 @@ class Part_model extends CI_Model {
 		$query = $this->db->get();
 		return $query->result();
 	}
+
+	// Pagination methods for parts
+	public function get_paginated_parts($search = [], $start = 0, $length = 10) {
+		$this->db->select('part.*, brand.name as brand_name, model.name as model_name, part_type.name as part_type_name, user.name as user_name, user.type as user_type');
+		$this->db->from('part');
+		$this->db->join('brand', 'brand.id = part.brand', 'left');
+		$this->db->join('model', 'model.id = part.model', 'left');
+		$this->db->join('part_type', 'part_type.id = part.type', 'left');
+		$this->db->join('user', 'user.id = part.added_by', 'left');
+		
+		// Apply search filters
+		if (!empty($search['brand_name'])) {
+			$this->db->like('brand.name', $search['brand_name']);
+		}
+		if (!empty($search['model_name'])) {
+			$this->db->like('model.name', $search['model_name']);
+		}
+		if (!empty($search['part_type_name'])) {
+			$this->db->like('part_type.name', $search['part_type_name']);
+		}
+		if (!empty($search['user_name'])) {
+			$this->db->like('user.name', $search['user_name']);
+		}
+		
+		// Global search
+		if (!empty($search['global'])) {
+			$this->db->group_start();
+			$this->db->like('brand.name', $search['global']);
+			$this->db->or_like('model.name', $search['global']);
+			$this->db->or_like('part_type.name', $search['global']);
+			$this->db->or_like('user.name', $search['global']);
+			$this->db->group_end();
+		}
+		
+		$this->db->order_by('part.id', 'DESC');
+		
+		if ($length != -1) {
+			$this->db->limit($length, $start);
+		}
+		
+		$query = $this->db->get();
+		return $query->result();
+	}
+	
+	public function count_all_parts() {
+		$this->db->from('part');
+		return $this->db->count_all_results();
+	}
+	
+	public function count_filtered_parts($search = []) {
+		$this->db->from('part');
+		$this->db->join('brand', 'brand.id = part.brand', 'left');
+		$this->db->join('model', 'model.id = part.model', 'left');
+		$this->db->join('part_type', 'part_type.id = part.type', 'left');
+		$this->db->join('user', 'user.id = part.added_by', 'left');
+		
+		// Apply search filters
+		if (!empty($search['brand_name'])) {
+			$this->db->like('brand.name', $search['brand_name']);
+		}
+		if (!empty($search['model_name'])) {
+			$this->db->like('model.name', $search['model_name']);
+		}
+		if (!empty($search['part_type_name'])) {
+			$this->db->like('part_type.name', $search['part_type_name']);
+		}
+		if (!empty($search['user_name'])) {
+			$this->db->like('user.name', $search['user_name']);
+		}
+		
+		// Global search
+		if (!empty($search['global'])) {
+			$this->db->group_start();
+			$this->db->like('brand.name', $search['global']);
+			$this->db->or_like('model.name', $search['global']);
+			$this->db->or_like('part_type.name', $search['global']);
+			$this->db->or_like('user.name', $search['global']);
+			$this->db->group_end();
+		}
+		
+		return $this->db->count_all_results();
+	}
+
 }

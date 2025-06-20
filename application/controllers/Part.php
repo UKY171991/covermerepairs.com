@@ -149,7 +149,6 @@ class Part extends CI_Controller {
 			}
 		}
 	}
-
 	public function add_data(){
 		if($this->input->post()){
 
@@ -164,12 +163,20 @@ class Part extends CI_Controller {
 			$prem['added_by'] = $this->session->userdata('user_id');
 			$id = $this->input->post('id');
 			if($id !=''){
-				$last_id = $this->part->update('part',$prem,$id);
-				echo "Part updated succefully.";
+				$result = $this->part->update('part',$prem,$id);
+				if($result) {
+					echo json_encode(['status' => 'success', 'message' => 'Part updated successfully.']);
+				} else {
+					echo json_encode(['status' => 'error', 'message' => 'Failed to update part.']);
+				}
 				exit();
 			}else{
-				$last_id = $this->part->insert('part',$prem);
-				echo "Part added succefully.";
+				$result = $this->part->insert('part',$prem);
+				if($result) {
+					echo json_encode(['status' => 'success', 'message' => 'Part added successfully.']);
+				} else {
+					echo json_encode(['status' => 'error', 'message' => 'Failed to add part.']);
+				}
 				exit();
 			}
 		}
@@ -489,79 +496,111 @@ class Part extends CI_Controller {
    
 		echo json_encode($output);
 	}
-
 	public function all_data_ajax(){
-		$all_data = $this->part->all_data('part','DESC');
-		$i =1;
-		$data = array();
-		foreach($all_data as $key => $all_datas){
-			$brand_name='';
-			$brand = $this->part->single_data('brand',$all_datas->brand);
-			foreach($brand as $brands){
-				$brand_name = $brands->name;
-			}
-			$model_name='';
-			$model = $this->part->single_data('model',$all_datas->model);
-			foreach($model as $models){
-				$model_name = $models->name;
-			}
-			$part_t='';
-			$part_type = $this->part->single_data('part_type',$all_datas->type);
-			foreach($part_type as $part_types){
-				$part_t = $part_types->name;
-			}
-			if($all_datas->price_min !='0.00' AND $all_datas->price_max != '0.00'){
-				$price = $all_datas->price_min.' - '.$all_datas->price_max;
-			}elseif($all_datas->price_min !='0.00'){
-				$price = $all_datas->price_min;
-			}elseif($all_datas->price_max !='0.00'){
-				$price = $all_datas->price_max;
-			}
-			$user = $this->part->single_data('user',$all_datas->added_by);
-			$user_type ='';
-			foreach($user as $users){
-				if($users->type =='0'){
-					$user_type = " (Admin)";
-				}elseif($users->type =='1'){
-					$user_type = " (Staff)";
-				}elseif($users->type =='2'){
-					$user_type = " (Technician)";
-				}elseif($users->type =='3'){
-					$user_type = " (Branch)";
-				}elseif($users->type =='4'){
-					$user_type = " (Part corntroller)";
+		// DataTable parameters
+		$start = $this->input->post('start') ?: 0;
+		$length = $this->input->post('length') ?: 10;
+		$search_value = $this->input->post('search')['value'] ?? '';
+		
+		// Column search
+		$columns = $this->input->post('columns');
+		$search = [];
+		
+		if (!empty($columns)) {
+			foreach ($columns as $index => $column) {
+				if (!empty($column['search']['value'])) {
+					switch ($index) {
+						case 1:
+							$search['brand_name'] = $column['search']['value'];
+							break;
+						case 2:
+							$search['model_name'] = $column['search']['value'];
+							break;
+						case 3:
+							$search['part_type_name'] = $column['search']['value'];
+							break;
+						case 6:
+							$search['user_name'] = $column['search']['value'];
+							break;
+					}
 				}
-				$username = $users->name.$user_type;
 			}
+		}
+		
+		// Global search
+		if (!empty($search_value)) {
+			$search['global'] = $search_value;
+		}
+		
+		// Get paginated data
+		$all_data = $this->part->get_paginated_parts($search, $start, $length);
+		$total_records = $this->part->count_all_parts();
+		$filtered_records = $this->part->count_filtered_parts($search);
+		
+		$i = $start + 1;
+		$data = array();
+		
+		foreach($all_data as $row){
+			// Format price
+			if($row->price_min !='0.00' AND $row->price_max != '0.00'){
+				$price = $row->price_min.' - '.$row->price_max;
+			}elseif($row->price_min !='0.00'){
+				$price = $row->price_min;
+			}elseif($row->price_max !='0.00'){
+				$price = $row->price_max;
+			} else {
+				$price = '-';
+			}
+			
+			// Format username with type
+			$user_type ='';
+			if($row->user_type =='0'){
+				$user_type = " (Admin)";
+			}elseif($row->user_type =='1'){
+				$user_type = " (Staff)";
+			}elseif($row->user_type =='2'){
+				$user_type = " (Technician)";
+			}elseif($row->user_type =='3'){
+				$user_type = " (Branch)";
+			}elseif($row->user_type =='4'){
+				$user_type = " (Part Controller)";
+			}
+			$username = $row->user_name.$user_type;			// Action buttons based on permissions
 			if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){
-				$action = "<button data-toggle='modal' data-target='#edit_data' onclick='return edit(".$all_datas->id.")' class='btn btn-info btn-xs'>Edit</button>";
-				$action .= "<button href='' onclick='return del(".$all_datas->id.")' class='btn btn-danger btn-xs'>Delete</button>"; 
+				$action = "<button data-id='".$row->id."' class='btn btn-success btn-xs view-btn' title='View'>View</button>";
+				$action .= "<button data-toggle='modal' data-target='#edit_data' data-id='".$row->id."' class='btn btn-info btn-xs edit-btn' title='Edit'>Edit</button>";
+				$action .= "<button data-id='".$row->id."' class='btn btn-danger btn-xs delete-btn' title='Delete'>Delete</button>"; 
 			}elseif($this->session->userdata('user_type') =='3'){
-				if($all_datas->added_by == $this->session->userdata('user_id')){
-					$action = "<button data-toggle='modal' data-target='#edit_data' onclick='return edit(".$all_datas->id.")' class='btn btn-info btn-xs'>Edit</button>";
-					$action .= "<button href='' onclick='return del(".$all_datas->id.")' class='btn btn-danger btn-xs'>Delete</button>"; 
-				}else{
-					$action = "<button  class='btn btn-info btn-xs' disabled>Edit</button>";
-					$action .= "<button class='btn btn-danger btn-xs' disabled>Delete</button>";
+				if($row->added_by == $this->session->userdata('user_id')){
+					$action = "<button data-id='".$row->id."' class='btn btn-success btn-xs view-btn' title='View'>View</button>";
+					$action .= "<button data-toggle='modal' data-target='#edit_data' data-id='".$row->id."' class='btn btn-info btn-xs edit-btn' title='Edit'>Edit</button>";
+					$action .= "<button data-id='".$row->id."' class='btn btn-danger btn-xs delete-btn' title='Delete'>Delete</button>";				}else{
+					$action = "<button data-id='".$row->id."' class='btn btn-success btn-xs view-btn' title='View'>View</button>";
+					$action .= "<button class='btn btn-info btn-xs' disabled title='Edit'>Edit</button>";
+					$action .= "<button class='btn btn-danger btn-xs' disabled title='Delete'>Delete</button>";
 				}
 			}else{
-				$action = "<button  class='btn btn-info btn-xs' disabled>Edit</button>";
-				$action .= "<button class='btn btn-danger btn-xs' disabled>Delete</button>";
+				$action = "<button data-id='".$row->id."' class='btn btn-success btn-xs view-btn' title='View'>View</button>";
+				$action .= "<button class='btn btn-info btn-xs' disabled title='Edit'>Edit</button>";
+				$action .= "<button class='btn btn-danger btn-xs' disabled title='Delete'>Delete</button>";
 			}
-			$row = array();
-			$row[] =  $i++;
-			$row[] =  $brand_name;
-			$row[] =  $model_name;
-			$row[] =  $part_t;
-			$row[] =  $price;
-			$row[] =  $all_datas->stock;
-			$row[] =  $username;
-			$row[] =  $action;
-			$data[] = $row;
+			
+			$data_row = array();
+			$data_row[] = $i++;
+			$data_row[] = $row->brand_name ?? '';
+			$data_row[] = $row->model_name ?? '';
+			$data_row[] = $row->part_type_name ?? '';
+			$data_row[] = $price;
+			$data_row[] = $row->stock;
+			$data_row[] = $username;
+			$data_row[] = $action;
+			$data[] = $data_row;
 		}
+		
 		$output = array(
-			"recordsTotal" => $this->part->count_all('part','DESC'),
-			"recordsFiltered" => $this->part->count_all('part','DESC'),
+			"draw" => intval($this->input->post('draw')),
+			"recordsTotal" => $total_records,
+			"recordsFiltered" => $filtered_records,
 			"data" => $data,
 		);
 		echo json_encode($output);
@@ -583,11 +622,14 @@ class Part extends CI_Controller {
 			echo '<option value="'.$all->id.'"  '.$select.'>'.$all->name.'</option>';
 		}
 	}
-
 	public function delete(){
 		$id = $this->input->post('id');
-		$this->part->delete('part',$id);
-		echo "Part deleted succefully.";
+		$result = $this->part->delete('part',$id);
+		if($result) {
+			echo json_encode(['status' => 'success', 'message' => 'Part deleted successfully.']);
+		} else {
+			echo json_encode(['status' => 'error', 'message' => 'Failed to delete part.']);
+		}
 		exit();
 	}
 	public function edit(){
