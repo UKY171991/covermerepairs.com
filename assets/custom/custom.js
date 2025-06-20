@@ -14,7 +14,6 @@ $(function () {
     });
   });
 
- $('.select2').select2();
  //Initialize Select2 Elements
 	$('.select2bs4').select2({
 	  theme: 'bootstrap4'
@@ -95,13 +94,30 @@ $('.toastsDefaultDanger').click(function() {
 //     }
 // });
 
-// Remove Select2 initialization for job modal select fields
-$('#edit_data').on('shown.bs.modal', function () {
-  // Remove Select2 if present
-  $(this).find('select.select2').each(function() {
-    if ($(this).hasClass('select2-hidden-accessible')) {
-      $(this).select2('destroy');
-      $(this).removeClass('select2');
+// Prevent Select2 on /job page, allow globally elsewhere
+$(document).ready(function() {
+  if (window.location.pathname === '/job' || window.location.pathname === '/job/') {
+    // Remove Select2 from all selects on job page if present
+    $('select.select2').each(function() {
+      if ($(this).hasClass('select2-hidden-accessible')) {
+        $(this).select2('destroy');
+        $(this).removeClass('select2');
+      }
+    });
+    // Also on modal show, in case dynamic
+    $('#edit_data, #found_issue, #status, #assign, #couriereStatus').on('shown.bs.modal', function () {
+      $(this).find('select.select2').each(function() {
+        if ($(this).hasClass('select2-hidden-accessible')) {
+          $(this).select2('destroy');
+          $(this).removeClass('select2');
+        }
+      });
+    });
+  } else {
+    // Global Select2 initialization for all other pages
+    $('select.form-control').addClass('select2');
+    if ($.fn.select2) {
+      $('select.select2').select2({ theme: 'bootstrap4' });
     }
-  });
+  }
 });
