@@ -233,10 +233,16 @@ function found_issue(id){
       success:function(res){
         // Set HTML only in the div, not in any textarea
         $(".issue_list").html(res);
+        // Always clear the textarea when opening or updating
+        $("#submit_issue textarea[name='issue_list']").val('');
       }
     }); 
 }
 
+// When opening the modal, always clear the textarea
+$('#found_issue').on('show.bs.modal', function () {
+  $("#submit_issue textarea[name='issue_list']").val('');
+});
 
 ///  Assign  add
 
