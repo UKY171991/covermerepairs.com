@@ -79,17 +79,16 @@
 
 
   <div class="modal fade" id="edit_data">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Add/Edit</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <form action="<?=base_url('technicians/add_data')?>" method="post" id="submit_data" enctype="multipart/form-data">
-            <div class="modal-body">
-
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Add/Edit</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="<?=base_url('technicians/add_data')?>" method="post" id="submit_data" enctype="multipart/form-data">
+          <div class="modal-body">
             <input type="hidden" name="id" class="form-control id">
             <div class="row">
               <div class="col-md-6">
@@ -116,80 +115,64 @@
                   <input type="text" name="phone" class="form-control phone" placeholder="" required>
                 </div>
               </div>
-
-            
-        
-        <div class="col-md-6">
+              <div class="col-md-6">
                 <div class="form-group">
                   <label>DOB</label>
                   <input type="date" name="dob" class="form-control dob" placeholder="" required>
                 </div>
               </div>
-
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Password</label>
                   <input type="password" name="password" class="form-control" placeholder="if you want  to  change  Password please enter password">
                 </div>
               </div>
-        
-        <div class="col-md-6">
+              <div class="col-md-6">
                 <div class="form-group">
                   <label>Address</label>
                   <input type="text" name="address" class="form-control address" placeholder="" >
                 </div>
               </div>
-          
-         
-              <?php if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){ ?>
+              <?php if($this->session->userdata('user_type') =='1' || $this->session->userdata('user_type') =='4'){ ?>
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Branch</label>
-                    <select name="branch[]" class="form-control branch select2" multiple required>
-                    <!--<option value="">Select branch</option> -->
+                  <select name="branch[]" class="form-control branch select2" multiple required style="width:100%">
                     <?php foreach($branch as $branchs){ ?>
-                    <option value="<?=$branchs->id?>"><?=$branchs->name?></option>
+                      <option value="<?=$branchs->id?>"><?=$branchs->name?></option>
                     <?php } ?>
-                    </select>
+                  </select>
                 </div>
               </div>
               <?php } ?>
-        
-        <div class="col-md-12">
+              <div class="col-md-12">
                 <div class="form-group">
                   <label>Permission</label>
-          <div class="row">
-          <?php foreach($permission as $permis){ ?>
-          <div class="col-md-4 mt-2">
-            <div class="form-check">
-              <input class="form-check-input" name="permission[]" type="checkbox" value="<?=$permis->slug?>" id="<?=$permis->slug?>">
-              <label class="form-check-label" for="<?=$permis->slug?>">
-              <?=$permis->name?>
-              </label>
-            </div>
-          </div>
-          <?php } ?>
-          </div>
-          
+                  <div class="row">
+                    <?php foreach($permission as $permis){ ?>
+                    <div class="col-md-4 mt-2">
+                      <div class="form-check">
+                        <input class="form-check-input" name="permission[]" type="checkbox" value="<?=$permis->slug?>" id="<?=$permis->slug?>">
+                        <label class="form-check-label" for="<?=$permis->slug?>">
+                          <?=$permis->name?>
+                        </label>
+                      </div>
+                    </div>
+                    <?php } ?>
+                  </div>
                 </div>
               </div>
-
-              <!-- /.col -->
             </div>
-        
-
-            </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Save changes</button>
-            </div>
-            </form>
           </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form>
       </div>
-      <!-- /.modal -->
+    </div>
+  </div>
+  <!-- /.modal -->
     
     
     
