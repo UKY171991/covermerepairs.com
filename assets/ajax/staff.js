@@ -18,9 +18,10 @@ $(document).ready(function() {
     });
 
     // Handle the "Add" button click
-    $('.add_btn').on('click', function() {
+    $('#add_btn').on('click', function() {
         reset_form();
         $('#edit_modal_title').text('Add Staff');
+        $('#edit_data').modal('show');
     });
 
     // Handle the "Edit" button click using event delegation
@@ -28,6 +29,22 @@ $(document).ready(function() {
         const id = $(this).data('id');
         if (id) {
             edit(id);
+        }
+    });
+
+    // Handle the "View" button click using event delegation
+    $('#all_data').on('click', '.view_btn', function() {
+        const id = $(this).data('id');
+        if (id) {
+            view(id);
+        }
+    });
+
+    // Handle the "Delete" button click using event delegation
+    $('#all_data').on('click', '.del_btn', function() {
+        const id = $(this).data('id');
+        if (id) {
+            del(id);
         }
     });
 });
@@ -108,6 +125,66 @@ function edit(id) {
         },
         error: function() {
             showMessage('Failed to fetch staff data from the server.', 'error');
+        }
+    });
+}
+
+function edit(id) {
+    reset_form();
+    $('#edit_modal_title').text('Edit Staff');
+    const base_url = $(".base_url").val();
+
+    $.ajax({
+        url: base_url + 'staff/edit',
+        type: 'POST',
+        data: { id: id },
+        dataType: 'json',
+        success: function(data) {
+            const staff = data[0];
+            if (!staff) {
+                showMessage('Could not find staff data.', 'error');
+                return;
+            }
+
+            // Populate fields
+            $('.id').val(staff.id);
+            $('.name').val(staff.name);
+            $('.email').val(staff.email);
+            $('.phone').val(staff.phone);
+            $('.username').val(staff.username);
+            $('.address').val(staff.address);
+            $('.dob').val(staff.dob);
+
+            // Handle Branch field
+            if ($('.branch').length > 0) {
+                const branchIds = staff.branch ? staff.branch.split('--').filter(Boolean) : [];
+                $('.branch').val(branchIds).trigger('change');
+            }
+
+            // Handle Permissions
+            const permissions = staff.permission ? staff.permission.split('--').filter(Boolean) : [];
+            permissions.forEach(slug => $('#' + slug).prop('checked', true));
+
+            $('#edit_data').modal('show');
+        },
+        error: function() {
+            showMessage('Failed to fetch staff data from the server.', 'error');
+        }
+    });
+}
+
+function view(id) {
+    const base_url = $(".base_url").val();
+    $.ajax({
+        url: base_url + 'staff/view',
+        type: 'POST',
+        data: { id: id },
+        success: function(res) {
+            $('.view_table').html(res);
+            $('#view_data').modal('show');
+        },
+        error: function() {
+            showMessage('Failed to fetch staff data.', 'error');
         }
     });
 }

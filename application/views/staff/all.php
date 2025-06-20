@@ -27,7 +27,7 @@
             <div class="card">
               <div class="card-header d-flex justify-content-end">
                 <?php if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){ ?>
-                 <button class="card-btn btn btn-info btn-sm add_btn" data-toggle='modal' data-target='#edit_data'>Add</button>
+                 <button class="card-btn btn btn-info btn-sm" id="add_btn">Add</button>
                <?php } ?>
               </div>
               <!-- /.card-header -->

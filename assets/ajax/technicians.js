@@ -15,12 +15,11 @@ $(document).ready(function() {
             options.placeholder = 'Select one or more branches';
         }
         $this.select2(options);
-    });
-
-    // Handle the "Add" button click
-    $('.add_btn').on('click', function() {
+    });    // Handle the "Add" button click
+    $('#add_btn').on('click', function() {
         reset_form();
         $('#edit_modal_title').text('Add Technician');
+        $('#edit_data').modal('show');
     });
 
     // Handle the "Edit" button click using event delegation
@@ -28,6 +27,22 @@ $(document).ready(function() {
         const id = $(this).data('id');
         if (id) {
             edit(id);
+        }
+    });
+
+    // Handle the "View" button click using event delegation
+    $('#all_data').on('click', '.view_btn', function() {
+        const id = $(this).data('id');
+        if (id) {
+            view(id);
+        }
+    });
+
+    // Handle the "Delete" button click using event delegation
+    $('#all_data').on('click', '.del_btn', function() {
+        const id = $(this).data('id');
+        if (id) {
+            del(id);
         }
     });
 });
@@ -108,6 +123,66 @@ function edit(id) {
         },
         error: function() {
             show_notification('error', 'Failed to fetch technician data from the server.');
+        }
+    });
+}
+
+function edit(id) {
+    reset_form();
+    $('#edit_modal_title').text('Edit Technician');
+    const base_url = $(".base_url").val();
+
+    $.ajax({
+        url: base_url + 'technicians/edit',
+        type: 'POST',
+        data: { id: id },
+        dataType: 'json',
+        success: function(data) {
+            const technician = data[0];
+            if (!technician) {
+                show_notification('error', 'Could not find technician data.');
+                return;
+            }
+
+            // Populate fields
+            $('.id').val(technician.id);
+            $('.name').val(technician.name);
+            $('.email').val(technician.email);
+            $('.phone').val(technician.phone);
+            $('.username').val(technician.username);
+            $('.address').val(technician.address);
+            $('.dob').val(technician.dob);
+
+            // Handle Branch field
+            if ($('.branch').length > 0) {
+                const branchIds = technician.branch ? technician.branch.split('--').filter(Boolean) : [];
+                $('.branch').val(branchIds).trigger('change');
+            }
+
+            // Handle Permissions
+            const permissions = technician.permission ? technician.permission.split('--').filter(Boolean) : [];
+            permissions.forEach(slug => $('#' + slug).prop('checked', true));
+
+            $('#edit_data').modal('show');
+        },
+        error: function() {
+            show_notification('error', 'Failed to fetch technician data from the server.');
+        }
+    });
+}
+
+function view(id) {
+    const base_url = $(".base_url").val();
+    $.ajax({
+        url: base_url + 'technicians/view',
+        type: 'POST',
+        data: { id: id },
+        success: function(res) {
+            $('.view_table').html(res);
+            $('#view_data').modal('show');
+        },
+        error: function() {
+            show_notification('error', 'Failed to fetch technician data.');
         }
     });
 }
