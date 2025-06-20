@@ -27,7 +27,7 @@
             <div class="card">
               <div class="card-header d-flex justify-content-end">
                 <?php if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){ ?>
-                 <button class="card-btn btn btn-info btn-sm" data-toggle='modal' data-target='#edit_data'  onclick="reset()">Add</button>
+                 <button class="card-btn btn btn-info btn-sm add_btn" data-toggle='modal' data-target='#edit_data'>Add</button>
                <?php } ?>
               </div>
               <!-- /.card-header -->
@@ -81,7 +81,7 @@
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Add/Edit</h4>
+              <h4 class="modal-title" id="edit_modal_title">Add/Edit Staff</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -140,16 +140,15 @@
               </div>
 			  
 			      
-              <?php if($this->session->userdata('user_type') =='1'){ ?>
+              <?php if($this->session->userdata('user_type') =='1' || $this->session->userdata('user_type') =='4'){ ?>
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Branch</label>
-          				  <select name="branch[]" class="form-control branch select2" multiple required>
-          					<!--<option value="">Select branch</option> -->
-          					<?php foreach($branch as $branchs){ ?>
-          					<option value="<?=$branchs->id?>"><?=$branchs->name?></option>
-          					<?php } ?>
-          				  </select>
+                  <select name="branch[]" class="form-control branch select2" multiple required style="width:100%">
+                    <?php foreach($branch as $branchs){ ?>
+                      <option value="<?=$branchs->id?>"><?=$branchs->name?></option>
+                    <?php } ?>
+                  </select>
                 </div>
               </div>
               <?php } ?>

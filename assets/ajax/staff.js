@@ -1,150 +1,152 @@
 $(document).ready(function() {
-  all_data();
- });
+    // Initialize DataTable
+    all_data();
 
-
-$(document).ready(function() {
-    // Initialize Select2
-    $('.select2').select2();
-  });
-
- 
-
-  function all_data(){
-
-    if ( $.fn.dataTable.isDataTable('#all_data') ) {
-      $('#all_data').DataTable().destroy();
-    }
-
-	var base_url = $(".base_url").val();
-    var dataTable = $('#all_data').DataTable({
-        "bSortCellsTop": true,
-        "processing": true, //Feature control the processing indicator.
-        ajax: {
-            url: base_url+'staff/all_data_ajax', // URL to your PHP script for fetching data
-            type: 'POST'
-        },
-        columns: [
-            { data: 0 },
-            { data: 1 },
-            { data: 2 },
-            { data: 3 },
-            { data: 4 },
-            { data: 5 },
-            // Add more columns as needed
-        ],
+    // Initialize all Select2 elements once.
+    $('.select2').each(function() {
+        const $this = $(this);
+        const options = {
+            width: '100%',
+            theme: 'bootstrap4',
+            allowClear: true,
+            dropdownParent: $this.closest('.modal')
+        };
+        if ($this.hasClass('branch')) {
+            options.placeholder = 'Select one or more branches';
+        }
+        $this.select2(options);
     });
 
-  }
+    // Handle the "Add" button click
+    $('.add_btn').on('click', function() {
+        reset_form();
+        $('#edit_modal_title').text('Add Staff');
+    });
 
-$("#submit_data").on('submit',function(e){
-  e.preventDefault();
-  var $btn = $(this).find('button[type=submit]');
-  $btn.prop('disabled', true);
-  var action = $(this).attr('action');
-  var data = $(this).serialize();
-  $.ajax({
-      url:action,
-      type:'post',
-      data:data,
-      success:function(res){
-        const obj = JSON.parse(res);
-        if(obj['status'] =='success'){
-          all_data();
-          alert(obj['message']);
-          $("#submit_data")[0].reset();
-          $(".id").val('');
-	  $('input').prop('checked', false);
-	  $('.select2').val(null).trigger('change');
-        }else{
-          alert(obj['message']);
+    // Handle the "Edit" button click using event delegation
+    $('#all_data').on('click', '.edit_btn', function() {
+        const id = $(this).data('id');
+        if (id) {
+            edit(id);
         }
-        $btn.prop('disabled', false);
-      },
-      error: function() {
-        $btn.prop('disabled', false);
-      }
     });
 });
-    
 
-function del(id){
-  var base_url = $(".base_url").val();
-  var conf = confirm('Arey sure  you want to  delete ?');
-  if(conf){
-    $.ajax({
-      url:base_url+'staff/delete',
-      type:'post',
-      data:{'id':id},
-      success:function(res){
-        all_data();
-        alert(res);
-        
-      }
+function all_data() {
+    if ($.fn.dataTable.isDataTable('#all_data')) {
+        $('#all_data').DataTable().destroy();
+    }
+    const base_url = $(".base_url").val();
+    $('#all_data').DataTable({
+        "processing": true,
+        "ajax": { "url": base_url + 'staff/all_data_ajax', "type": "POST" },
+        "columns": [
+            { "data": 0 }, { "data": 1 }, { "data": 2 },
+            { "data": 3 }, { "data": 4 }, { "data": 5 }
+        ]
     });
-  }
-  
 }
 
-
-function edit(id){
-  var base_url = $(".base_url").val();
-  $('input').prop('checked', false);
-  //$('.select2').val(null).trigger('change');
+$("#submit_data").on('submit', function(e) {
+    e.preventDefault();
+    const $btn = $(this).find('button[type=submit]');
+    $btn.prop('disabled', true).text('Saving...');
     $.ajax({
-      url:base_url+'staff/edit',
-      type:'post',
-      data:{'id':id},
-      success:function(res){
-        const obj = JSON.parse(res);
-        $('.id').val(obj[0]['id']);
-        $('.name').val(obj[0]['name']);
-        $('.email').val(obj[0]['email']);
-        $('.phone').val(obj[0]['phone']);
-        $('.username').val(obj[0]['username']);
-       // $(".type option[value="+obj[0]['type']+"]").prop("selected", "selected");
-    		$('.address').val(obj[0]['address']);
-    		$('.dob').val(obj[0]['dob']);
-        //$('.branch').val(obj[0]['branch']);
-        //$(".branch option[value="+obj[0]['branch']+"]").prop("selected", "selected");
-        $(".branch").val(obj[0]['branch']).trigger("change");
-		
-		let text = obj[0]['permission'];
-		const myArray = text.split("--");
+        url: $(this).attr('action'),
+        type: 'POST',
+        data: $(this).serialize(),
+        dataType: 'json',
+        success: function(response) {
+            if (response.status === 'success') {
+                all_data();
+                $('#edit_data').modal('hide');
+                showMessage(response.message, 'success');
+            } else {
+                showMessage(response.message || 'An unknown error occurred.', 'error');
+            }
+        },
+        error: function() { showMessage('A server error occurred. Please try again.', 'error'); },
+        complete: function() { $btn.prop('disabled', false).text('Save changes'); }
+    });
+});
 
-		// Loop through the array using a for loop
-		for (var i = 0; i < myArray.length; i++) {
-		  $('#'+myArray[i]).prop('checked', true);
-		}
-		
-		
-		let standred = obj[0]['standred'];
-		const stand = standred.split("--");
-		//var selectedValues = ['value1', 'value3'];
+function edit(id) {
+    reset_form();
+    $('#edit_modal_title').text('Edit Staff');
+    const base_url = $(".base_url").val();
 
-		// Iterate through the array and set the selected attribute
-		$('.select2 option').each(function() {
-		  var optionValue = $(this).val();
-		  if ($.inArray(optionValue, stand) !== -1) {
-			$(this).prop('selected', true);
-		  }
-		  $('.select2').select2(); 
-		});
-		
-      }
-    }); 
+    $.ajax({
+        url: base_url + 'staff/edit',
+        type: 'POST',
+        data: { id: id },
+        dataType: 'json',
+        success: function(data) {
+            const staff = data[0];
+            if (!staff) {
+                showMessage('Could not find staff data.', 'error');
+                return;
+            }
+
+            // Populate fields
+            $('.id').val(staff.id);
+            $('.name').val(staff.name);
+            $('.email').val(staff.email);
+            $('.phone').val(staff.phone);
+            $('.username').val(staff.username);
+            $('.address').val(staff.address);
+            $('.dob').val(staff.dob);
+
+            // Handle Branch field
+            if ($('.branch').length > 0) {
+                const branchIds = staff.branch ? staff.branch.split('--').filter(Boolean) : [];
+                $('.branch').val(branchIds).trigger('change');
+            }
+
+            // Handle Permissions
+            const permissions = staff.permission ? staff.permission.split('--').filter(Boolean) : [];
+            permissions.forEach(slug => $('#' + slug).prop('checked', true));
+        },
+        error: function() {
+            showMessage('Failed to fetch staff data from the server.', 'error');
+        }
+    });
 }
 
+function del(id) {
+    if (confirm('Are you sure you want to delete this staff member?')) {
+        const base_url = $(".base_url").val();
+        $.ajax({
+            url: base_url + 'staff/delete',
+            type: 'POST',
+            data: { id: id },
+            success: function(res) {
+                all_data();
+                showMessage('Staff member deleted successfully.', 'success');
+            },
+            error: function() { showMessage('Failed to delete staff member.', 'error'); }
+        });
+    }
+}
 
-function view(id){
-  var base_url = $(".base_url").val();
-  //$('.branch').val(null).trigger('change');
-    $.ajax({
-      url:base_url+'staff/view',
-      type:'post',
-      data:{'id':id},
-      success:function(res){
-        $('.view_table').html(res);
-      }
-    });  
+function reset_form() {
+    const $form = $("#submit_data");
+    $form[0].reset();
+    $form.find(".id").val("");
+    $form.find('.select2').val(null).trigger('change');
+    $form.find('input[type=checkbox]').prop('checked', false);
+}
+
+function showMessage(message, type) {
+    const bgColor = type === 'success' ? '#28a745' : '#dc3545';
+    const notification = $('<div>', {
+        text: message,
+        css: {
+            position: 'fixed', top: '20px', right: '20px',
+            padding: '15px', borderRadius: '5px', color: 'white',
+            fontWeight: 'bold', zIndex: 10001, backgroundColor: bgColor,
+            boxShadow: '0 2px 10px rgba(0,0,0,0.2)'
+        }
+    });
+    $('body').append(notification);
+    notification.hide().fadeIn(300).delay(3500).fadeOut(400, function() { $(this).remove(); });
 }
