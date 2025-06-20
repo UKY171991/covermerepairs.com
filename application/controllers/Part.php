@@ -511,14 +511,17 @@ class Part extends CI_Controller {
 			"recordsFiltered" => $filtered_records,
 			"data" => $data,
 		);
-   
-		echo json_encode($output);
+   		echo json_encode($output);
 	}
+	
 	public function all_data_ajax(){
 		// DataTable parameters
 		$start = $this->input->post('start') ?: 0;
 		$length = $this->input->post('length') ?: 10;
 		$search_value = $this->input->post('search')['value'] ?? '';
+		
+		// Debug logging
+		error_log('Start: ' . $start . ', Length: ' . $length . ', Search: ' . $search_value);
 		
 		// Column search
 		$columns = $this->input->post('columns');
@@ -550,14 +553,25 @@ class Part extends CI_Controller {
 			$search['global'] = $search_value;
 		}
 		
-		// Get paginated data
+		// Debug search parameters
+		error_log('Search parameters: ' . print_r($search, true));
+				// Get paginated data
 		$all_data = $this->part->get_paginated_parts($search, $start, $length);
 		$total_records = $this->part->count_all_parts();
 		$filtered_records = $this->part->count_filtered_parts($search);
 		
+		// Debug: Try alternative query if paginated returns no results
+		if (empty($all_data)) {
+			error_log('No data from paginated query, trying fallback...');
+			$fallback_data = $this->part->all_data('part', 'DESC');
+			error_log('Fallback data count: ' . count($fallback_data));
+		}
+		
+		// Debug record counts
+		error_log('Total records: ' . $total_records . ', Filtered: ' . $filtered_records . ', Data count: ' . count($all_data));
+		
 		$i = $start + 1;
 		$data = array();
-		
 		foreach($all_data as $row){
 			// Format price
 			if($row->price_min !='0.00' AND $row->price_max != '0.00'){
@@ -571,19 +585,21 @@ class Part extends CI_Controller {
 			}
 			
 			// Format username with type
-			$user_type ='';
+			$user_type_label ='';
 			if($row->user_type =='0'){
-				$user_type = " (Admin)";
+				$user_type_label = " (Admin)";
 			}elseif($row->user_type =='1'){
-				$user_type = " (Staff)";
+				$user_type_label = " (Staff)";
 			}elseif($row->user_type =='2'){
-				$user_type = " (Technician)";
+				$user_type_label = " (Technician)";
 			}elseif($row->user_type =='3'){
-				$user_type = " (Branch)";
+				$user_type_label = " (Branch)";
 			}elseif($row->user_type =='4'){
-				$user_type = " (Part Controller)";
+				$user_type_label = " (Part Controller)";
 			}
-			$username = $row->user_name.$user_type;			// Action buttons based on permissions
+			$username = ($row->user_name ?? '') . $user_type_label;
+			
+			// Action buttons based on permissions
 			if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){
 				$action = "<button data-id='".$row->id."' class='btn btn-success btn-xs view-btn' title='View'>View</button>";
 				$action .= "<button data-toggle='modal' data-target='#edit_data' data-id='".$row->id."' class='btn btn-info btn-xs edit-btn' title='Edit'>Edit</button>";
@@ -592,7 +608,8 @@ class Part extends CI_Controller {
 				if($row->added_by == $this->session->userdata('user_id')){
 					$action = "<button data-id='".$row->id."' class='btn btn-success btn-xs view-btn' title='View'>View</button>";
 					$action .= "<button data-toggle='modal' data-target='#edit_data' data-id='".$row->id."' class='btn btn-info btn-xs edit-btn' title='Edit'>Edit</button>";
-					$action .= "<button data-id='".$row->id."' class='btn btn-danger btn-xs delete-btn' title='Delete'>Delete</button>";				}else{
+					$action .= "<button data-id='".$row->id."' class='btn btn-danger btn-xs delete-btn' title='Delete'>Delete</button>"; 
+				}else{
 					$action = "<button data-id='".$row->id."' class='btn btn-success btn-xs view-btn' title='View'>View</button>";
 					$action .= "<button class='btn btn-info btn-xs' disabled title='Edit'>Edit</button>";
 					$action .= "<button class='btn btn-danger btn-xs' disabled title='Delete'>Delete</button>";
@@ -600,8 +617,7 @@ class Part extends CI_Controller {
 			}else{
 				$action = "<button data-id='".$row->id."' class='btn btn-success btn-xs view-btn' title='View'>View</button>";
 				$action .= "<button class='btn btn-info btn-xs' disabled title='Edit'>Edit</button>";
-				$action .= "<button class='btn btn-danger btn-xs' disabled title='Delete'>Delete</button>";
-			}
+				$action .= "<button class='btn btn-danger btn-xs' disabled title='Delete'>Delete</button>";			}
 			
 			$data_row = array();
 			$data_row[] = $i++;
