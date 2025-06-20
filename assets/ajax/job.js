@@ -145,6 +145,8 @@ function edit(id){
             }
             $('.loan_device_details').val(obj[0].hasOwnProperty('loan_device_details') ? obj[0]['loan_device_details'] : '');
             $('.imei_no').val(obj[0].hasOwnProperty('imei_no') ? obj[0]['imei_no'] : '');
+            $('.exceeds').val(obj[0].hasOwnProperty('exceeds') ? obj[0]['exceeds'] : '');
+            $('.security_code').val(obj[0].hasOwnProperty('security_code') ? obj[0]['security_code'] : '');
           } else {
             console.error("Received empty or invalid data for job edit:", obj);
           }
