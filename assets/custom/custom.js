@@ -95,6 +95,8 @@ $('.toastsDefaultDanger').click(function() {
 // });
 
 // Prevent Select2 on /job page, allow globally elsewhere
+
+/*
 $(document).ready(function() {
   if (window.location.pathname === '/job' || window.location.pathname === '/job/') {
     // Remove Select2 from all selects on job page if present
@@ -121,3 +123,5 @@ $(document).ready(function() {
     }
   }
 });
+
+*/
