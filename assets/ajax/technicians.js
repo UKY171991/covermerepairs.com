@@ -2,26 +2,33 @@ $(document).ready(function() {
     // Initialize DataTable
     all_data();
 
-    // Initialize all Select2 elements. This runs only once.
+    // Initialize all Select2 elements once.
     $('.select2').each(function() {
         const $this = $(this);
         const options = {
             width: '100%',
             theme: 'bootstrap4',
-            allowClear: true
+            allowClear: true,
+            dropdownParent: $this.closest('.modal')
         };
-        if ($this.closest('.modal').length) {
-            options.dropdownParent = $this.closest('.modal');
-        }
         if ($this.hasClass('branch')) {
             options.placeholder = 'Select one or more branches';
         }
         $this.select2(options);
     });
 
-    // When the "Add" button is clicked, reset the form for a new entry.
+    // Handle the "Add" button click
     $('.add_btn').on('click', function() {
         reset_form();
+        $('#edit_modal_title').text('Add Technician');
+    });
+
+    // Handle the "Edit" button click using event delegation
+    $('#all_data').on('click', '.edit_btn', function() {
+        const id = $(this).data('id');
+        if (id) {
+            edit(id);
+        }
     });
 });
 
@@ -64,9 +71,8 @@ $("#submit_data").on('submit', function(e) {
 });
 
 function edit(id) {
-    // NOTE FOR DEBUGGING: Open your browser's developer console (F12) to see these messages.
-    console.log(`Requesting data for technician ID: ${id}`);
     reset_form();
+    $('#edit_modal_title').text('Edit Technician');
     const base_url = $(".base_url").val();
 
     $.ajax({
@@ -78,10 +84,8 @@ function edit(id) {
             const technician = data[0];
             if (!technician) {
                 showMessage('Could not find technician data.', 'error');
-                console.error("Received empty or invalid data for technician.", data);
                 return;
             }
-            console.log("Received data:", technician);
 
             // Populate fields
             $('.id').val(technician.id);
@@ -93,24 +97,17 @@ function edit(id) {
             $('.dob').val(technician.dob);
 
             // Handle Branch field
-            const $branchField = $('.branch');
-            console.log(`Branch field element exists in modal: ${$branchField.length > 0}`);
-            if ($branchField.length > 0) {
+            if ($('.branch').length > 0) {
                 const branchIds = technician.branch ? technician.branch.split('--').filter(Boolean) : [];
-                console.log(`Setting branch IDs: ${JSON.stringify(branchIds)}`);
-                $branchField.val(branchIds).trigger('change');
-                console.log(`Branch field value after setting: ${$branchField.val()}`);
+                $('.branch').val(branchIds).trigger('change');
             }
 
             // Handle Permissions
-            $('input[name="permission[]"]').prop('checked', false); // Clear first
             const permissions = technician.permission ? technician.permission.split('--').filter(Boolean) : [];
             permissions.forEach(slug => $('#' + slug).prop('checked', true));
-            console.log("Permissions set.");
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function() {
             showMessage('Failed to fetch technician data from the server.', 'error');
-            console.error("AJAX error:", textStatus, errorThrown);
         }
     });
 }
@@ -122,47 +119,22 @@ function del(id) {
             url: base_url + 'technicians/delete',
             type: 'POST',
             data: { id: id },
-            // Assuming the response is a simple string message
             success: function(res) {
                 all_data();
-                // Attempt to parse as JSON, otherwise treat as text
-                try {
-                    const obj = JSON.parse(res);
-                    showMessage(obj.message || 'Deleted successfully.', obj.status || 'success');
-                } catch (e) {
-                    showMessage(res, 'success');
-                }
+                showMessage('Technician deleted successfully.', 'success');
             },
             error: function() { showMessage('Failed to delete technician.', 'error'); }
         });
     }
 }
 
-/**
- * Resets the form by manually clearing fields, avoiding native form.reset()
- * which can interfere with plugins like Select2.
- */
 function reset_form() {
-    console.log("Resetting form...");
     const $form = $("#submit_data");
-
-    // Clear text-based inputs and textareas
-    $form.find('input[type="text"], input[type="email"], input[type="password"], input[type="date"], textarea').val('');
-    
-    // Clear hidden ID field
+    $form[0].reset();
     $form.find(".id").val("");
-
-    // Uncheck all permission checkboxes
-    $form.find('input[type="checkbox"]').prop('checked', false);
-
-    // Reset Select2 fields
-    if ($form.find('.select2').length) {
-        console.log("Resetting Select2 fields.");
-        $form.find('.select2').val(null).trigger('change');
-    }
-    console.log("Form reset complete.");
+    $form.find('.select2').val(null).trigger('change');
+    $form.find('input[type=checkbox]').prop('checked', false);
 }
-
 
 function showMessage(message, type) {
     const bgColor = type === 'success' ? '#28a745' : '#dc3545';

@@ -144,7 +144,7 @@ class Technicians extends CI_Controller {
 
 			if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){
 				$action = "<button data-toggle='modal' data-target='#view_data' onclick='return view(".$all_datas->id.")' class='btn btn-primary btn-xs m-1'><i class='fa fa-eye' aria-hidden='true'></i></button>";
-				$action .= "<button data-toggle='modal' data-target='#edit_data' data-id='".$all_datas->id."' class='btn btn-info btn-xs m-1'><i class='fas fa-pencil-alt'></i></button>";
+				$action .= "<button data-toggle='modal' data-target='#edit_data' data-id='".$all_datas->id."' class='btn btn-info btn-xs m-1 edit_btn'><i class='fas fa-pencil-alt'></i></button>";
 				$action .= "<button onclick='return del(".$all_datas->id.")' class='btn btn-danger btn-xs m-1'><i class='fa fa-trash' aria-hidden='true'></i></button>";
 			}else{
 				$action = "<button  class='btn btn-info btn-xs m-1' disabled><i class='fas fa-pencil-alt'></i></button>";
