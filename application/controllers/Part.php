@@ -517,11 +517,7 @@ class Part extends CI_Controller {
 	public function all_data_ajax(){
 		// DataTable parameters
 		$start = $this->input->post('start') ?: 0;
-		$length = $this->input->post('length') ?: 10;
-		$search_value = $this->input->post('search')['value'] ?? '';
-		
-		// Debug logging
-		error_log('Start: ' . $start . ', Length: ' . $length . ', Search: ' . $search_value);
+		$length = $this->input->post('length') ?: 10;		$search_value = $this->input->post('search')['value'] ?? '';
 		
 		// Column search
 		$columns = $this->input->post('columns');
@@ -554,25 +550,13 @@ class Part extends CI_Controller {
 		}
 		
 		// Debug search parameters
-		error_log('Search parameters: ' . print_r($search, true));
-				// Get paginated data
+		error_log('Search parameters: ' . print_r($search, true));		// Get paginated data
 		$all_data = $this->part->get_paginated_parts($search, $start, $length);
 		$total_records = $this->part->count_all_parts();
 		$filtered_records = $this->part->count_filtered_parts($search);
 		
-		// Debug: Try alternative query if paginated returns no results
-		if (empty($all_data)) {
-			error_log('No data from paginated query, trying fallback...');
-			$fallback_data = $this->part->all_data('part', 'DESC');
-			error_log('Fallback data count: ' . count($fallback_data));
-		}
-		
-		// Debug record counts
-		error_log('Total records: ' . $total_records . ', Filtered: ' . $filtered_records . ', Data count: ' . count($all_data));
-		
 		$i = $start + 1;
-		$data = array();
-		foreach($all_data as $row){
+		$data = array();foreach($all_data as $row){
 			// Format price
 			if($row->price_min !='0.00' AND $row->price_max != '0.00'){
 				$price = $row->price_min.' - '.$row->price_max;
@@ -586,18 +570,20 @@ class Part extends CI_Controller {
 			
 			// Format username with type
 			$user_type_label ='';
-			if($row->user_type =='0'){
-				$user_type_label = " (Admin)";
-			}elseif($row->user_type =='1'){
-				$user_type_label = " (Staff)";
-			}elseif($row->user_type =='2'){
-				$user_type_label = " (Technician)";
-			}elseif($row->user_type =='3'){
-				$user_type_label = " (Branch)";
-			}elseif($row->user_type =='4'){
-				$user_type_label = " (Part Controller)";
+			if(isset($row->user_type)){
+				if($row->user_type =='0'){
+					$user_type_label = " (Admin)";
+				}elseif($row->user_type =='1'){
+					$user_type_label = " (Staff)";
+				}elseif($row->user_type =='2'){
+					$user_type_label = " (Technician)";
+				}elseif($row->user_type =='3'){
+					$user_type_label = " (Branch)";
+				}elseif($row->user_type =='4'){
+					$user_type_label = " (Part Controller)";
+				}
 			}
-			$username = ($row->user_name ?? '') . $user_type_label;
+			$username = (isset($row->user_name) ? $row->user_name : 'Unknown') . $user_type_label;
 			
 			// Action buttons based on permissions
 			if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){
@@ -616,14 +602,14 @@ class Part extends CI_Controller {
 				}
 			}else{
 				$action = "<button data-id='".$row->id."' class='btn btn-success btn-xs view-btn' title='View'>View</button>";
-				$action .= "<button class='btn btn-info btn-xs' disabled title='Edit'>Edit</button>";
-				$action .= "<button class='btn btn-danger btn-xs' disabled title='Delete'>Delete</button>";			}
+				$action .= "<button class='btn btn-info btn-xs' disabled title='Edit'>Edit</button>";				$action .= "<button class='btn btn-danger btn-xs' disabled title='Delete'>Delete</button>";
+			}
 			
 			$data_row = array();
 			$data_row[] = $i++;
-			$data_row[] = $row->brand_name ?? '';
-			$data_row[] = $row->model_name ?? '';
-			$data_row[] = $row->part_type_name ?? '';
+			$data_row[] = isset($row->brand_name) ? $row->brand_name : 'N/A';
+			$data_row[] = isset($row->model_name) ? $row->model_name : 'N/A';
+			$data_row[] = isset($row->part_type_name) ? $row->part_type_name : 'N/A';
 			$data_row[] = $price;
 			$data_row[] = $row->stock;
 			$data_row[] = $username;

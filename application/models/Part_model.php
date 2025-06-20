@@ -252,7 +252,7 @@ class Part_model extends CI_Model {
 		$this->db->join('part_type', 'part_type.id = part.type', 'left');
 		$this->db->join('user', 'user.id = part.added_by', 'left');
 		
-		// Apply search filters
+		// Apply column search filters
 		if (!empty($search['brand_name'])) {
 			$this->db->like('brand.name', $search['brand_name']);
 		}
@@ -273,6 +273,9 @@ class Part_model extends CI_Model {
 			$this->db->or_like('model.name', $search['global']);
 			$this->db->or_like('part_type.name', $search['global']);
 			$this->db->or_like('user.name', $search['global']);
+			$this->db->or_like('part.stock', $search['global']);
+			$this->db->or_like('part.price_min', $search['global']);
+			$this->db->or_like('part.price_max', $search['global']);
 			$this->db->group_end();
 		}
 		
@@ -298,7 +301,7 @@ class Part_model extends CI_Model {
 		$this->db->join('part_type', 'part_type.id = part.type', 'left');
 		$this->db->join('user', 'user.id = part.added_by', 'left');
 		
-		// Apply search filters
+		// Apply column search filters
 		if (!empty($search['brand_name'])) {
 			$this->db->like('brand.name', $search['brand_name']);
 		}
@@ -319,6 +322,9 @@ class Part_model extends CI_Model {
 			$this->db->or_like('model.name', $search['global']);
 			$this->db->or_like('part_type.name', $search['global']);
 			$this->db->or_like('user.name', $search['global']);
+			$this->db->or_like('part.stock', $search['global']);
+			$this->db->or_like('part.price_min', $search['global']);
+			$this->db->or_like('part.price_max', $search['global']);
 			$this->db->group_end();
 		}
 		
