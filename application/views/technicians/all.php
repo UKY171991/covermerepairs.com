@@ -82,7 +82,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Add/Edit</h4>
+          <h4 class="modal-title" id="edit_modal_title">Add/Edit Technician</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
