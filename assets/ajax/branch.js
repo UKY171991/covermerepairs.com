@@ -8,12 +8,26 @@ $(document).ready(function() {
   };
   
   all_data();
+
+  // Handle Add button click
+  $('#add_btn').on('click', function() {
+    reset_form();
+    $('#edit_data').modal('show');
+  });
 });
 
 $(document).ready(function() {
     // Initialize Select2
     $('.select2').select2();
 });
+
+// Function to reset the form
+function reset_form() {
+  $("#submit_data")[0].reset();
+  $(".id").val('');
+  $('input[type="checkbox"]').prop('checked', false);
+  $('.select2').val(null).trigger('change');
+}
 
  
 
@@ -62,10 +76,7 @@ $("#submit_data").on('submit',function(e){
         if(obj['status'] =='success'){
           all_data();
           toastr.success(obj['message']);
-          $("#submit_data")[0].reset();
-          $(".id").val('');
-          $('input').prop('checked', false);
-          $('.select2').val(null).trigger('change');
+          reset_form();
           $('#edit_data').modal('hide'); // Close the modal
         }else{
           toastr.error(obj['message']);
