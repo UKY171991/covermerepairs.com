@@ -47,7 +47,6 @@
                     <th>Address</th>
                     <th>Added By</th>
                     <th>User Type</th>
-                    <th>Profile Picture</th>
                     <th>Action</th>
                   </tr>
                   </thead>
@@ -65,7 +64,6 @@
                     <th>Address</th>
                     <th>Added By</th>
                     <th>User Type</th>
-                    <th>Profile Picture</th>
                     <th>Action</th>
                   </tr>
                   </tfoot>

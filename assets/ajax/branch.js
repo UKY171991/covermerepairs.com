@@ -41,8 +41,7 @@ $(document).ready(function() {
             { data: 6 },
             { data: 7 },
             { data: 8 },
-            { data: 9 },
-            { data: 10 }
+            { data: 9 }
         ],
     });
 
@@ -65,8 +64,9 @@ $("#submit_data").on('submit',function(e){
           toastr.success(obj['message']);
           $("#submit_data")[0].reset();
           $(".id").val('');
-      $('input').prop('checked', false);
-      $('.select2').val(null).trigger('change');
+          $('input').prop('checked', false);
+          $('.select2').val(null).trigger('change');
+          $('#edit_data').modal('hide'); // Close the modal
         }else{
           toastr.error(obj['message']);
         }
