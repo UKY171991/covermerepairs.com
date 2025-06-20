@@ -233,18 +233,18 @@
       </div>
       <form action="<?=base_url('job/add_issue') ?>" method="post" id="submit_issue" enctype="multipart/form-data">
         <div class="modal-body">
-          <input type="hidden" name="job" value="" class="job_id">
+          <input type="hidden" name="job" value="" class="form-control job_id">
           <div class="form-group">
-            <label>Add Issue</label>
-            <textarea name="issue_list" class="form-control issue_list" required></textarea>
+            <label for="issue_list">Add Issue</label>
+            <textarea name="issue_list" class="form-control" rows="3" placeholder="Enter found issue..." required></textarea>
           </div>
-          <div class="issue_list"></div>
         </div>
         <div class="modal-footer justify-content-between">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Save changes</button>
         </div>
       </form>
+      <div class="issue_list"></div>
     </div>
   </div>
 </div>
