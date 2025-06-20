@@ -104,4 +104,8 @@ $('#edit_data').on('shown.bs.modal', function () {
     theme: 'bootstrap4',
     dropdownParent: $('#edit_data')
   });
+  // Also re-initialize Select2 for all select fields when the modal is shown
+  $('select.form-control').select2({
+    dropdownParent: $('#edit_data')
+  });
 });

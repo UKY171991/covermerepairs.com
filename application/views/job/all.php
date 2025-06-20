@@ -322,4 +322,7 @@ function resetJobForm() {
   $('#submit_data')[0].reset();
   $('.id').val('');
 }
+
+// Ensure all select fields use Select2 for better dropdown handling
+$('select.form-control').addClass('select2');
 </script>
