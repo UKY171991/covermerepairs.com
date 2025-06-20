@@ -157,6 +157,31 @@ $("#submit_data").on('submit',function(e){
   });
 });
 
+$("#add_data_btn").on('click', function() {
+  var base_url = $(".base_url").val();
+  var data = $("#add_data_form").serialize();
+  
+  $.ajax({
+    url: base_url + 'part/add_data',
+    type:'post',
+    data:data,
+    dataType: 'json',
+    success:function(res){
+      if(res.status === 'success'){
+        all_data();
+        toastr.success(res.message);
+        $('#edit_data').modal('hide');
+      } else {
+        toastr.error(res.message || 'An error occurred.');
+      }
+    },
+    error: function(xhr, status, error) {
+      console.error('AJAX Error:', xhr.responseText);
+      toastr.error('Server error occurred. Please try again.');
+    }
+  });
+});
+
 function del(id){
   var base_url = $(".base_url").val();
   
@@ -243,13 +268,13 @@ function view(id){
   }); 
 }
 
-$('.brand').on('change',function(){
+$('#brand').on('change',function(){
   load_model();
 });
 
 function load_model(model_id_to_select){
   var base_url = $(".base_url").val();
-  var brand_id = $('.brand').val();
+  var brand_id = $('#brand').val();
   
   if (brand_id) {
     $.ajax({
@@ -263,11 +288,11 @@ function load_model(model_id_to_select){
             options += '<option value="' + model.id + '">' + model.name + '</option>';
           });
         }
-        $('.model').html(options);
+        $('#model').html(options);
 
         // If a model needs to be pre-selected (during edit)
         if(model_id_to_select) {
-          $('.model').val(model_id_to_select);
+          $('#model').val(model_id_to_select);
         }
       },
       error: function() {
@@ -275,16 +300,16 @@ function load_model(model_id_to_select){
       }
     });
   } else {
-    $('.model').html('<option value="">Select Brand First</option>');
+    $('#model').html('<option value="">Select Brand First</option>');
   }
 }
 
 function reset(){
-  $("#submit_data")[0].reset();
-  $('.id').val('');
-  $('.model').html('<option value="">Select Brand First</option>');
+  $("#add_data_form")[0].reset();
+  $('#id').val('');
+  $('#model').html('<option value="">Select Brand First</option>');
   
   // Re-enable form inputs and show submit button
-  $('#submit_data input, #submit_data select').prop('disabled', false);
-  $('#submit_data button[type="submit"]').show();
+  $('#add_data_form input, #add_data_form select').prop('disabled', false);
+  $('#add_data_form button[type="submit"]').show();
 }
