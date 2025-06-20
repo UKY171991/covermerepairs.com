@@ -293,7 +293,21 @@
       </div>
       <form action="<?=base_url('job/add_status')?>" method="post" id="status_data" enctype="multipart/form-data">
         <div class="modal-body">
-          <!-- ...form fields as before... -->
+          <input type="hidden" name="job_id" class="form-control job_id">
+          <div class="form-group">
+            <label for="status">Select Status</label>
+            <select name="status" class="form-control status_select" required>
+              <option value="">Select Status</option>
+              <option value="Pending">Pending</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Wait">Wait</option>
+              <option value="QC">QC</option>
+              <option value="Ready">Ready</option>
+              <option value="Picked">Picked</option>
+              <option value="Approvid">Approvid</option>
+              <option value="Couriered">Couriered</option>
+            </select>
+          </div>
         </div>
         <div class="modal-footer justify-content-between">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

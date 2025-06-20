@@ -315,6 +315,21 @@ $("#status_data").on('submit',function(e){
 // Status
 function status(id){
   $('.job_id').val(id);
+  // Find the current status from the table row and select it
+  var row = $("button[data-target='#status'][onclick*='status("+id+")']").closest('tr');
+  var currentStatus = row.find('td').eq(8).text().trim();
+  // Try to match the dropdown value
+  var found = false;
+  $(".status_select option").each(function() {
+    if ($(this).text().trim() === currentStatus) {
+      $(".status_select").val($(this).val()).change();
+      found = true;
+      return false;
+    }
+  });
+  if (!found) {
+    $(".status_select").val('').change();
+  }
 }
 
 
