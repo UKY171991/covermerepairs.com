@@ -34,18 +34,30 @@ class Part_model extends CI_Model {
 		return $query->result();
 	}
 
+	public function get_models_by_brand($brand_id)
+	{
+		$this->db->select('id, name');
+		$this->db->where('brand_id', $brand_id);
+		$query = $this->db->get('model');
+		return $query->result();
+	}
+
+	public function single_data_join($where)
+	{
+		$this->db->select('part.*, brand.name as brand_name, model.name as model_name, part_type.name as part_type_name');
+		$this->db->from('part');
+		$this->db->join('brand', 'brand.id = part.brand', 'left');
+		$this->db->join('model', 'model.id = part.model', 'left');
+		$this->db->join('part_type', 'part_type.id = part.type', 'left');
+		$this->db->where($where);
+		$query = $this->db->get();
+		return $query->row();
+	}
+
 	public function single_stock($table='',$data='')
 	{
 		$this->db->select('*');
 		$this->db->where($data);
-		$query = $this->db->get($table);
-		return $query->result();
-	}
-
-	public function single_modal($table='',$id='')
-	{
-		$this->db->select('*');
-		$this->db->where('brand_id',$id);
 		$query = $this->db->get($table);
 		return $query->result();
 	}
@@ -244,13 +256,17 @@ class Part_model extends CI_Model {
 	}
 
 	// Pagination methods for parts
-	public function get_paginated_parts($search = [], $start = 0, $length = 10) {
-		$this->db->select('part.*, brand.name as brand_name, model.name as model_name, part_type.name as part_type_name, user.name as user_name, user.type as user_type');
+	public function get_paginated_parts($search = [], $start = 0, $length = 10, $user_branch = null) {
+		$this->db->select('part.id, part.price_min, part.price_max, brand.name as brand_name, model.name as model_name, part_type.name as part_type_name, user.name as user_name, user.type as user_type');
 		$this->db->from('part');
 		$this->db->join('brand', 'brand.id = part.brand', 'left');
 		$this->db->join('model', 'model.id = part.model', 'left');
 		$this->db->join('part_type', 'part_type.id = part.type', 'left');
 		$this->db->join('user', 'user.id = part.added_by', 'left');
+
+		if ($user_branch !== null) {
+            $this->db->where('part.branch', $user_branch);
+        }
 		
 		// Apply column search filters
 		if (!empty($search['brand_name'])) {
@@ -267,15 +283,14 @@ class Part_model extends CI_Model {
 		}
 		
 		// Global search
-		if (!empty($search['global'])) {
+		if (!empty($search['global_search'])) {
 			$this->db->group_start();
-			$this->db->like('brand.name', $search['global']);
-			$this->db->or_like('model.name', $search['global']);
-			$this->db->or_like('part_type.name', $search['global']);
-			$this->db->or_like('user.name', $search['global']);
-			$this->db->or_like('part.stock', $search['global']);
-			$this->db->or_like('part.price_min', $search['global']);
-			$this->db->or_like('part.price_max', $search['global']);
+			$this->db->like('brand.name', $search['global_search']);
+			$this->db->or_like('model.name', $search['global_search']);
+			$this->db->or_like('part_type.name', $search['global_search']);
+			$this->db->or_like('user.name', $search['global_search']);
+			$this->db->or_like('part.price_min', $search['global_search']);
+			$this->db->or_like('part.price_max', $search['global_search']);
 			$this->db->group_end();
 		}
 		
@@ -289,17 +304,24 @@ class Part_model extends CI_Model {
 		return $query->result();
 	}
 	
-	public function count_all_parts() {
+	public function count_all_parts($user_branch = null) {
 		$this->db->from('part');
+		if ($user_branch !== null) {
+            $this->db->where('part.branch', $user_branch);
+        }
 		return $this->db->count_all_results();
 	}
 	
-	public function count_filtered_parts($search = []) {
+	public function count_filtered_parts($search = [], $user_branch = null) {
 		$this->db->from('part');
 		$this->db->join('brand', 'brand.id = part.brand', 'left');
 		$this->db->join('model', 'model.id = part.model', 'left');
 		$this->db->join('part_type', 'part_type.id = part.type', 'left');
 		$this->db->join('user', 'user.id = part.added_by', 'left');
+
+		if ($user_branch !== null) {
+            $this->db->where('part.branch', $user_branch);
+        }
 		
 		// Apply column search filters
 		if (!empty($search['brand_name'])) {
@@ -316,19 +338,31 @@ class Part_model extends CI_Model {
 		}
 		
 		// Global search
-		if (!empty($search['global'])) {
+		if (!empty($search['global_search'])) {
 			$this->db->group_start();
-			$this->db->like('brand.name', $search['global']);
-			$this->db->or_like('model.name', $search['global']);
-			$this->db->or_like('part_type.name', $search['global']);
-			$this->db->or_like('user.name', $search['global']);
-			$this->db->or_like('part.stock', $search['global']);
-			$this->db->or_like('part.price_min', $search['global']);
-			$this->db->or_like('part.price_max', $search['global']);
+			$this->db->like('brand.name', $search['global_search']);
+			$this->db->or_like('model.name', $search['global_search']);
+			$this->db->or_like('part_type.name', $search['global_search']);
+			$this->db->or_like('user.name', $search['global_search']);
+			$this->db->or_like('part.price_min', $search['global_search']);
+			$this->db->or_like('part.price_max', $search['global_search']);
 			$this->db->group_end();
 		}
 		
 		return $this->db->count_all_results();
+	}
+
+	public function get_part_details($id)
+	{
+		$this->db->select('part.*, brand.name as brand_name, model.name as model_name, part_type.name as part_type_name, user.name as user_name');
+		$this->db->from('part');
+		$this->db->join('brand', 'brand.id = part.brand', 'left');
+		$this->db->join('model', 'model.id = part.model', 'left');
+		$this->db->join('part_type', 'part_type.id = part.type', 'left');
+		$this->db->join('user', 'user.id = part.added_by', 'left');
+		$this->db->where('part.id', $id);
+		$query = $this->db->get();
+		return $query->row();
 	}
 
 }

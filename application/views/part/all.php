@@ -89,14 +89,15 @@
                 <table id="all_data" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th style="width: 5%;">#</th>
-                    <th style="width: 15%;">Brand Name</th>
-                    <th style="width: 15%;">Model Name</th>
-                    <th style="width: 15%;">Part Type</th>
-                    <th style="width: 12%;">Price</th>
-                    <th style="width: 8%;">Qty.</th>
-                    <th style="width: 15%;">Added by</th>
-                    <th style="width: 15%;">Action</th>
+                    <th>#</th>
+                    <th>Brand Name</th>
+                    <th>Model Name</th>
+                    <th>Part Type</th>
+                    <th>Min Price</th>
+                    <th>Max Price</th>
+                    <th>Stock</th>
+                    <th>Added by</th>
+                    <th>Action</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -155,7 +156,7 @@
                   <label>Brand Name</label>
           
                     <select name="brand" class="form-control brand" required>
-                    <option Value="">Select Branch</option>
+                    <option value="">Select Brand</option>
                     <?php foreach($brand as $brands){ ?>
                     <option Value="<?=$brands->id?>"><?=$brands->name?></option>
                     <?php } ?>
@@ -168,10 +169,7 @@
                   <label>Model Name</label>
           
                     <select name="model" class="form-control model" required>
-                    <option Value="">Select model</option>
-                    <?php foreach($model as $models){ ?>
-                    <option Value="<?=$models->id?>"><?=$models->name?></option>
-                    <?php } ?>
+                    <option value="">Select Brand First</option>
                     </select>
                 </div>
               </div>
@@ -181,7 +179,7 @@
                   <label>Part type</label>
           
                     <select name="type" class="form-control type" required>
-                    <option Value="">Select model</option>
+                    <option value="">Select Part Type</option>
                     <?php foreach($type as $types){ ?>
                     <option Value="<?=$types->id?>"><?=$types->name?></option>
                     <?php } ?>
