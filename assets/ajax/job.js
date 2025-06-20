@@ -62,17 +62,14 @@ $("#submit_data").on('submit',function(e){
         } else if (typeof res === 'object' && res.message) {
           msg = res.message;
         }
-        $(document).Toasts('create', {
-          class: 'bg-success',
-          title: 'Success',
-          body: msg || 'Job updated successfully.'
-        });
+        toastr.success(msg || 'Job updated successfully.');
         $('#edit_data').modal('hide');
         $("#submit_data")[0].reset();
         $(".id").val('');
         $btn.prop('disabled', false);
       },
       error: function() {
+        toastr.error('An error occurred. Please try again.');
         $btn.prop('disabled', false);
       }
     });
@@ -101,11 +98,7 @@ function del(id){
         } else if (typeof res === 'object' && res.message) {
           msg = res.message;
         }
-        $(document).Toasts('create', {
-          class: 'bg-success',
-          title: 'Deleted',
-          body: msg || 'Job deleted successfully.'
-        });
+        toastr.success(msg || 'Job deleted successfully.');
       }
     });
   }
@@ -153,11 +146,7 @@ function edit(id){
         },
       error: function(jqXHR, textStatus, errorThrown) {
         console.error("AJAX error in edit function:", textStatus, errorThrown);
-        $(document).Toasts('create', {
-          class: 'bg-danger',
-          title: 'Error',
-          body: 'An error occurred while fetching job details.'
-        });
+        toastr.error('An error occurred while fetching job details.');
       }
     }); 
 }
@@ -211,11 +200,7 @@ $("#submit_issue").on('submit',function(e){
       data:data,
       success:function(res){
         // Only show a toast, do not try to parse as JSON
-        $(document).Toasts('create', {
-          class: 'bg-success',
-          title: 'Success',
-          body: (typeof res === 'string' ? res : 'Issue added successfully.')
-        });
+        toastr.success(typeof res === 'string' ? res : 'Issue added successfully.');
         $("#submit_issue")[0].reset();
         // Clear only the textarea, not the .issue_list div
         $("#submit_issue textarea[name='issue_list']").val('');
@@ -261,11 +246,7 @@ $("#assign_data").on('submit',function(e){
       type:'post',
       data:data,
       success:function(res){
-        $(document).Toasts('create', {
-          class: 'bg-success',
-          title: 'Success',
-          body: res
-        });
+        toastr.success(res);
         $("#assign_data")[0].reset();
         all_data();  
       }
@@ -304,11 +285,7 @@ $("#status_data").on('submit',function(e){
       type:'post',
       data:data,
       success:function(res){
-        $(document).Toasts('create', {
-          class: 'bg-success',
-          title: 'Success',
-          body: res
-        });
+        toastr.success(res);
         $("#status_data")[0].reset();
         all_data();  
       }
@@ -348,11 +325,7 @@ $("#couriere").on('submit',function(e){
       type:'post',
       data:data,
       success:function(res){
-        $(document).Toasts('create', {
-          class: 'bg-success',
-          title: 'Success',
-          body: res
-        });
+        toastr.success(res);
         $("#couriere")[0].reset();
         found_couriereStatus(job); 
       }
@@ -390,3 +363,11 @@ function autoRemoveToasts() {
 $(document).on('DOMNodeInserted', '.toasts .toast', function() {
   autoRemoveToasts();
 });
+
+// Toastr config for job page (match branch page)
+toastr.options = {
+  closeButton: true,
+  progressBar: true,
+  positionClass: 'toast-top-right',
+  timeOut: 5000
+};
