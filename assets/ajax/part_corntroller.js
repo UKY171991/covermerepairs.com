@@ -1,149 +1,142 @@
 $(document).ready(function() {
-  all_data();
- });
+    var manageTable;
+    var base_url = $('body').data('base_url');
 
+    // Initialize DataTable
+    manageTable = $('#manageTable').DataTable({
+        'ajax': base_url + 'part_corntroller/get_all_part_corntroller',
+        'order': []
+    });
 
-$(document).ready(function() {
     // Initialize Select2
-    $('.select2').select2();
-  });
+    $('#branch_id').select2({
+        width: '100%',
+        placeholder: 'Select a Branch'
+    });
 
- 
-
-  function all_data(){
-
-    if ( $.fn.dataTable.isDataTable('#all_data') ) {
-      $('#all_data').DataTable().destroy();
+    // Custom notification function
+    function showNotification(color, message) {
+        var notification = '<div class="alert alert-' + color + ' alert-dismissible" role="alert">' +
+            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+            message +
+            '</div>';
+        $('#messages').html(notification);
+        $('.alert-dismissible').delay(3000).slideUp('slow');
     }
 
-	var base_url = $(".base_url").val();
-    var dataTable = $('#all_data').DataTable({
-        "bSortCellsTop": true,
-        "processing": true, //Feature control the processing indicator.
-        ajax: {
-            url: base_url+'part_corntroller/all_data_ajax', // URL to your PHP script for fetching data
-            type: 'POST'
-        },
-        columns: [
-            { data: 0 },
-            { data: 1 },
-            { data: 2 },
-            { data: 3 },
-            { data: 4 },
-            { data: 5 },
-            // Add more columns as needed
-        ],
+    // Reset modal and form
+    function resetModal() {
+        $('#modal_form')[0].reset();
+        $('.form-group').removeClass('has-error').removeClass('has-success');
+        $('.text-danger').remove();
+        $('#messages').html('');
+        // Reset Select2
+        $('#branch_id').val(null).trigger('change');
+    }
+
+    // Show modal for adding new
+    $('#add_new_btn').on('click', function() {
+        resetModal();
+        $('#modal_title').text('Add Part Controller');
+        $('#modal_form').attr('action', base_url + 'part_corntroller/add');
+        $('#password').prop('required', true);
     });
 
-  }
+    // Handle form submission (add/edit)
+    $('#modal_form').off('submit').on('submit', function(e) {
+        e.preventDefault();
+        var form = $(this);
+        var url = form.attr('action');
 
-$("#submit_data").on('submit',function(e){
-  e.preventDefault();
-  var $btn = $(this).find('button[type=submit]');
-  $btn.prop('disabled', true);
-  var action = $(this).attr('action');
-  var data = $(this).serialize();
-  $.ajax({
-      url:action,
-      type:'post',
-      data:data,
-      success:function(res){
-        const obj = JSON.parse(res);
-        if(obj['status'] =='success'){
-          all_data();
-          alert(obj['message']);
-          $("#submit_data")[0].reset();
-          $(".id").val('');
-	  $('input').prop('checked', false);
-	  $('.select2').val(null).trigger('change');
-        }else{
-          alert(obj['message']);
+        // Clear previous messages
+        $('.form-group').removeClass('has-error');
+        $('.text-danger').remove();
+        $('#messages').html('');
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: form.serialize(),
+            dataType: 'json',
+            success: function(response) {
+                if (response.success === true) {
+                    $('#add_modal').modal('hide');
+                    manageTable.ajax.reload(null, false);
+                    // Use a global notification area if available, or create one
+                    showNotification('success', response.messages);
+                } else {
+                    if (response.messages) {
+                         $('#messages').html('<div class="alert alert-danger alert-dismissible" role="alert">' +
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                            response.messages +
+                            '</div>');
+                    }
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                showNotification('danger', 'An error occurred: ' + textStatus + ' - ' + errorThrown);
+            }
+        });
+    });
+
+    // Handle edit button click
+    $(document).on('click', '.edit_btn', function() {
+        var id = $(this).data('id');
+        resetModal();
+        $('#modal_title').text('Edit Part Controller');
+        $('#modal_form').attr('action', base_url + 'part_corntroller/edit/' + id);
+        $('#password').prop('required', false);
+
+        $.ajax({
+            url: base_url + 'part_corntroller/get_part_corntroller_by_id/' + id,
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                if (response) {
+                    $('#fname').val(response.fname);
+                    $('#lname').val(response.lname);
+                    $('#email').val(response.email);
+                    $('#phone').val(response.phone);
+                    if (response.branch_id) {
+                        $('#branch_id').val(response.branch_id).trigger('change');
+                    }
+                    // The modal is already being triggered by the button's data-target attribute
+                    // $('#add_modal').modal('show'); 
+                } else {
+                    showNotification('danger', 'Could not fetch part controller data.');
+                }
+            },
+            error: function() {
+                showNotification('danger', 'Error occurred while fetching data.');
+            }
+        });
+    });
+
+    // Handle delete button click
+    $(document).on('click', '.delete_btn', function() {
+        var id = $(this).data('id');
+        if (confirm("Are you sure you want to delete this part controller?")) {
+            $.ajax({
+                url: base_url + 'part_corntroller/delete/' + id,
+                type: 'POST',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success === true) {
+                        manageTable.ajax.reload(null, false);
+                        showNotification('success', response.messages);
+                    } else {
+                        showNotification('danger', response.messages);
+                    }
+                },
+                error: function() {
+                    showNotification('danger', 'Error occurred during deletion.');
+                }
+            });
         }
-        $btn.prop('disabled', false);
-      },
-      error: function() {
-        $btn.prop('disabled', false);
-      }
+    });
+
+    // Reset form when modal is closed
+    $('#add_modal').on('hidden.bs.modal', function () {
+        resetModal();
     });
 });
-    
-
-function del(id){
-  var base_url = $(".base_url").val();
-  var conf = confirm('Arey sure  you want to  delete ?');
-  if(conf){
-    $.ajax({
-      url:base_url+'part_corntroller/delete',
-      type:'post',
-      data:{'id':id},
-      success:function(res){
-        all_data();
-        alert(res);
-        
-      }
-    });
-  }
-  
-}
-
-
-function edit(id){
-  var base_url = $(".base_url").val();
-  $('input').prop('checked', false);
-  //$('.select2').val(null).trigger('change');
-    $.ajax({
-      url:base_url+'part_corntroller/edit',
-      type:'post',
-      data:{'id':id},
-      success:function(res){
-        const obj = JSON.parse(res);
-        $('.id').val(obj[0]['id']);
-        $('.name').val(obj[0]['name']);
-        $('.email').val(obj[0]['email']);
-        $('.phone').val(obj[0]['phone']);
-        $('.username').val(obj[0]['username']);
-        //$(".type option[value="+obj[0]['type']+"]").prop("selected", "selected");
-		
-    		$('.address').val(obj[0]['address']);
-    		$('.dob').val(obj[0]['dob']);
-        $(".branch").val(obj[0]['branch']).trigger("change");
-		
-		let text = obj[0]['permission'];
-		const myArray = text.split("--");
-
-		// Loop through the array using a for loop
-		for (var i = 0; i < myArray.length; i++) {
-		  $('#'+myArray[i]).prop('checked', true);
-		}
-		
-		
-		let standred = obj[0]['standred'];
-		const stand = standred.split("--");
-		//var selectedValues = ['value1', 'value3'];
-
-		// Iterate through the array and set the selected attribute
-		$('.select2 option').each(function() {
-		  var optionValue = $(this).val();
-		  if ($.inArray(optionValue, stand) !== -1) {
-			$(this).prop('selected', true);
-		  }
-		  $('.select2').select2(); 
-		});
-		
-      }
-    }); 
-}
-
-
-function view(id){
-  var base_url = $(".base_url").val();
-  //$('.branch').val(null).trigger('change');
-    $.ajax({
-      url:base_url+'part_corntroller/view',
-      type:'post',
-      data:{'id':id},
-      success:function(res){
-        $('.view_table').html(res);
-      }
-    });  
-}

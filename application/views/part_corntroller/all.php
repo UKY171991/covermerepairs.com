@@ -4,213 +4,99 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>All Part corntroller</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Part corntroller</li>
-            </ol>
-          </div>
-        </div>
-      </div><!-- /.container-fluid -->
+        <h1>Part Controller Management</h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Part Controller</li>
+        </ol>
     </section>
 
     <!-- Main content -->
     <section class="content">
-      <div class="container-fluid">
         <div class="row">
-          <div class="col-12">
-            <div class="card">
-              <div class="card-header d-flex justify-content-end">
-                <?php if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4' OR $this->session->userdata('user_type') =='5'){ ?>
-                <button class="card-btn btn btn-info btn-sm" data-toggle='modal' data-target='#edit_data'  onclick="reset()">Add</button>
-                <?php } ?>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">  <!--example1-->
-              
-                <div class="table-responsive">
-                <table id="all_data" class="table table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Action</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  
-                  </tbody> 
-                  <tfoot>
-                  <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Action</th>
-                  </tr>
-                  </tfoot>
-                </table>
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">All Part Controllers</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_modal" id="add_new_btn">
+                                <i class="fa fa-plus"></i> Add New
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <table id="manageTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Branch</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
-              </div>
-              <!-- /.card-body -->
             </div>
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
         </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container-fluid -->
     </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
+</div>
 
-
-
-  <div class="modal fade" id="edit_data">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
+<!-- Add/Edit Modal -->
+<div class="modal fade" id="add_modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Add/Edit</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modal_title">Add Part Controller</h4>
             </div>
-            <form action="<?=base_url('part_corntroller/add_data')?>" method="post" id="submit_data" enctype="multipart/form-data">
-            <div class="modal-body">
+            <form role="form" action="<?php echo base_url('part_corntroller/add') ?>" method="post" id="modal_form">
+                <div class="modal-body">
+                    <div id="messages"></div>
 
-            <input type="hidden" name="id" class="form-control id">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Name</label>
-                  <input type="text" name="name" class="form-control name" placeholder="" required>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Username</label>
-                  <input type="text" name="username" class="form-control username" placeholder="" required>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Email</label>
-                  <input type="email" name="email" class="form-control email" placeholder="" required>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Phone</label>
-                  <input type="text" name="phone" class="form-control phone" placeholder="" required>
-                </div>
-              </div>
+                    <div class="form-group">
+                        <label for="fname">First Name</label>
+                        <input type="text" class="form-control" id="fname" name="fname" placeholder="Enter First Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lname">Last Name</label>
+                        <input type="text" class="form-control" id="lname" name="lname" placeholder="Enter Last Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password">
+                        <small class="text-muted">Leave blank if you don't want to change it.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter Phone Number" required>
+                    </div>
 
-            
-			  
-			  <div class="col-md-6">
-                <div class="form-group">
-                  <label>DOB</label>
-                  <input type="date" name="dob" class="form-control dob" placeholder="" required>
-                </div>
-              </div>
+                    <?php if ($this->session->userdata('user_type') == '1' || $this->session->userdata('user_type') == '4') : ?>
+                        <div class="form-group">
+                            <label for="branch_id">Branch</label>
+                            <select class="form-control select2" id="branch_id" name="branch_id[]" multiple="multiple" style="width: 100%;" required>
+                                <?php foreach ($branch as $br) : ?>
+                                    <option value="<?php echo $br->id; ?>"><?php echo $br->name; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    <?php endif; ?>
 
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Password</label>
-                  <input type="password" name="password" class="form-control" placeholder="if you want  to  change  Password please enter password">
                 </div>
-              </div>
-			  
-			  <div class="col-md-6">
-                <div class="form-group">
-                  <label>Address</label>
-                  <input type="text" name="address" class="form-control address" placeholder="">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
                 </div>
-              </div>
-
-            
-              <?php if($this->session->userdata('user_type') =='1'){ ?>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>Branch</label>
-        				  <select name="branch[]" class="form-control branch select2" multiple required>
-        					<!--<option value="">Select branch</option> -->
-        					<?php foreach($branch as $branchs){ ?>
-        					<option value="<?=$branchs->id?>"><?=$branchs->name?></option>
-        					<?php } ?>
-        				  </select>
-                </div>
-              </div>
-              <?php } ?>
-			  
-			  <div class="col-md-12">
-                <div class="form-group">
-                  <label>Permission</label>
-				  <div class="row">
-				  <?php foreach($permission as $permis){ ?>
-					<div class="col-md-4 mt-2">
-						<div class="form-check">
-						  <input class="form-check-input" name="permission[]" type="checkbox" value="<?=$permis->slug?>" id="<?=$permis->slug?>">
-						  <label class="form-check-label" for="<?=$permis->slug?>">
-							<?=$permis->name?>
-						  </label>
-						</div>
-					</div>
-					<?php } ?>
-				  </div>
-				  
-                </div>
-              </div>
-
-              <!-- /.col -->
-            </div>
-        
-
-            </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Save changes</button>
-            </div>
             </form>
-          </div>
-          <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
-      </div>
-      <!-- /.modal -->
-	  
-	  
-	  
-	  <div class="modal fade" id="view_data">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">View</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body view_table">
-			
+    </div>
+</div>
 
-            </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
-      <!-- /.modal -->
+<script type="text/javascript" src="<?php echo base_url('assets/ajax/part_corntroller.js') ?>"></script>
