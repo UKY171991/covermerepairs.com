@@ -556,11 +556,10 @@ class Part extends CI_Controller {
 		$all_data = $this->part->single_data('part',$id);
 		echo json_encode($all_data);
 	}
-
 	public function delete_brand(){
 		$id = $this->input->post('id');
 		$this->part->delete('brand',$id);
-		echo "Part deleted succefully.";
+		echo json_encode(['status' => 'success', 'message' => 'Brand deleted successfully.']);
 		exit();
 	}
 	public function edit_brand(){

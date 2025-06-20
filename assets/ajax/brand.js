@@ -1,4 +1,12 @@
 $(document).ready(function() {
+  // Configure Toastr
+  toastr.options = {
+    closeButton: true,
+    progressBar: true,
+    positionClass: 'toast-top-right',
+    timeOut: 5000
+  };
+
   loadBrandTable();
 
   // Add/Edit Brand
@@ -16,17 +24,17 @@ $(document).ready(function() {
       success: function(res) {
         if (res.status === 'success') {
           $('#edit_data').modal('hide');
-          showBrandMessage('success', res.message);
+          toastr.success(res.message);
           $('#submit_data')[0].reset();
           $('.id').val('');
           reloadBrandTable();
         } else {
-          showBrandMessage('danger', res.message || 'Error saving brand.');
+          toastr.error(res.message || 'Error saving brand.');
         }
         $btn.prop('disabled', false);
       },
       error: function(xhr) {
-        showBrandMessage('danger', xhr.responseText || 'Server error.');
+        toastr.error(xhr.responseText || 'Server error.');
         $btn.prop('disabled', false);
       }
     });
@@ -45,7 +53,7 @@ function loadBrandTable() {
       type: 'POST',
       dataSrc: function(json) {
         if (typeof json.data === 'undefined' && json.status === 'error') {
-          showBrandMessage('danger', json.message || 'Session expired. Please login again.');
+          toastr.error(json.message || 'Session expired. Please login again.');
           return [];
         }
         return json.data;
@@ -64,11 +72,6 @@ function reloadBrandTable() {
   $('#all_data').DataTable().ajax.reload(null, false);
 }
 
-function showBrandMessage(type, message) {
-  $('#brand-message').html('<div class="alert alert-' + type + ' alert-dismissible">' +
-    '<button type="button" class="close" data-dismiss="alert">&times;</button>' + message + '</div>');
-}
-
 function del(id) {
   var base_url = $('.base_url').val();
   if (confirm('Are you sure you want to delete this brand?')) {
@@ -76,12 +79,17 @@ function del(id) {
       url: base_url + 'part/delete_brand',
       type: 'POST',
       data: { id: id },
+      dataType: 'json',
       success: function(res) {
-        reloadBrandTable();
-        showBrandMessage('success', 'Brand deleted successfully.');
+        if (res.status === 'success') {
+          reloadBrandTable();
+          toastr.success(res.message);
+        } else {
+          toastr.error(res.message || 'Delete failed.');
+        }
       },
       error: function(xhr) {
-        showBrandMessage('danger', xhr.responseText || 'Delete failed.');
+        toastr.error(xhr.responseText || 'Delete failed.');
       }
     });
   }
@@ -100,11 +108,11 @@ function edit(id) {
         $('.name').val(obj[0]['name']);
         $('#edit_data').modal('show');
       } else {
-        showBrandMessage('danger', 'Brand not found.');
+        toastr.error('Brand not found.');
       }
     },
     error: function(xhr) {
-      showBrandMessage('danger', xhr.responseText || 'Error loading brand.');
+      toastr.error(xhr.responseText || 'Error loading brand.');
     }
   });
 }
