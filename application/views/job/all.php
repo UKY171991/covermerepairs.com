@@ -91,7 +91,7 @@
           <input type="hidden" name="status_list" class="form-control status_list" value="<?php if(isset($_GET['status'])){ echo $_GET['status']; } ?>">
           <hr>
           <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
               <div class="form-group">
                   <label>Branch Name</label>
                   <select name="branch" class="form-control branch" required>
