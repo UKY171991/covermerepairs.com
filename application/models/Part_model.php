@@ -257,7 +257,7 @@ class Part_model extends CI_Model {
 
 	// Pagination methods for parts
 	public function get_paginated_parts($search = [], $start = 0, $length = 10, $user_branch = null) {
-		$this->db->select('part.id, part.price_min, part.price_max, brand.name as brand_name, model.name as model_name, part_type.name as part_type_name, user.name as user_name, user.type as user_type');
+		$this->db->select('part.id, part.price_min, part.price_max, part.stock, brand.name as brand_name, model.name as model_name, part_type.name as part_type_name, user.name as user_name, user.type as user_type');
 		$this->db->from('part');
 		$this->db->join('brand', 'brand.id = part.brand', 'left');
 		$this->db->join('model', 'model.id = part.model', 'left');
