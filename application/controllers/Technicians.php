@@ -42,15 +42,18 @@ class Technicians extends CI_Controller {
 			$prem['phone'] = $this->input->post('phone');
 			$prem['dob'] = $this->input->post('dob');
 			$prem['address'] = $this->input->post('address');
-			$prem['branch'] = $this->input->post('branch');
 			$prem['username'] = $this->input->post('username');
 			$prem['type'] = 3; //$this->input->post('type');
 			$prem['added_by'] = $this->session->userdata('user_id');
 			
+			// Handle branch assignment based on user type
 			if($this->session->userdata('user_id')== 1 ){
-				$standred = $this->input->post('branch');
-				$stand = implode('--',$standred); 
-				$prem['branch'] = $stand; 
+				$branch_data = $this->input->post('branch');
+				if(is_array($branch_data)) {
+					$prem['branch'] = implode('--', $branch_data); 
+				} else {
+					$prem['branch'] = $branch_data;
+				}
 			}else{
 				$prem['branch'] = $this->session->userdata('user_id'); 
 			}
@@ -197,7 +200,27 @@ class Technicians extends CI_Controller {
 	public function view(){
 		$id = $this->input->post('id');
 		$all_data = $this->user->single_data('user',$id);
-		$all_branch = $this->user->single_data('user',$all_data[0]->branch);
+		
+		// Handle multiple branches
+		$branch_display = '';
+		if(strpos($all_data[0]->branch, '--') !== false) {
+			// Multiple branches
+			$branch_ids = explode('--', $all_data[0]->branch);
+			$branch_names = array();
+			foreach($branch_ids as $branch_id) {
+				if(!empty($branch_id)) {
+					$branch_data = $this->user->single_data('user', $branch_id);
+					if(!empty($branch_data)) {
+						$branch_names[] = $branch_data[0]->name;
+					}
+				}
+			}
+			$branch_display = implode(', ', $branch_names);
+		} else {
+			// Single branch
+			$all_branch = $this->user->single_data('user',$all_data[0]->branch);
+			$branch_display = !empty($all_branch) ? $all_branch[0]->name : 'N/A';
+		}
 		
 		echo '
 			<table class="table table-bordered">
@@ -206,10 +229,8 @@ class Technicians extends CI_Controller {
 				<tr><td>Phone</td><td>'.$all_data[0]->phone.'</td></tr>
 				<tr><td>DOB</td><td>'.$all_data[0]->dob.'</td></tr>
 				<tr><td>Address</td><td>'.$all_data[0]->address.'</td></tr>
-				<tr><td>Branch</td><td>'.$all_branch[0]->name.'</td></tr>
+				<tr><td>Branch</td><td>'.$branch_display.'</td></tr>
 			</table>
 		';
-		//print_r($all_data); die;
-		//echo json_encode($all_data);
 	}
 }

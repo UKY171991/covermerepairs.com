@@ -87,7 +87,12 @@ function del(id){
 function edit(id){
   var base_url = $(".base_url").val();
   $('input').prop('checked', false);
-  //$('.select2').val(null).trigger('change');
+  
+  // Reinitialize Select2 if needed
+  if (!$('.branch').hasClass('select2-hidden-accessible')) {
+    $('.branch').select2();
+  }
+  
     $.ajax({
       url:base_url+'technicians/edit',
       type:'post',
@@ -99,12 +104,30 @@ function edit(id){
         $('.email').val(obj[0]['email']);
         $('.phone').val(obj[0]['phone']);
         $('.username').val(obj[0]['username']);
-        //$(".type option[value="+obj[0]['type']+"]").prop("selected", "selected");
-		
-    		$('.address').val(obj[0]['address']);
-    		$('.dob').val(obj[0]['dob']);
-        //$('.branch').val(obj[0]['branch']);
-        $(".branch").val(obj[0]['branch']).trigger("change");
+        //$(".type option[value="+obj[0]['type']+"]").prop("selected", "selected");        $('.address').val(obj[0]['address']);
+        $('.dob').val(obj[0]['dob']);
+        
+        // Handle branch selection for multiple branches
+        if(obj[0]['branch']) {
+          let branchData = obj[0]['branch'];
+          
+          // Clear previous selections first
+          $('.branch').val(null).trigger('change');
+          
+          if(branchData.includes('--')) {
+            // Multiple branches - split and set array
+            const branchArray = branchData.split("--").filter(function(item) {
+              return item !== "";  // Remove empty strings
+            });
+            $('.branch').val(branchArray).trigger('change');
+          } else {
+            // Single branch - set as single value
+            $('.branch').val([branchData]).trigger('change');
+          }
+        } else {
+          // No branch data - clear selection
+          $('.branch').val(null).trigger('change');
+        }
 		
 		let text = obj[0]['permission'];
 		const myArray = text.split("--");
@@ -113,20 +136,6 @@ function edit(id){
 		for (var i = 0; i < myArray.length; i++) {
 		  $('#'+myArray[i]).prop('checked', true);
 		}
-		
-		
-		let standred = obj[0]['standred'];
-		const stand = standred.split("--");
-		//var selectedValues = ['value1', 'value3'];
-
-		// Iterate through the array and set the selected attribute
-		$('.select2 option').each(function() {
-		  var optionValue = $(this).val();
-		  if ($.inArray(optionValue, stand) !== -1) {
-			$(this).prop('selected', true);
-		  }
-		  $('.select2').select2(); 
-		});
 		
       }
     }); 
@@ -150,5 +159,12 @@ function reset() {
   $("#submit_data")[0].reset();
   $(".id").val("");
   $('input').prop('checked', false);
+  
+  // Properly reset Select2 multiple selection
   $('.select2').val(null).trigger('change');
+  
+  // Reinitialize Select2 if needed
+  if (!$('.select2').hasClass('select2-hidden-accessible')) {
+    $('.select2').select2();
+  }
 }
