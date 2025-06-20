@@ -1,217 +1,171 @@
 $(document).ready(function() {
-    // Initialize DataTable
-    all_data();
+    const base_url = $(".base_url").val();
+    let table;
 
-    // Initialize all Select2 elements once.
-    $('.select2').each(function() {
-        const $this = $(this);
-        const options = {
-            width: '100%',
-            theme: 'bootstrap4',
-            allowClear: true,
-            dropdownParent: $this.closest('.modal')
-        };
-        if ($this.hasClass('branch')) {
-            options.placeholder = 'Select one or more branches';
-        }
-        $this.select2(options);
+    // Initialize Select2 for the modal, ensuring it's attached to the modal content
+    $('.select2').select2({
+        dropdownParent: $('#edit_data .modal-content')
     });
 
-    // Handle the "Add" button click
+    // Function to initialize or re-initialize the DataTable
+    function initialize_table() {
+        if ($.fn.dataTable.isDataTable('#all_data')) {
+            table.destroy();
+        }
+        table = $('#all_data').DataTable({
+            "processing": true,
+            "ajax": {
+                "url": base_url + 'staff/all_data_ajax',
+                "type": "POST",
+                "dataSrc": "data"
+            },
+            "columns": [
+                { "data": 0 },
+                { "data": 1 },
+                { "data": 2 },
+                { "data": 3 },
+                { "data": 4 },
+                { "data": 5 }
+            ],
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+        });
+    }
+
+    // Centralized function to reset the form to its default state
+    function reset_form() {
+        $('#submit_data')[0].reset();
+        $('.id').val('');
+        $('input[type="checkbox"]').prop('checked', false);
+        $('.branch').val(null).trigger('change'); // Specifically for Select2
+    }
+
+    // Event handler for the "Add" button
     $('#add_btn').on('click', function() {
         reset_form();
         $('#edit_modal_title').text('Add Staff');
         $('#edit_data').modal('show');
     });
 
-    // Handle the "Edit" button click using event delegation
+    // Use event delegation for buttons inside the DataTable
     $('#all_data').on('click', '.edit_btn', function() {
         const id = $(this).data('id');
-        if (id) {
-            edit(id);
-        }
+        reset_form();
+
+        $.ajax({
+            url: base_url + 'staff/edit',
+            type: 'post',
+            data: { 'id': id },
+            dataType: 'json',
+            success: function(res) {
+                if (res && res.length > 0) {
+                    const data = res[0];
+                    $('#edit_modal_title').text('Edit Staff');
+
+                    // Populate form fields
+                    $('.id').val(data.id);
+                    $('.name').val(data.name);
+                    $('.email').val(data.email);
+                    $('.phone').val(data.phone);
+                    $('.username').val(data.username);
+                    $('.address').val(data.address);
+                    $('.dob').val(data.dob);
+
+                    // Handle multi-select for branches
+                    if (data.branch) {
+                        const branch_ids = data.branch.split('--');
+                        $('.branch').val(branch_ids).trigger('change');
+                    }
+
+                    // Handle checkboxes for permissions
+                    if (data.permission) {
+                        const permissions = data.permission.split('--');
+                        permissions.forEach(function(permission) {
+                            if (permission) {
+                                $('#' + permission).prop('checked', true);
+                            }
+                        });
+                    }
+
+                    $('#edit_data').modal('show');
+                } else {
+                    showMessage('Could not retrieve Staff data.', 'error');
+                }
+            },
+            error: function() {
+                showMessage('An error occurred while fetching data.', 'error');
+            }
+        });
     });
 
-    // Handle the "View" button click using event delegation
     $('#all_data').on('click', '.view_btn', function() {
         const id = $(this).data('id');
-        if (id) {
-            view(id);
-        }
+        $.ajax({
+            url: base_url + 'staff/view',
+            type: 'post',
+            data: { 'id': id },
+            success: function(res) {
+                $('.view_table').html(res);
+                $('#view_data').modal('show');
+            },
+            error: function() {
+                showMessage('An error occurred while fetching the data.', 'error');
+            }
+        });
     });
 
-    // Handle the "Delete" button click using event delegation
     $('#all_data').on('click', '.del_btn', function() {
         const id = $(this).data('id');
-        if (id) {
-            del(id);
+        if (confirm('Are you sure you want to delete this Staff member?')) {
+            $.ajax({
+                url: base_url + 'staff/delete',
+                type: 'post',
+                data: { 'id': id },
+                success: function(res) {
+                    showMessage(res, 'success');
+                    table.ajax.reload();
+                },
+                error: function() {
+                    showMessage('An error occurred during deletion.', 'error');
+                }
+            });
         }
     });
-});
 
-function all_data() {
-    if ($.fn.dataTable.isDataTable('#all_data')) {
-        $('#all_data').DataTable().destroy();
-    }
-    const base_url = $(".base_url").val();
-    $('#all_data').DataTable({
-        "processing": true,
-        "ajax": { "url": base_url + 'staff/all_data_ajax', "type": "POST" },
-        "columns": [
-            { "data": 0 }, { "data": 1 }, { "data": 2 },
-            { "data": 3 }, { "data": 4 }, { "data": 5 }
-        ]
-    });
-}
+    // Handle the form submission for both add and edit
+    $("#submit_data").on('submit', function(e) {
+        e.preventDefault();
+        const $btn = $(this).find('button[type=submit]');
+        $btn.prop('disabled', true);
+        const action = $(this).attr('action');
+        const data = $(this).serialize();
 
-$("#submit_data").on('submit', function(e) {
-    e.preventDefault();
-    const $btn = $(this).find('button[type=submit]');
-    $btn.prop('disabled', true).text('Saving...');
-    $.ajax({
-        url: $(this).attr('action'),
-        type: 'POST',
-        data: $(this).serialize(),
-        dataType: 'json',
-        success: function(response) {
-            if (response.status === 'success') {
-                all_data();
-                $('#edit_data').modal('hide');
-                showMessage(response.message, 'success');
-            } else {
-                showMessage(response.message || 'An unknown error occurred.', 'error');
-            }
-        },
-        error: function() { showMessage('A server error occurred. Please try again.', 'error'); },
-        complete: function() { $btn.prop('disabled', false).text('Save changes'); }
-    });
-});
-
-function edit(id) {
-    reset_form();
-    $('#edit_modal_title').text('Edit Staff');
-    const base_url = $(".base_url").val();
-
-    $.ajax({
-        url: base_url + 'staff/edit',
-        type: 'POST',
-        data: { id: id },
-        dataType: 'json',
-        success: function(data) {
-            const staff = data[0];
-            if (!staff) {
-                showMessage('Could not find staff data.', 'error');
-                return;
-            }
-
-            // Populate fields
-            $('.id').val(staff.id);
-            $('.name').val(staff.name);
-            $('.email').val(staff.email);
-            $('.phone').val(staff.phone);
-            $('.username').val(staff.username);
-            $('.address').val(staff.address);
-            $('.dob').val(staff.dob);
-
-            // Handle Branch field
-            if ($('.branch').length > 0) {
-                const branchIds = staff.branch ? staff.branch.split('--').filter(Boolean) : [];
-                $('.branch').val(branchIds).trigger('change');
-            }
-
-            // Handle Permissions
-            const permissions = staff.permission ? staff.permission.split('--').filter(Boolean) : [];
-            permissions.forEach(slug => $('#' + slug).prop('checked', true));
-        },
-        error: function() {
-            showMessage('Failed to fetch staff data from the server.', 'error');
-        }
-    });
-}
-
-function edit(id) {
-    reset_form();
-    $('#edit_modal_title').text('Edit Staff');
-    const base_url = $(".base_url").val();
-
-    $.ajax({
-        url: base_url + 'staff/edit',
-        type: 'POST',
-        data: { id: id },
-        dataType: 'json',
-        success: function(data) {
-            const staff = data[0];
-            if (!staff) {
-                showMessage('Could not find staff data.', 'error');
-                return;
-            }
-
-            // Populate fields
-            $('.id').val(staff.id);
-            $('.name').val(staff.name);
-            $('.email').val(staff.email);
-            $('.phone').val(staff.phone);
-            $('.username').val(staff.username);
-            $('.address').val(staff.address);
-            $('.dob').val(staff.dob);
-
-            // Handle Branch field
-            if ($('.branch').length > 0) {
-                const branchIds = staff.branch ? staff.branch.split('--').filter(Boolean) : [];
-                $('.branch').val(branchIds).trigger('change');
-            }
-
-            // Handle Permissions
-            const permissions = staff.permission ? staff.permission.split('--').filter(Boolean) : [];
-            permissions.forEach(slug => $('#' + slug).prop('checked', true));
-
-            $('#edit_data').modal('show');
-        },
-        error: function() {
-            showMessage('Failed to fetch staff data from the server.', 'error');
-        }
-    });
-}
-
-function view(id) {
-    const base_url = $(".base_url").val();
-    $.ajax({
-        url: base_url + 'staff/view',
-        type: 'POST',
-        data: { id: id },
-        success: function(res) {
-            $('.view_table').html(res);
-            $('#view_data').modal('show');
-        },
-        error: function() {
-            showMessage('Failed to fetch staff data.', 'error');
-        }
-    });
-}
-
-function del(id) {
-    if (confirm('Are you sure you want to delete this staff member?')) {
-        const base_url = $(".base_url").val();
         $.ajax({
-            url: base_url + 'staff/delete',
-            type: 'POST',
-            data: { id: id },
+            url: action,
+            type: 'post',
+            data: data,
+            dataType: 'json',
             success: function(res) {
-                all_data();
-                showMessage('Staff member deleted successfully.', 'success');
+                if (res.status === 'success') {
+                    showMessage(res.message, 'success');
+                    $('#edit_data').modal('hide');
+                    table.ajax.reload();
+                } else {
+                    showMessage(res.message, 'error');
+                }
+                $btn.prop('disabled', false);
             },
-            error: function() { showMessage('Failed to delete staff member.', 'error'); }
+            error: function() {
+                showMessage('An error occurred. Please try again.', 'error');
+                $btn.prop('disabled', false);
+            }
         });
-    }
-}
+    });
 
-function reset_form() {
-    const $form = $("#submit_data");
-    $form[0].reset();
-    $form.find(".id").val("");
-    $form.find('.select2').val(null).trigger('change');
-    $form.find('input[type=checkbox]').prop('checked', false);
-}
+    // Initial data load
+    initialize_table();
+});
 
 function showMessage(message, type) {
     toastr.options = {
