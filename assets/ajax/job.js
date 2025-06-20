@@ -56,6 +56,7 @@ $("#submit_data").on('submit',function(e){
           title: 'Success',
           body: res
         });
+        $('#edit_data').modal('hide');
         $("#submit_data")[0].reset();
         $(".id").val('');
         $btn.prop('disabled', false);
