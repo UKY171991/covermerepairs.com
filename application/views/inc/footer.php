@@ -1,4 +1,4 @@
-  <!-- /.content-wrapper -->
+<!-- /.content-wrapper -->
   <footer class="main-footer">
     <strong>Copyright &copy; <?=date('Y');?>.</strong>
     All rights reserved. 
@@ -67,7 +67,7 @@
 <script src="<?= base_url();?>assets/custom/custom.js"></script>
 
 <script>var BASE_URL = '<?= base_url() ?>';</script>
-<?php if($ajax == 'order'){ ?>
+<?php if(isset($ajax) && $ajax == 'order'){ ?>
 <script src="<?= base_url();?>assets/ajax/order.js"></script>
 <?php } ?>
 <?php if(isset($ajax) && $ajax == 'technicians'){ ?>
