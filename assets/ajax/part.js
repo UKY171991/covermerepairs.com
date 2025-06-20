@@ -221,11 +221,11 @@ function edit(id){
         $('#price_max').val(obj.price_max);
         $('#price_min').val(obj.price_min);
         $('#stock').val(obj.stock);
-        $("#branch").val(obj.branch);
-        $("#type").val(obj.type);
+        $('#branch').val(obj.branch);
+        $('#type').val(obj.type);
 
         // Set brand and load models
-        $("#brand").val(obj.brand);
+        $('#brand').val(obj.brand);
         load_model(obj.model); // Pass model_id to load_model
         
         $('#edit_data').modal('show');
