@@ -109,7 +109,8 @@ function loadModels(selectedModel = null) {
                 var options = '<option value="">Select Model</option>';
                 if (models && models.length > 0) {
                     $.each(models, function(index, model) {
-                        options += '<option value="' + model.id + '">' + model.name + '</option>';
+                        var selected = (selectedModel && selectedModel == model.id) ? 'selected' : '';
+                        options += '<option value="' + model.id + '" ' + selected + '>' + model.name + '</option>';
                     });
                 }
                 $('#model').html(options);
@@ -199,6 +200,8 @@ function editPart(id) {
         dataType: 'json',
         success: function(data) {
             if (data) {
+                console.log('Edit data received:', data); // Debug log
+                
                 // Populate form fields
                 $('#part_id').val(data.id);
                 $('#branch').val(data.branch);
@@ -208,7 +211,7 @@ function editPart(id) {
                 $('#price_max').val(data.price_max);
                 $('#stock').val(data.stock);
                 
-                // Load models and set selected model
+                // Load models with selected model
                 loadModels(data.model);
                 
                 // Update modal title and show
@@ -218,7 +221,8 @@ function editPart(id) {
                 toastr.error('Part data not found');
             }
         },
-        error: function() {
+        error: function(xhr, status, error) {
+            console.error('Edit error:', xhr.responseText);
             toastr.error('Error loading part data');
         }
     });
