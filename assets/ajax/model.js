@@ -27,17 +27,46 @@ $(document).ready(function() {
          
           processing: true,
           serverSide: true,
+          paging: true,
+          pageLength: 10,
+          lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+          searching: true,
+          ordering: true,
+          info: true,
+          autoWidth: false,
+          responsive: true,
             ajax: {
                 url: base_url+'part/all_model_ajax', // URL to your PHP script for fetching data
                 type: 'POST'
             },
             columns: [
-                { data: 0 },
-                { data: 1 },
-                { data: 2 },
-                { data: 3 },
-                { data: 4 }
-            ]
+                { data: 0, searchable: false, orderable: false },
+                { data: 1, searchable: true, orderable: true },
+                { data: 2, searchable: true, orderable: true },
+                { data: 3, searchable: true, orderable: true },
+                { data: 4, searchable: false, orderable: false }
+            ],
+            initComplete: function () {
+                // Add individual column search inputs
+                this.api().columns().every(function (index) {
+                    var column = this;
+                    var title = $(column.header()).text();
+                    
+                    // Skip search for # and Action columns
+                    if (index === 0 || index === 4) {
+                        $(column.header()).html(title);
+                        return;
+                    }
+                    
+                    var input = $('<input type="text" class="form-control form-control-sm" placeholder="Search ' + title + '" />')
+                        .appendTo($(column.header()).empty())
+                        .on('keyup change clear', function () {
+                            if (column.search() !== this.value) {
+                                column.search(this.value).draw();
+                            }
+                        });
+                });
+            }
         });
     
     }

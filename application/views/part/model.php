@@ -36,11 +36,11 @@
                                 <table id="all_data" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <th>Model Name</th>
-                                            <th>Brand Name</th>
-                                            <th>User Name</th>
-                                            <th>Action</th>
+                                            <th style="width: 5%;">#</th>
+                                            <th style="width: 25%;">Model Name</th>
+                                            <th style="width: 25%;">Brand Name</th>
+                                            <th style="width: 25%;">User Name</th>
+                                            <th style="width: 20%;">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
