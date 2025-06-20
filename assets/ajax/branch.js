@@ -1,12 +1,19 @@
 $(document).ready(function() {
+  // Configure Toastr
+  toastr.options = {
+    closeButton: true,
+    progressBar: true,
+    positionClass: 'toast-top-right',
+    timeOut: 5000
+  };
+  
   all_data();
- });
-
+});
 
 $(document).ready(function() {
     // Initialize Select2
     $('.select2').select2();
-  });
+});
 
  
 
@@ -55,17 +62,18 @@ $("#submit_data").on('submit',function(e){
         const obj = JSON.parse(res);
         if(obj['status'] =='success'){
           all_data();
-          alert(obj['message']);
+          toastr.success(obj['message']);
           $("#submit_data")[0].reset();
           $(".id").val('');
       $('input').prop('checked', false);
       $('.select2').val(null).trigger('change');
         }else{
-          alert(obj['message']);
+          toastr.error(obj['message']);
         }
         $btn.prop('disabled', false);
       },
       error: function() {
+        toastr.error('An error occurred. Please try again.');
         $btn.prop('disabled', false);
       }
     });
@@ -74,7 +82,7 @@ $("#submit_data").on('submit',function(e){
 
 function del(id){
   var base_url = $(".base_url").val();
-  var conf = confirm('Arey sure  you want to  delete ?');
+  var conf = confirm('Are you sure you want to delete?');
   if(conf){
     $.ajax({
       url:base_url+'branch/delete',
@@ -82,12 +90,13 @@ function del(id){
       data:{'id':id},
       success:function(res){
         all_data();
-        alert(res);
-        
+        toastr.success(res);
+      },
+      error: function() {
+        toastr.error('An error occurred during deletion.');
       }
     });
   }
-  
 }
 
 
