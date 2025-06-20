@@ -201,38 +201,38 @@ $("#submit_issue").on('submit',function(e){
   e.preventDefault();
   var action = $(this).attr('action');
   var data = $(this).serialize();
-
   var job= $('.job_id').val();
-
   $.ajax({
       url:action,
       type:'post',
       data:data,
       success:function(res){
+        // Only show a toast, do not try to parse as JSON
         $(document).Toasts('create', {
           class: 'bg-success',
           title: 'Success',
-          body: (typeof res === 'object' && res.message) ? res.message : (typeof res === 'string' ? (JSON.parse(res).message || 'Issue added successfully.') : 'Issue added successfully.')
+          body: (typeof res === 'string' ? res : 'Issue added successfully.')
         });
         $("#submit_issue")[0].reset();
         // Clear only the textarea, not the .issue_list div
         $("#submit_issue textarea[name='issue_list']").val('');
         found_issue(job);
       }
-    });
+  });
 });
 
 // Found issue model
 function found_issue(id){
   $('.job_id').val(id);
-  $('.issue_list').html('');
+  // Only update the .issue_list div, not the textarea
   var base_url = $(".base_url").val();
     $.ajax({
       url:base_url+'job/found_issie',
       type:'post',
       data:{'job':id},
       success:function(res){
-        $('.issue_list').html(res);
+        // Set HTML only in the div, not in any textarea
+        $(".issue_list").html(res);
       }
     }); 
 }
