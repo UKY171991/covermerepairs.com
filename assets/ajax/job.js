@@ -51,10 +51,21 @@ $("#submit_data").on('submit',function(e){
       data:data,
       success:function(res){
         all_data();
+        var msg = res;
+        if (typeof res === 'string') {
+          try {
+            var parsed = JSON.parse(res);
+            if (parsed && parsed.message) {
+              msg = parsed.message;
+            }
+          } catch (e) {}
+        } else if (typeof res === 'object' && res.message) {
+          msg = res.message;
+        }
         $(document).Toasts('create', {
           class: 'bg-success',
           title: 'Success',
-          body: res
+          body: msg || 'Job updated successfully.'
         });
         $('#edit_data').modal('hide');
         $("#submit_data")[0].reset();
@@ -79,10 +90,21 @@ function del(id){
       data:{'id':id},
       success:function(res){
         all_data();
+        var msg = res;
+        if (typeof res === 'string') {
+          try {
+            var parsed = JSON.parse(res);
+            if (parsed && parsed.message) {
+              msg = parsed.message;
+            }
+          } catch (e) {}
+        } else if (typeof res === 'object' && res.message) {
+          msg = res.message;
+        }
         $(document).Toasts('create', {
           class: 'bg-success',
           title: 'Deleted',
-          body: res
+          body: msg || 'Job deleted successfully.'
         });
       }
     });
