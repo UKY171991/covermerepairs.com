@@ -144,6 +144,7 @@ function edit(id){
               $('.inspection_fee_paid').prop('checked', false);
             }
             $('.loan_device_details').val(obj[0].hasOwnProperty('loan_device_details') ? obj[0]['loan_device_details'] : '');
+            $('.imei_no').val(obj[0].hasOwnProperty('imei_no') ? obj[0]['imei_no'] : '');
           } else {
             console.error("Received empty or invalid data for job edit:", obj);
           }
