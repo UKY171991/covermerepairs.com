@@ -276,14 +276,6 @@
           </li>
           <?php endif; // end $can_see_part_dropdown ?>
 
-          <?php if($user_type == '1' || (in_array($user_type, ['1', '2', '4', '5']) && in_array('part_order', $user_permissions))): ?>
-          <li class="nav-item">
-            <a href="<?=base_url('part/order')?>" class="nav-link <?= $uri == 'part' && $this->uri->segment(2) == 'order' ? 'active' : '' ?>">
-              <i class="nav-icon fas fa-shopping-cart"></i>
-              <p>Part order</p>
-            </a>
-          </li>
-          <?php endif; ?>
 
           <?php if($user_type == '1' || ($user_type != '5' && in_array('job', $user_permissions))): ?>
           <li class="nav-item">
