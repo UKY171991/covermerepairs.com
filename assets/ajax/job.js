@@ -275,7 +275,20 @@ function assign(id, techId) {
   if (techId) {
     $('.assigned_to').val(techId).change();
   } else {
-    $('.assigned_to').val('').change();
+    // Try to get the current assigned technician from the table row
+    var row = $("button[data-target='#assign']").closest('tr');
+    var techName = row.find('td').eq(7).text().trim();
+    var found = false;
+    $('.assigned_to option').each(function() {
+      if ($(this).text().trim() === techName) {
+        $('.assigned_to').val($(this).val()).change();
+        found = true;
+        return false;
+      }
+    });
+    if (!found) {
+      $('.assigned_to').val('').change();
+    }
   }
 }
 
