@@ -212,9 +212,11 @@ $("#submit_issue").on('submit',function(e){
         $(document).Toasts('create', {
           class: 'bg-success',
           title: 'Success',
-          body: res
+          body: (typeof res === 'object' && res.message) ? res.message : (typeof res === 'string' ? (JSON.parse(res).message || 'Issue added successfully.') : 'Issue added successfully.')
         });
         $("#submit_issue")[0].reset();
+        // Clear only the textarea, not the .issue_list div
+        $("#submit_issue textarea[name='issue_list']").val('');
         found_issue(job);
       }
     });
