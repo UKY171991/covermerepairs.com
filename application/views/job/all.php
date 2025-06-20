@@ -354,6 +354,6 @@ function resetJobForm() {
   $('.id').val('');
 }
 
-// Ensure all select fields use Select2 for better dropdown handling
-$('select.form-control').addClass('select2');
+// Ensure all select fields use Select2 for better dropdown handling, except Branch Name
+$('select.form-control').not('select[name="branch"]').addClass('select2');
 </script>
