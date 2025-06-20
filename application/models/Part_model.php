@@ -184,4 +184,61 @@ class Part_model extends CI_Model {
 		$query = $this->db->get();
 		return $query->result();
 	}
+
+	// New methods for part_type pagination
+	public function count_all_part_types() {
+		return $this->db->count_all('part_type');
+	}
+
+	public function count_filtered_part_types($search = []) {
+		$this->db->select('*');
+		$this->db->from('part_type');
+		
+		if (!empty($search['name'])) {
+			$this->db->like('part_type.name', $search['name']);
+		}
+		if (!empty($search['user_name'])) {
+			$this->db->join('user', 'user.id = part_type.added_by');
+			$this->db->like('user.name', $search['user_name']);
+		}
+		if (!empty($search['global_search'])) {
+			$this->db->group_start();
+			$this->db->like('part_type.name', $search['global_search']);
+			if (!isset($search['user_name'])) {
+				$this->db->join('user', 'user.id = part_type.added_by', 'left');
+			}
+			$this->db->or_like('user.name', $search['global_search']);
+			$this->db->group_end();
+		}
+		
+		return $this->db->count_all_results();
+	}
+
+	public function get_paginated_part_types($search = [], $start = 0, $length = 10) {
+		$this->db->select('part_type.*');
+		$this->db->from('part_type');
+		
+		if (!empty($search['name'])) {
+			$this->db->like('part_type.name', $search['name']);
+		}
+		if (!empty($search['user_name'])) {
+			$this->db->join('user', 'user.id = part_type.added_by');
+			$this->db->like('user.name', $search['user_name']);
+		}
+		if (!empty($search['global_search'])) {
+			$this->db->group_start();
+			$this->db->like('part_type.name', $search['global_search']);
+			if (!isset($search['user_name'])) {
+				$this->db->join('user', 'user.id = part_type.added_by', 'left');
+			}
+			$this->db->or_like('user.name', $search['global_search']);
+			$this->db->group_end();
+		}
+		
+		$this->db->order_by('part_type.id', 'DESC');
+		$this->db->limit($length, $start);
+		
+		$query = $this->db->get();
+		return $query->result();
+	}
 }

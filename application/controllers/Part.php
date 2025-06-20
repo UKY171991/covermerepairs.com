@@ -114,7 +114,6 @@ class Part extends CI_Controller {
 			}
 		}
 	}
-
 	public function add_part_type(){
 		if($this->input->post()){
 			$prem['name'] = $this->input->post('name');
@@ -123,11 +122,11 @@ class Part extends CI_Controller {
 			$id = $this->input->post('id');
 			if($id !=''){
 				$last_id = $this->part->update('part_type',$prem,$id);
-				echo "Brand name updated succefully.";
+				echo json_encode(['status' => 'success', 'message' => 'Part type updated successfully.']);
 				exit();
 			}else{
 				$last_id = $this->part->insert('part_type',$prem);
-				echo "Brand name added succefully.";
+				echo json_encode(['status' => 'success', 'message' => 'Part type added successfully.']);
 				exit();
 			}
 		}
@@ -304,42 +303,62 @@ class Part extends CI_Controller {
     echo json_encode($output);
 
 	}
-
 	public function all_part_type_ajax(){
+		// Get DataTables parameters
+		$draw = intval($this->input->post('draw'));
+		$start = intval($this->input->post('start'));
+		$length = intval($this->input->post('length'));
+		$search_value = $this->input->post('search')['value'];
+		
+		// Column search parameters
 		$prem = array();
-		if($_POST['columns'][1]['search']['value'] !=''){
-			$prem['name'] = $_POST['columns'][1]['search']['value'];
+		if($this->input->post('columns')[1]['search']['value'] !=''){
+			$prem['name'] = $this->input->post('columns')[1]['search']['value'];
+		}
+		if($this->input->post('columns')[2]['search']['value'] !=''){
+			$prem['user_name'] = $this->input->post('columns')[2]['search']['value'];
+		}
+		
+		// Global search
+		if(!empty($search_value)){
+			$prem['global_search'] = $search_value;
 		}
 
-		if(count($prem) !='0'){
-			$all_data = $this->part->all_data('part_type','DESC',$prem);
+		// Get total records count (without filtering)
+		$total_records = $this->part->count_all_part_types();
+		
+		// Get filtered records count
+		$filtered_records = $this->part->count_filtered_part_types($prem);
+		
+		// Get paginated data
+		if(count($prem) > 0){
+			$all_data = $this->part->get_paginated_part_types($prem, $start, $length);
 		}else{
-			$all_data = $this->part->all_data('part_type','DESC');
+			$all_data = $this->part->get_paginated_part_types(array(), $start, $length);
 		}
 
-		//$all_data = $this->part->all_data('part_type','DESC');
-		$i =1;
 		$data = array();
+		$i = $start + 1;
 		foreach($all_data as $key => $all_datas){
 			if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){
-				$action = "<button data-toggle='modal' data-target='#edit_data' onclick='return edit(".$all_datas->id.")' class='btn btn-info btn-xs'>Edit</button>";
-				$action .= "<button href='' onclick='return del(".$all_datas->id.")' class='btn btn-danger btn-xs'>Delete</button>"; 
+				$action = "<button data-toggle='modal' data-target='#edit_data' onclick='return edit(".$all_datas->id.")' class='btn btn-info btn-xs m-1'><i class='fas fa-pencil-alt'></i></button>";
+				$action .= "<button onclick='return del(".$all_datas->id.")' class='btn btn-danger btn-xs m-1'><i class='fa fa-trash'></i></button>"; 
 			}elseif($this->session->userdata('user_type') =='3'){
 				if($all_datas->added_by == $this->session->userdata('user_id')){
-					$action = "<button data-toggle='modal' data-target='#edit_data' onclick='return edit(".$all_datas->id.")' class='btn btn-info btn-xs'>Edit</button>";
-					$action .= "<button href='' onclick='return del(".$all_datas->id.")' class='btn btn-danger btn-xs'>Delete</button>"; 
+					$action = "<button data-toggle='modal' data-target='#edit_data' onclick='return edit(".$all_datas->id.")' class='btn btn-info btn-xs m-1'><i class='fas fa-pencil-alt'></i></button>";
+					$action .= "<button onclick='return del(".$all_datas->id.")' class='btn btn-danger btn-xs m-1'><i class='fa fa-trash'></i></button>"; 
 				}else{
-					$action = "<button  class='btn btn-info btn-xs' disabled>Edit</button>";
-					$action .= "<button class='btn btn-danger btn-xs' disabled>Delete</button>";
+					$action = "<button class='btn btn-info btn-xs m-1' disabled><i class='fas fa-pencil-alt'></i></button>";
+					$action .= "<button class='btn btn-danger btn-xs m-1' disabled><i class='fa fa-trash'></i></button>";
 			}
 			}else{
-				$action = "<button  class='btn btn-info btn-xs' disabled>Edit</button>";
-				$action .= "<button class='btn btn-danger btn-xs' disabled>Delete</button>";
+				$action = "<button class='btn btn-info btn-xs m-1' disabled><i class='fas fa-pencil-alt'></i></button>";
+				$action .= "<button class='btn btn-danger btn-xs m-1' disabled><i class='fa fa-trash'></i></button>";
 			}
 
 			$user = $this->part->single_data('user',$all_datas->added_by);
 
-			$user_type ='';
+			$username ='';
 			foreach($user as $users){
 				if($users->type =='1'){
 					$user_type = " (Admin)";
@@ -355,25 +374,24 @@ class Part extends CI_Controller {
 				$username = $users->name.$user_type;
 			}
 
-
 			$row = array();
-			$row[] =  $i++;
-			$row[] =  $all_datas->name;
-			$row[] =  $username;
-			$row[] =  $action;
+			$row[] = $i++;
+			$row[] = $all_datas->name;
+			$row[] = $username;
+			$row[] = $action;
 			$data[] = $row;
 		}
 
 		$output = array(
-                   "draw" 				=> intval($_POST['draw']),
-                    "recordsTotal" 		=> $this->part->count_all('part','DESC'),
-                    "recordsFiltered" => $this->part->count_all('part','DESC'),
-                    "data" 						=> $data,
-            	);
+			"draw" => $draw,
+			"recordsTotal" => $total_records,
+			"recordsFiltered" => $filtered_records,
+			"data" => $data,		);
    
-    echo json_encode($output);
+		echo json_encode($output);
+	}
 
-	}	public function all_model_ajax(){
+	public function all_model_ajax(){
 		// Get DataTables parameters
 		$draw = intval($this->input->post('draw'));
 		$start = intval($this->input->post('start'));
@@ -599,11 +617,10 @@ class Part extends CI_Controller {
 		$all_data = $this->part->single_data('model',$id);
 		echo json_encode($all_data);
 	}
-
 	public function delete_part_type(){
 		$id = $this->input->post('id');
 		$this->part->delete('part_type',$id);
-		echo "Part deleted succefully.";
+		echo json_encode(['status' => 'success', 'message' => 'Part type deleted successfully.']);
 		exit();
 	}
 	public function edit_part_type(){

@@ -1,45 +1,98 @@
 $(document).ready(function() {
+  // Configure Toastr
+  toastr.options = {
+    closeButton: true,
+    progressBar: true,
+    positionClass: 'toast-top-right',
+    timeOut: 5000
+  };
+  
   all_data();
- });
 
-  function all_data(){
+  // Add button event handler - reset form and set modal title
+  $('#add-part-type-btn').on('click', function() {
+    reset();
+    $('#modal-title').text('Add Part Type');
+  });
+});
 
-    if ( $.fn.dataTable.isDataTable('#all_data') ) {
-      $('#all_data').DataTable().destroy();
-    }
+function all_data(){
 
-	var base_url = $(".base_url").val();
-        var dataTable = $('#all_data').DataTable({
-           processing: true,
-          serverSide: true,
-            ajax: {
-                url: base_url+'part/all_part_type_ajax', // URL to your PHP script for fetching data
-                type: 'POST'
-            },
-            columns: [
-                { data: 0 },
-                { data: 1 },
-                { data: 2 },
-                { data: 3 },
-                // Add more columns as needed
-            ]
-        });
-        $('#all_data thead tr').clone(true).appendTo('#all_data thead');
-    $('#all_data thead tr:eq(1) th').each(function(i) {
-      //if(i !=0 && i != 2 && i != 3){
-        var title = $(this).text();
-        $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+  if ( $.fn.dataTable.isDataTable('#all_data') ) {
+    $('#all_data').DataTable().destroy();
+    // Remove any existing search rows to prevent duplicates
+    $('#all_data thead tr.search-row').remove();
+  }
 
-        $('input', this).on('keyup change', function() {
-            if (dataTable.column(i).search() !== this.value) {
-                dataTable.column(i).search(this.value).draw();
+  var base_url = $(".base_url").val();
+  var dataTable = $('#all_data').DataTable({
+    processing: true,
+    serverSide: true,
+    paging: true,
+    pageLength: 10,
+    lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+    searching: true,
+    ordering: true,
+    info: true,
+    autoWidth: false,
+    responsive: true,
+    stateSave: true,
+    pagingType: "full_numbers",
+    dom: 'lfrtip',
+    language: {
+      paginate: {
+        first: "First",
+        last: "Last",
+        next: "Next",
+        previous: "Previous"
+      },
+      info: "Showing _START_ to _END_ of _TOTAL_ entries",
+      infoEmpty: "Showing 0 to 0 of 0 entries",
+      infoFiltered: "(filtered from _MAX_ total entries)",
+      lengthMenu: "Show _MENU_ entries",
+      search: "Search:",
+      processing: "Loading...",
+      zeroRecords: "No matching records found",
+      emptyTable: "No data available in table"
+    },
+    ajax: {
+      url: base_url+'part/all_part_type_ajax',
+      type: 'POST'
+    },
+    columns: [
+      { data: 0, title: "#", searchable: false, orderable: false, width: "5%" },
+      { data: 1, title: "Part Type Name", searchable: true, orderable: true, width: "40%" },
+      { data: 2, title: "User Name", searchable: true, orderable: true, width: "35%" },
+      { data: 3, title: "Action", searchable: false, orderable: false, width: "20%" }
+    ],
+    initComplete: function () {
+      // Only add search row if it doesn't already exist
+      if ($('#all_data thead tr.search-row').length === 0) {
+        var api = this.api();
+        
+        // Clone the header row and add search inputs
+        $('#all_data thead tr').clone(true).addClass('search-row').appendTo('#all_data thead');
+        $('#all_data thead tr:eq(1) th').each(function (i) {
+          var title = $(this).text();
+          
+          // Skip search for # and Action columns
+          if (i === 0 || i === 3) {
+            $(this).html('');
+            return;
+          }
+          
+          $(this).html('<input type="text" class="form-control form-control-sm" placeholder="Search ' + title + '" />');
+          
+          $('input', this).on('keyup change clear', function () {
+            if (api.column(i).search() !== this.value) {
+              api.column(i).search(this.value).draw();
             }
+          });
         });
-       // }
-    });
-
+      }
     }
-
+  });
+}
 
 $("#submit_data").on('submit',function(e){
   e.preventDefault();
@@ -48,58 +101,76 @@ $("#submit_data").on('submit',function(e){
   var action = $(this).attr('action');
   var data = $(this).serialize();
   $.ajax({
-      url:action,
-      type:'post',
-      data:data,
-      success:function(res){
+    url:action,
+    type:'post',
+    data:data,
+    dataType: 'json',
+    success:function(res){
+      if(res.status === 'success'){
         all_data();
-        alert(res);
+        toastr.success(res.message);
         $("#submit_data")[0].reset();
         $(".id").val('');
-        $btn.prop('disabled', false);
-      },
-      error: function() {
-        $btn.prop('disabled', false);
+        $('#edit_data').modal('hide');
+      } else {
+        toastr.error(res.message || 'An error occurred.');
       }
-    });
+      $btn.prop('disabled', false);
+    },
+    error: function() {
+      toastr.error('Server error occurred. Please try again.');
+      $btn.prop('disabled', false);
+    }
+  });
 });
-    
 
 function del(id){
   var base_url = $(".base_url").val();
-  var conf = confirm('Arey sure  you want to  delete ?');
+  var conf = confirm('Are you sure you want to delete this part type?');
   if(conf){
     $.ajax({
       url:base_url+'part/delete_part_type',
       type:'post',
       data:{'id':id},
+      dataType: 'json',
       success:function(res){
         all_data();
-        alert(res);
-        
+        if(res.status === 'success') {
+          toastr.success(res.message);
+        } else {
+          toastr.error(res.message || 'Failed to delete part type.');
+        }
+      },
+      error: function() {
+        toastr.error('Server error occurred while deleting.');
       }
     });
   }
-  
 } 
-
 
 function edit(id){
   var base_url = $(".base_url").val();
-    $.ajax({
-      url:base_url+'part/edit_part_type',
-      type:'post',
-      data:{'id':id},
-      success:function(res){
+  $('#modal-title').text('Edit Part Type');
+  $.ajax({
+    url:base_url+'part/edit_part_type',
+    type:'post',
+    data:{'id':id},
+    success:function(res){
+      try {
         const obj = JSON.parse(res);
         $('.id').val(obj[0]['id']);
         $('.name').val(obj[0]['name']);
-        $(".brand_id option[value="+obj[0]['brand_id']+"]").prop("selected", "selected");
-       
+      } catch (e) {
+        toastr.error('Error loading part type data.');
       }
-    }); 
+    },
+    error: function() {
+      toastr.error('Error loading part type data.');
+    }
+  }); 
 }
 
 function reset(){
   $("#submit_data")[0].reset();
+  $('.id').val('');
 }
