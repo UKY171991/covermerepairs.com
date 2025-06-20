@@ -272,7 +272,20 @@ $("#assign_data").on('submit',function(e){
 // Assign
 function assign(id) {
   $('.assign').val(id);
-  $('.assigned_to').val('').change(); // Always reset to no selection
+  // Find the current engineer from the table row and select it
+  var row = $("button[data-target='#assign']").closest('tr');
+  var techName = row.find('td').eq(7).text().trim();
+  var found = false;
+  $('.assigned_to option').each(function() {
+    if ($(this).text().trim() === techName) {
+      $('.assigned_to').val($(this).val()).change();
+      found = true;
+      return false;
+    }
+  });
+  if (!found) {
+    $('.assigned_to').val('').change();
+  }
 }
 
 
