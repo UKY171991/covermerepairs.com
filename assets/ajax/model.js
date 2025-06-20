@@ -35,36 +35,51 @@ $(document).ready(function() {
           info: true,
           autoWidth: false,
           responsive: true,
+          language: {
+            paginate: {
+              first: "First",
+              last: "Last",
+              next: "Next",
+              previous: "Previous"
+            },
+            info: "Showing _START_ to _END_ of _TOTAL_ entries",
+            lengthMenu: "Show _MENU_ entries",
+            search: "Search:",
+            processing: "Loading..."
+          },
             ajax: {
-                url: base_url+'part/all_model_ajax', // URL to your PHP script for fetching data
+                url: base_url+'part/all_model_ajax',
                 type: 'POST'
             },
             columns: [
-                { data: 0, searchable: false, orderable: false },
-                { data: 1, searchable: true, orderable: true },
-                { data: 2, searchable: true, orderable: true },
-                { data: 3, searchable: true, orderable: true },
-                { data: 4, searchable: false, orderable: false }
+                { data: 0, title: "#", searchable: false, orderable: false, width: "5%" },
+                { data: 1, title: "Model Name", searchable: true, orderable: true, width: "25%" },
+                { data: 2, title: "Brand Name", searchable: true, orderable: true, width: "25%" },
+                { data: 3, title: "User Name", searchable: true, orderable: true, width: "25%" },
+                { data: 4, title: "Action", searchable: false, orderable: false, width: "20%" }
             ],
             initComplete: function () {
-                // Add individual column search inputs
-                this.api().columns().every(function (index) {
-                    var column = this;
-                    var title = $(column.header()).text();
+                // Create a second header row for search inputs
+                var api = this.api();
+                
+                // Clone the header row and add search inputs
+                $('#all_data thead tr').clone(true).addClass('search-row').appendTo('#all_data thead');
+                $('#all_data thead tr:eq(1) th').each(function (i) {
+                    var title = $(this).text();
                     
                     // Skip search for # and Action columns
-                    if (index === 0 || index === 4) {
-                        $(column.header()).html(title);
+                    if (i === 0 || i === 4) {
+                        $(this).html('');
                         return;
                     }
                     
-                    var input = $('<input type="text" class="form-control form-control-sm" placeholder="Search ' + title + '" />')
-                        .appendTo($(column.header()).empty())
-                        .on('keyup change clear', function () {
-                            if (column.search() !== this.value) {
-                                column.search(this.value).draw();
-                            }
-                        });
+                    $(this).html('<input type="text" class="form-control form-control-sm" placeholder="Search ' + title + '" />');
+                    
+                    $('input', this).on('keyup change clear', function () {
+                        if (api.column(i).search() !== this.value) {
+                            api.column(i).search(this.value).draw();
+                        }
+                    });
                 });
             }
         });
