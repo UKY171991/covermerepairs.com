@@ -549,8 +549,7 @@ class Part extends CI_Controller {
 			$search['global'] = $search_value;
 		}
 		
-		// Debug search parameters
-		error_log('Search parameters: ' . print_r($search, true));		// Get paginated data
+		// Get paginated data
 		$all_data = $this->part->get_paginated_parts($search, $start, $length);
 		$total_records = $this->part->count_all_parts();
 		$filtered_records = $this->part->count_filtered_parts($search);
@@ -571,26 +570,26 @@ class Part extends CI_Controller {
 			// Format username with type
 			$user_type_label ='';
 			if(isset($row->user_type)){
-				if($row->user_type =='0'){
+				if($row->user_type =='1'){
 					$user_type_label = " (Admin)";
-				}elseif($row->user_type =='1'){
+				}elseif($row->user_type == '2'){
 					$user_type_label = " (Staff)";
-				}elseif($row->user_type =='2'){
+				}elseif($row->user_type == '3'){
 					$user_type_label = " (Technician)";
-				}elseif($row->user_type =='3'){
+				}elseif($row->user_type == '4'){
 					$user_type_label = " (Branch)";
-				}elseif($row->user_type =='4'){
+				}elseif($row->user_type == '5'){
 					$user_type_label = " (Part Controller)";
 				}
 			}
 			$username = (isset($row->user_name) ? $row->user_name : 'Unknown') . $user_type_label;
 			
 			// Action buttons based on permissions
-			if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){
+			if($this->session->userdata('user_type') == '1' || $this->session->userdata('user_type') == '5'){
 				$action = "<button data-id='".$row->id."' class='btn btn-success btn-xs view-btn' title='View'>View</button>";
 				$action .= "<button data-toggle='modal' data-target='#edit_data' data-id='".$row->id."' class='btn btn-info btn-xs edit-btn' title='Edit'>Edit</button>";
 				$action .= "<button data-id='".$row->id."' class='btn btn-danger btn-xs delete-btn' title='Delete'>Delete</button>"; 
-			}elseif($this->session->userdata('user_type') =='3'){
+			}elseif($this->session->userdata('user_type') == '3'){
 				if($row->added_by == $this->session->userdata('user_id')){
 					$action = "<button data-id='".$row->id."' class='btn btn-success btn-xs view-btn' title='View'>View</button>";
 					$action .= "<button data-toggle='modal' data-target='#edit_data' data-id='".$row->id."' class='btn btn-info btn-xs edit-btn' title='Edit'>Edit</button>";
@@ -602,7 +601,8 @@ class Part extends CI_Controller {
 				}
 			}else{
 				$action = "<button data-id='".$row->id."' class='btn btn-success btn-xs view-btn' title='View'>View</button>";
-				$action .= "<button class='btn btn-info btn-xs' disabled title='Edit'>Edit</button>";				$action .= "<button class='btn btn-danger btn-xs' disabled title='Delete'>Delete</button>";
+				$action .= "<button class='btn btn-info btn-xs' disabled title='Edit'>Edit</button>";
+				$action .= "<button class='btn btn-danger btn-xs' disabled title='Delete'>Delete</button>";
 			}
 			
 			$data_row = array();
