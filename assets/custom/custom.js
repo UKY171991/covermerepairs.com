@@ -95,15 +95,13 @@ $('.toastsDefaultDanger').click(function() {
 //     }
 // });
 
+// Remove Select2 initialization for job modal select fields
 $('#edit_data').on('shown.bs.modal', function () {
-  // Destroy any existing Select2 to prevent duplicates
+  // Remove Select2 if present
   $(this).find('select.select2').each(function() {
     if ($(this).hasClass('select2-hidden-accessible')) {
       $(this).select2('destroy');
+      $(this).removeClass('select2');
     }
-  });
-  // Re-initialize Select2 for all select fields inside the modal
-  $(this).find('select.form-control').addClass('select2').select2({
-    dropdownParent: $('#edit_data')
   });
 });
