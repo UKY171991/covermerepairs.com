@@ -1,142 +1,174 @@
 $(document).ready(function() {
-    var manageTable;
-    var base_url = $('body').data('base_url');
+    const base_url = $(".base_url").val();
+    let table;
 
-    // Initialize DataTable
-    manageTable = $('#manageTable').DataTable({
-        'ajax': base_url + 'part_corntroller/get_all_part_corntroller',
-        'order': []
+    // Initialize Select2 for the modal, ensuring it's attached to the modal content
+    $('.select2').select2({
+        dropdownParent: $('#edit_data .modal-content')
     });
 
-    // Initialize Select2
-    $('#branch_id').select2({
-        width: '100%',
-        placeholder: 'Select a Branch'
-    });
-
-    // Custom notification function
-    function showNotification(color, message) {
-        var notification = '<div class="alert alert-' + color + ' alert-dismissible" role="alert">' +
-            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-            message +
-            '</div>';
-        $('#messages').html(notification);
-        $('.alert-dismissible').delay(3000).slideUp('slow');
-    }
-
-    // Reset modal and form
-    function resetModal() {
-        $('#modal_form')[0].reset();
-        $('.form-group').removeClass('has-error').removeClass('has-success');
-        $('.text-danger').remove();
-        $('#messages').html('');
-        // Reset Select2
-        $('#branch_id').val(null).trigger('change');
-    }
-
-    // Show modal for adding new
-    $('#add_new_btn').on('click', function() {
-        resetModal();
-        $('#modal_title').text('Add Part Controller');
-        $('#modal_form').attr('action', base_url + 'part_corntroller/add');
-        $('#password').prop('required', true);
-    });
-
-    // Handle form submission (add/edit)
-    $('#modal_form').off('submit').on('submit', function(e) {
-        e.preventDefault();
-        var form = $(this);
-        var url = form.attr('action');
-
-        // Clear previous messages
-        $('.form-group').removeClass('has-error');
-        $('.text-danger').remove();
-        $('#messages').html('');
-
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: form.serialize(),
-            dataType: 'json',
-            success: function(response) {
-                if (response.success === true) {
-                    $('#add_modal').modal('hide');
-                    manageTable.ajax.reload(null, false);
-                    // Use a global notification area if available, or create one
-                    showNotification('success', response.messages);
-                } else {
-                    if (response.messages) {
-                         $('#messages').html('<div class="alert alert-danger alert-dismissible" role="alert">' +
-                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-                            response.messages +
-                            '</div>');
-                    }
-                }
+    // Function to initialize or re-initialize the DataTable
+    function initialize_table() {
+        if ($.fn.dataTable.isDataTable('#all_data')) {
+            table.destroy();
+        }
+        table = $('#all_data').DataTable({
+            "processing": true,
+            "ajax": {
+                "url": base_url + 'part_corntroller/all_data_ajax',
+                "type": "POST",
+                "dataSrc": "data"
             },
-            error: function(jqXHR, textStatus, errorThrown) {
-                showNotification('danger', 'An error occurred: ' + textStatus + ' - ' + errorThrown);
-            }
+            "columns": [
+                { "data": 0 },
+                { "data": 1 },
+                { "data": 2 },
+                { "data": 3 },
+                { "data": 4 },
+                { "data": 5 }
+            ],
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
         });
+    }
+
+    // Centralized function to reset the form to its default state
+    function reset_form() {
+        $('#submit_data')[0].reset();
+        $('.id').val('');
+        $('input[type="checkbox"]').prop('checked', false);
+        $('.branch').val(null).trigger('change'); // Specifically for Select2
+    }
+
+    // A simple notification handler (can be replaced with a more advanced library like SweetAlert or Toastr)
+    function show_notification(type, message) {
+        // For now, we'll use a simple alert.
+        alert(message);
+    }
+
+    // Event handler for the "Add" button
+    $('#add_btn').on('click', function() {
+        reset_form();
+        $('#modal_title').text('Add Part Controller');
+        $('#edit_data').modal('show');
     });
 
-    // Handle edit button click
-    $(document).on('click', '.edit_btn', function() {
-        var id = $(this).data('id');
-        resetModal();
-        $('#modal_title').text('Edit Part Controller');
-        $('#modal_form').attr('action', base_url + 'part_corntroller/edit/' + id);
-        $('#password').prop('required', false);
+    // Use event delegation for buttons inside the DataTable
+    $('#all_data').on('click', '.edit_btn', function() {
+        const id = $(this).data('id');
+        reset_form();
 
         $.ajax({
-            url: base_url + 'part_corntroller/get_part_corntroller_by_id/' + id,
-            type: 'GET',
+            url: base_url + 'part_corntroller/edit',
+            type: 'post',
+            data: { 'id': id },
             dataType: 'json',
-            success: function(response) {
-                if (response) {
-                    $('#fname').val(response.fname);
-                    $('#lname').val(response.lname);
-                    $('#email').val(response.email);
-                    $('#phone').val(response.phone);
-                    if (response.branch_id) {
-                        $('#branch_id').val(response.branch_id).trigger('change');
+            success: function(res) {
+                if (res && res.length > 0) {
+                    const data = res[0];
+                    $('#modal_title').text('Edit Part Controller');
+
+                    // Populate form fields
+                    $('.id').val(data.id);
+                    $('.name').val(data.name);
+                    $('.email').val(data.email);
+                    $('.phone').val(data.phone);
+                    $('.username').val(data.username);
+                    $('.address').val(data.address);
+                    $('.dob').val(data.dob);
+
+                    // Handle multi-select for branches
+                    if (data.branch) {
+                        const branch_ids = data.branch.split('--');
+                        $('.branch').val(branch_ids).trigger('change');
                     }
-                    // The modal is already being triggered by the button's data-target attribute
-                    // $('#add_modal').modal('show'); 
+
+                    // Handle checkboxes for permissions
+                    if (data.permission) {
+                        const permissions = data.permission.split('--');
+                        permissions.forEach(function(permission) {
+                            if (permission) {
+                                $('#' + permission).prop('checked', true);
+                            }
+                        });
+                    }
+
+                    $('#edit_data').modal('show');
                 } else {
-                    showNotification('danger', 'Could not fetch part controller data.');
+                    show_notification('error', 'Could not retrieve Part Controller data.');
                 }
             },
             error: function() {
-                showNotification('danger', 'Error occurred while fetching data.');
+                show_notification('error', 'An error occurred while fetching data.');
             }
         });
     });
 
-    // Handle delete button click
-    $(document).on('click', '.delete_btn', function() {
-        var id = $(this).data('id');
-        if (confirm("Are you sure you want to delete this part controller?")) {
+    $('#all_data').on('click', '.view_btn', function() {
+        const id = $(this).data('id');
+        $.ajax({
+            url: base_url + 'part_corntroller/view',
+            type: 'post',
+            data: { 'id': id },
+            success: function(res) {
+                $('.view_table').html(res);
+                $('#view_data').modal('show');
+            },
+            error: function() {
+                show_notification('error', 'An error occurred while fetching the data.');
+            }
+        });
+    });
+
+    $('#all_data').on('click', '.del_btn', function() {
+        const id = $(this).data('id');
+        if (confirm('Are you sure you want to delete this Part Controller?')) {
             $.ajax({
-                url: base_url + 'part_corntroller/delete/' + id,
-                type: 'POST',
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success === true) {
-                        manageTable.ajax.reload(null, false);
-                        showNotification('success', response.messages);
-                    } else {
-                        showNotification('danger', response.messages);
-                    }
+                url: base_url + 'part_corntroller/delete',
+                type: 'post',
+                data: { 'id': id },
+                success: function(res) {
+                    show_notification('success', res);
+                    table.ajax.reload();
                 },
                 error: function() {
-                    showNotification('danger', 'Error occurred during deletion.');
+                    show_notification('error', 'An error occurred during deletion.');
                 }
             });
         }
     });
 
-    // Reset form when modal is closed
-    $('#add_modal').on('hidden.bs.modal', function () {
-        resetModal();
+    // Handle the form submission for both add and edit
+    $("#submit_data").on('submit', function(e) {
+        e.preventDefault();
+        const $btn = $(this).find('button[type=submit]');
+        $btn.prop('disabled', true);
+        const action = $(this).attr('action');
+        const data = $(this).serialize();
+
+        $.ajax({
+            url: action,
+            type: 'post',
+            data: data,
+            dataType: 'json',
+            success: function(res) {
+                if (res.status === 'success') {
+                    show_notification('success', res.message);
+                    $('#edit_data').modal('hide');
+                    table.ajax.reload();
+                } else {
+                    show_notification('error', res.message);
+                }
+                $btn.prop('disabled', false);
+            },
+            error: function() {
+                show_notification('error', 'An error occurred. Please try again.');
+                $btn.prop('disabled', false);
+            }
+        });
     });
+
+    // Initial data load
+    initialize_table();
 });
