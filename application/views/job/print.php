@@ -87,7 +87,7 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
         <tr>
           <td>Make: <?= $brand[0]->name ?? '' ?></td>
           <td>Model: <?= $model[0]->name ?? '' ?></td>
-          <td>IMEI/ESN: <?= $jobs[0]->imei ?? '' ?></td>
+          <td>IMEI No.: <?= $jobs[0]->imei_no ?? '' ?></td>
         </tr>
         <tr>
           <td>Security Code: <?= $jobs[0]->security_code ?? '' ?></td>

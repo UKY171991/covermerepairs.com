@@ -122,6 +122,12 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
+                <label>IMEI No.</label>
+                <input type="text" name="imei_no" class="form-control imei_no">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
                   <label>Brand</label>
                   <select name="brand" class="form-control brand" required>
                       <option value="">Select Brand</option>
