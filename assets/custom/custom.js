@@ -96,16 +96,14 @@ $('.toastsDefaultDanger').click(function() {
 // });
 
 $('#edit_data').on('shown.bs.modal', function () {
+  // Destroy any existing Select2 to prevent duplicates
+  $(this).find('select.select2').each(function() {
+    if ($(this).hasClass('select2-hidden-accessible')) {
+      $(this).select2('destroy');
+    }
+  });
   // Re-initialize Select2 for all select fields inside the modal
-  $('.select2').select2({
-    dropdownParent: $('#edit_data')
-  });
-  $('.select2bs4').select2({
-    theme: 'bootstrap4',
-    dropdownParent: $('#edit_data')
-  });
-  // Also re-initialize Select2 for all select fields when the modal is shown
-  $('select.form-control').select2({
+  $(this).find('select.form-control').addClass('select2').select2({
     dropdownParent: $('#edit_data')
   });
 });
