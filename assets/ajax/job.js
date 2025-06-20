@@ -101,17 +101,15 @@ function edit(id){
           var obj = JSON.parse(data);
           if (obj && obj[0]) {
             $('.id').val(obj[0]['id']);
-            $('.branch').val(obj[0]['branch']);
+            $('.branch').val(obj[0]['branch']).change();
             $('.customer_name').val(obj[0]['customer_name']);
             $('.mobile').val(obj[0]['mobile']);
             $('.email').val(obj[0]['email']);
-            $('.brand').val(obj[0]['brand']);
-            // Trigger change to load models if necessary, then set model_no
-            $('.brand').trigger('change'); 
-            setTimeout(function() { // Timeout to allow models to load
-                $('.model_no').val(obj[0]['model_no']);
-            }, 500); // Adjust timeout as needed
-            $('.assigned_to').val(obj[0]['assigned_to']);
+            $('.brand').val(obj[0]['brand']).change();
+            setTimeout(function() {
+                $('.model_no').val(obj[0]['model_no']).change();
+            }, 500);
+            $('.assigned_to').val(obj[0]['assigned_to']).change();
             $('.date_from').val(obj[0]['date_from']);
             $('.date_to').val(obj[0]['date_to']);
             $('.issue').val(obj[0].hasOwnProperty('issue') ? obj[0]['issue'] : '');
@@ -124,10 +122,8 @@ function edit(id){
               $('.inspection_fee_paid').prop('checked', false);
             }
             $('.loan_device_details').val(obj[0].hasOwnProperty('loan_device_details') ? obj[0]['loan_device_details'] : '');
-            // $('.status').val(obj[0]['status']); // Assuming status is handled elsewhere or not in this modal
           } else {
             console.error("Received empty or invalid data for job edit:", obj);
-            // Optionally, display an error message to the user
           }
         },
       error: function(jqXHR, textStatus, errorThrown) {
