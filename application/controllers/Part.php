@@ -604,7 +604,7 @@ class Part extends CI_Controller {
 	
 	public function edit_data(){
 		if($this->input->post('id')){
-			$prem['id'] = $this->input->post('id');
+			$prem['part.id'] = $this->input->post('id');
 			$data = $this->part->single_data_join($prem);
 			echo json_encode($data);
 		}
