@@ -64,6 +64,9 @@
 <!-- Select2 -->
 <script src="<?= base_url();?>assets/plugins/select2/js/select2.full.min.js"></script>
 
+<!-- Toastr -->
+<script src="<?= base_url();?>assets/plugins/toastr/toastr.min.js"></script>
+
 <script src="<?= base_url();?>assets/custom/custom.js"></script>
 
 <script>var BASE_URL = '<?= base_url() ?>';</script>

@@ -60,12 +60,12 @@ $("#submit_data").on('submit', function(e) {
             if (response.status === 'success') {
                 all_data();
                 $('#edit_data').modal('hide');
-                showMessage(response.message, 'success');
+                show_notification('success', response.message);
             } else {
-                showMessage(response.message || 'An unknown error occurred.', 'error');
+                show_notification('error', response.message || 'An unknown error occurred.');
             }
         },
-        error: function() { showMessage('A server error occurred. Please try again.', 'error'); },
+        error: function() { show_notification('error', 'A server error occurred. Please try again.'); },
         complete: function() { $btn.prop('disabled', false).text('Save changes'); }
     });
 });
@@ -83,7 +83,7 @@ function edit(id) {
         success: function(data) {
             const technician = data[0];
             if (!technician) {
-                showMessage('Could not find technician data.', 'error');
+                show_notification('error', 'Could not find technician data.');
                 return;
             }
 
@@ -107,7 +107,7 @@ function edit(id) {
             permissions.forEach(slug => $('#' + slug).prop('checked', true));
         },
         error: function() {
-            showMessage('Failed to fetch technician data from the server.', 'error');
+            show_notification('error', 'Failed to fetch technician data from the server.');
         }
     });
 }
@@ -121,9 +121,9 @@ function del(id) {
             data: { id: id },
             success: function(res) {
                 all_data();
-                showMessage('Technician deleted successfully.', 'success');
+                show_notification('success', 'Technician deleted successfully.');
             },
-            error: function() { showMessage('Failed to delete technician.', 'error'); }
+            error: function() { show_notification('error', 'Failed to delete technician.'); }
         });
     }
 }
@@ -136,17 +136,16 @@ function reset_form() {
     $form.find('input[type=checkbox]').prop('checked', false);
 }
 
-function showMessage(message, type) {
-    const bgColor = type === 'success' ? '#28a745' : '#dc3545';
-    const notification = $('<div>', {
-        text: message,
-        css: {
-            position: 'fixed', top: '20px', right: '20px',
-            padding: '15px', borderRadius: '5px', color: 'white',
-            fontWeight: 'bold', zIndex: 10001, backgroundColor: bgColor,
-            boxShadow: '0 2px 10px rgba(0,0,0,0.2)'
-        }
-    });
-    $('body').append(notification);
-    notification.hide().fadeIn(300).delay(3500).fadeOut(400, function() { $(this).remove(); });
+function show_notification(type, message) {
+    toastr.options = {
+        closeButton: true,
+        progressBar: true,
+        positionClass: 'toast-top-right',
+        timeOut: 5000
+    };
+    if (type === 'error') {
+        toastr.error(message);
+    } else {
+        toastr.success(message);
+    }
 }

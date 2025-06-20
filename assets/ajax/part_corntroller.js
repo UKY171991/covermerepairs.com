@@ -43,8 +43,17 @@ $(document).ready(function() {
 
     // A simple notification handler (can be replaced with a more advanced library like SweetAlert or Toastr)
     function show_notification(type, message) {
-        // For now, we'll use a simple alert.
-        alert(message);
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: 'toast-top-right',
+            timeOut: 5000
+        };
+        if (type === 'error') {
+            toastr.error(message);
+        } else {
+            toastr.success(message);
+        }
     }
 
     // Event handler for the "Add" button

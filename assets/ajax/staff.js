@@ -137,16 +137,15 @@ function reset_form() {
 }
 
 function showMessage(message, type) {
-    const bgColor = type === 'success' ? '#28a745' : '#dc3545';
-    const notification = $('<div>', {
-        text: message,
-        css: {
-            position: 'fixed', top: '20px', right: '20px',
-            padding: '15px', borderRadius: '5px', color: 'white',
-            fontWeight: 'bold', zIndex: 10001, backgroundColor: bgColor,
-            boxShadow: '0 2px 10px rgba(0,0,0,0.2)'
-        }
-    });
-    $('body').append(notification);
-    notification.hide().fadeIn(300).delay(3500).fadeOut(400, function() { $(this).remove(); });
+    toastr.options = {
+        closeButton: true,
+        progressBar: true,
+        positionClass: 'toast-top-right',
+        timeOut: 5000
+    };
+    if (type === 'error') {
+        toastr.error(message);
+    } else {
+        toastr.success(message);
+    }
 }
