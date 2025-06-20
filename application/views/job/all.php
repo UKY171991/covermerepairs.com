@@ -259,9 +259,18 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="<?=base_url('job/add_assign')?>" method="post" id="assign_data" enctype="multipart/form-data">
+      <form action="<?=base_url('job/add_assign') ?>" method="post" id="assign_data" enctype="multipart/form-data">
         <div class="modal-body">
-          <!-- ...form fields as before... -->
+          <input type="hidden" name="id" class="form-control assign">
+          <div class="form-group">
+            <label>Assigned to</label>
+            <select name="assigned_to" class="form-control assigned_to" required>
+              <option value="">Select Technician</option>
+              <?php foreach($technicians as $technician){ ?>
+                <option value="<?=$technician->id?>"><?=$technician->name?></option>
+              <?php } ?>
+            </select>
+          </div>
         </div>
         <div class="modal-footer justify-content-between">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

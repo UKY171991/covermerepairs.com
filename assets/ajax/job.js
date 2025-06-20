@@ -270,8 +270,13 @@ $("#assign_data").on('submit',function(e){
 });
 
 // Assign
-function assign(id){
+function assign(id, techId) {
   $('.assign').val(id);
+  if (techId) {
+    $('.assigned_to').val(techId).change();
+  } else {
+    $('.assigned_to').val('').change();
+  }
 }
 
 
