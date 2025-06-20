@@ -376,3 +376,14 @@ function found_couriereStatus(id){
       }
     }); 
 }
+
+function autoRemoveToasts() {
+  setTimeout(function() {
+    $(".toasts .toast").fadeOut(500, function() { $(this).remove(); });
+  }, 5000);
+}
+
+// Patch all Toasts creation to auto-remove
+$(document).on('DOMNodeInserted', '.toasts .toast', function() {
+  autoRemoveToasts();
+});
