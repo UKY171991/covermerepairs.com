@@ -568,6 +568,7 @@ class Part extends CI_Controller {
 				$action .= "<button data-toggle='modal' data-target='#add_edit_modal' onclick='return edit(".$all_datas->id.")' class='btn btn-info btn-xs m-1'><i class='fas fa-pencil-alt'></i></button>";
 				$action .= "<button onclick='return del(".$all_datas->id.")' class='btn btn-danger btn-xs m-1'><i class='fa fa-trash'></i></button>"; 
 			}
+			$action .= "</div>";
 
 			$user_type_map = [
 				'1' => ' (Admin)',
