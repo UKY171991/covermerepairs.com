@@ -101,7 +101,6 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <!-- Data will be loaded here by DataTable -->
                   </tbody>
                 </table>
                 </div>
@@ -118,110 +117,126 @@
     </section>
     <!-- /.content -->
   </div>
-  <!-- /.content-wrapper -->
-
-  <div class="modal fade" id="edit_data">
-        <div class="modal-dialog modal-xl">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title" id="modal-title">Add Part</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <form action="<?=base_url('part/add_data')?>" method="post" id="submit_data" enctype="multipart/form-data">
-            <div class="modal-body">
-
-            <input type="hidden" name="id" class="form-control id">
-			
-			<hr>
-			
-        <div class="row">
-			
-          <div class="col-md-4">
-                <div class="form-group">
-                  <label>Branch Name</label>
-				  
-        				  <select name="branch" class="form-control branch" required>
-        					<option Value="">Select Branch</option>
-        					<?php foreach($branch as $branchs){ ?>
-        					<option Value="<?=$branchs->id?>"><?=$branchs->name?></option>
-        					<?php } ?>
-        				  </select>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label>Brand Name</label>
-          
-                    <select name="brand" class="form-control brand" required>
-                    <option value="">Select Brand</option>
-                    <?php foreach($brand as $brands){ ?>
-                    <option Value="<?=$brands->id?>"><?=$brands->name?></option>
-                    <?php } ?>
-                    </select>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label>Model Name</label>
-          
-                    <select name="model" class="form-control model" required>
-                    <option value="">Select Brand First</option>
-                    </select>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label>Part type</label>
-          
-                    <select name="type" class="form-control type" required>
-                    <option value="">Select Part Type</option>
-                    <?php foreach($type as $types){ ?>
-                    <option Value="<?=$types->id?>"><?=$types->name?></option>
-                    <?php } ?>
-                    </select>
-                </div>
-              </div>
-			  
-			    <div class="col-md-4">
-                <div class="form-group">
-                  <label>Price min</label>
-                  <input type="number" name="price_min" class="form-control price_min" placeholder="" required>
-                </div>
-              </div>
-			  
-			    <div class="col-md-4">
-                <div class="form-group">
-                  <label>Price max</label>
-                  <input type="number" name="price_max" class="form-control price_max" placeholder="" required>
-                </div>
-          </div>
-
-          <div class="col-md-4">
-                <div class="form-group">
-                  <label>Stock</label>
-                  <input type="number" name="stock" class="form-control stock" placeholder="" required>
-                </div>
-          </div>
-			  
-			  </div>
-			  
-			  <hr>
-			  
-
-			</div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Save changes</button>
-            </div>
-            </form>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
+<!-- edit modal -->
+<div class="modal fade" id="edit_data">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Add Part</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <!-- /.modal -->
+      <div class="modal-body">
+        <form id="add_data_form" action="" method="post">
+          <input type="hidden" id="id" name="id" value="">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="branch">Branch</label>
+                <select class="form-control" id="branch" name="branch" required>
+                  <option value="">Select Branch</option>
+                  <?php foreach($branch as $branchs){ ?>
+                  <option value="<?=$branchs->id?>"><?=$branchs->name?></option>
+                  <?php } ?>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="brand">Brand</label>
+                <select class="form-control" id="brand" name="brand" required>
+                  <option value="">Select Brand</option>
+                  <?php foreach($brand as $brands){ ?>
+                  <option value="<?=$brands->id?>"><?=$brands->name?></option>
+                  <?php } ?>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="model">Model</label>
+                <select class="form-control" id="model" name="model" required>
+                  <option value="">Select Model</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="type">Part Type</label>
+                <select class="form-control" id="type" name="type" required>
+                  <option value="">Select Part Type</option>
+                  <?php foreach($type as $types){ ?>
+                  <option value="<?=$types->id?>"><?=$types->name?></option>
+                  <?php } ?>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="price_min">Min Price</label>
+                <input type="text" class="form-control" id="price_min" name="price_min" placeholder="Min Price">
+              </div>
+              <div class="form-group">
+                <label for="price_max">Max Price</label>
+                <input type="text" class="form-control" id="price_max" name="price_max" placeholder="Max Price">
+              </div>
+              <div class="form-group">
+                <label for="stock">Stock</label>
+                <input type="number" class="form-control" id="stock" name="stock" placeholder="Stock">
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="add_data_btn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- view modal -->
+<div class="modal fade" id="view_data">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">View Part</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <th>Brand Name</th>
+              <td id="view_brand_name"></td>
+            </tr>
+            <tr>
+              <th>Model Name</th>
+              <td id="view_model_name"></td>
+            </tr>
+            <tr>
+              <th>Part Type</th>
+              <td id="view_part_type_name"></td>
+            </tr>
+            <tr>
+              <th>Min Price</th>
+              <td id="view_price_min"></td>
+            </tr>
+            <tr>
+              <th>Max Price</th>
+              <td id="view_price_max"></td>
+            </tr>
+            <tr>
+              <th>Stock</th>
+              <td id="view_stock"></td>
+            </tr>
+            <tr>
+              <th>Added by</th>
+              <td id="view_added_by"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

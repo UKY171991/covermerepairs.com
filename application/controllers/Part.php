@@ -561,7 +561,7 @@ class Part extends CI_Controller {
 		foreach($all_data as $key => $all_datas){
 			$action = "";
 			// View button is always available
-			$action .= "<a href='" . base_url('part/view/') . $all_datas->id . "' class='btn btn-success btn-xs m-1'><i class='fa fa-eye'></i></a>";
+			$action .= "<button data-toggle='modal' data-target='#view_data' onclick='return view(".$all_datas->id.")' class='btn btn-success btn-xs m-1'><i class='fa fa-eye'></i></button>";
 			
 			// Edit and Delete buttons are available for Admin (1) and Part Controller (5)
 			if($this->session->userdata('user_type') == '1' || $this->session->userdata('user_type') == '5'){
