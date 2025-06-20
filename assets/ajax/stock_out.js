@@ -63,7 +63,8 @@ function loadStockOutTable() {
             { data: 4 },
             { data: 5 },
             { data: 6 }
-        ]
+        ],
+        order: [[0, 'desc']] // Order by first column (ID or date) descending
     });
 }
 
