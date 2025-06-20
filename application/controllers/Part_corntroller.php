@@ -24,7 +24,9 @@ class Part_corntroller extends CI_Controller
     public function index()
     {
         $this->data['branch'] = $this->Branch_model->get_branch();
+        $this->load->view('inc/header');
         $this->load->view('part_corntroller/all', $this->data);
+        $this->load->view('inc/footer');
     }
 
     public function add()
