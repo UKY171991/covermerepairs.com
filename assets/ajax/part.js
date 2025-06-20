@@ -192,18 +192,47 @@ function edit(id){
     dataType: 'json',
     success: function(obj){
       if (obj) {
-        $('.id').val(obj.id);
-        $('.price_max').val(obj.price_max);
-        $('.price_min').val(obj.price_min);
-        $('.stock').val(obj.stock);
-        $(".branch").val(obj.branch);
-        $(".type").val(obj.type);
+        $('#id').val(obj.id);
+        $('#price_max').val(obj.price_max);
+        $('#price_min').val(obj.price_min);
+        $('#stock').val(obj.stock);
+        $("#branch").val(obj.branch);
+        $("#type").val(obj.type);
 
         // Set brand and load models
-        $(".brand").val(obj.brand);
+        $("#brand").val(obj.brand);
         load_model(obj.model); // Pass model_id to load_model
         
         $('#edit_data').modal('show');
+      } else {
+        toastr.error('Part data not found.');
+      }
+    },
+    error: function() {
+      toastr.error('Error loading part data.');
+    }
+  }); 
+}
+
+function view(id){
+  var base_url = $(".base_url").val();
+  
+  $.ajax({
+    url: base_url + 'part/edit_data',
+    type: 'post',
+    data: {'id': id},
+    dataType: 'json',
+    success: function(obj){
+      if (obj) {
+        $('#view_brand_name').text(obj.brand_name);
+        $('#view_model_name').text(obj.model_name);
+        $('#view_part_type_name').text(obj.part_type_name);
+        $('#view_price_min').text(obj.price_min);
+        $('#view_price_max').text(obj.price_max);
+        $('#view_stock').text(obj.stock);
+        $('#view_added_by').text(obj.user_name);
+        
+        $('#view_data').modal('show');
       } else {
         toastr.error('Part data not found.');
       }
