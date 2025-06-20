@@ -80,13 +80,13 @@ class Technicians extends CI_Controller {
 			if($id !=''){
 				$all_data = $this->user->all_email_update('user',$this->input->post('email'),$id);
 				if($all_data !=0){
-					$mes=array('status'=>"failed",'message'=>'Email id  alreay exits');
+					$mes=array('status'=>"failed",'message'=>'Email ID already exists.');
 					echo json_encode($mes);
 					exit();
 				}
 				$all_data = $this->user->all_username_update('user',$this->input->post('username'),$id);
 				if($all_data !=0){
-					$mes=array('status'=>"failed",'message'=>'Username not avaliavle.');
+					$mes=array('status'=>"failed",'message'=>'Username not available.');
 					echo json_encode($mes);
 					exit();
 				}
@@ -96,27 +96,27 @@ class Technicians extends CI_Controller {
 				//print_r($prem); exit();
 
 				$this->user->update('user',$prem,$id);
-				$mes=array('status'=>"success",'message'=>'User updated succefully.');
+				$mes=array('status'=>"success",'message'=>'User updated successfully.');
 				echo json_encode($mes);
 				exit();
 			}else{
 				$all_data = $this->user->all_email('user',$this->input->post('email'));
 				if($all_data !=0){
-					$mes=array('status'=>"failed",'message'=>'Email id  alreay exits');
+					$mes=array('status'=>"failed",'message'=>'Email ID already exists.');
 					echo json_encode($mes);
 					exit();
 				}
 
 				$all_data = $this->user->all_username('user',$this->input->post('username'));
 				if($all_data !=0){
-					$mes=array('status'=>"failed",'message'=>'Username alreay exits');
+					$mes=array('status'=>"failed",'message'=>'Username already exists.');
 					echo json_encode($mes);
 					exit();
 				}
 
 
 				$last_id = $this->user->insert('user',$prem);
-				$mes=array('status'=>"success",'message'=>'User added succefully.');
+				$mes=array('status'=>"success",'message'=>'User added successfully.');
 				echo json_encode($mes);
 				exit();
 			}
@@ -184,12 +184,12 @@ class Technicians extends CI_Controller {
 	}
 
 	public function delete(){
-		$id = $this->input->post('id');
-		$this->user->delete('user',$id);
-		echo "User deleted succefully.";
-		exit();
-	}
-	public function edit(){
+ 		$id = $this->input->post('id');
+ 		$this->user->delete('user',$id);
+		echo "User deleted successfully.";
+ 		exit();
+ 	}
+ 	public function edit(){
 		$id = $this->input->post('id');
 
 		$wher = array('id'=>$id);
