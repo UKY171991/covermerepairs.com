@@ -3,18 +3,20 @@ $(document).ready(function() {
  });
 
 $(document).ready(function() {
-    // Initialize Select2 only once on page load
-    setTimeout(function() {
-      $('.select2').each(function() {
-        if (!$(this).hasClass('select2-hidden-accessible')) {
-          $(this).select2({
-            width: '100%',
-            minimumResultsForSearch: 0,
-            theme: 'bootstrap4'
-          });
-        }
-      });
-    }, 500);
+    // Initialize branch field specifically
+    handleBranchField(null);
+    
+    // Initialize other Select2 fields
+    $('.select2:not(.branch)').each(function() {
+      if (!$(this).hasClass('select2-hidden-accessible')) {
+        $(this).select2({
+          width: '100%',
+          minimumResultsForSearch: 0,
+          theme: 'bootstrap4',
+          allowClear: true
+        });
+      }
+    });
   });
 
  
@@ -116,34 +118,9 @@ function edit(id){
         //$(".type option[value="+obj[0]['type']+"]").prop("selected", "selected");        $('.address').val(obj[0]['address']);
         $('.dob').val(obj[0]['dob']);
         
-        // Handle branch selection for multiple branches
+        // Handle branch selection using the specific handler
         console.log('Branch data from server:', obj[0]['branch']); // Debug log
-        
-        // Use setTimeout to ensure modal is fully loaded
-        setTimeout(function() {
-          // Clean up Select2 completely
-          cleanSelect2('.branch');
-          
-          if(obj[0]['branch']) {
-            let branchData = obj[0]['branch'].toString();
-            
-            if(branchData.includes('--')) {
-              // Multiple branches - split and set array
-              const branchArray = branchData.split("--").filter(function(item) {
-                return item !== "" && item.trim() !== "";
-              });
-              console.log('Multiple branches array:', branchArray); // Debug log
-              $('.branch').val(branchArray);
-            } else {
-              // Single branch - set as single value
-              console.log('Single branch:', branchData); // Debug log
-              $('.branch').val([branchData]);
-            }
-          }
-          
-          // Reinitialize Select2 with proper settings
-          initSelect2('.branch');
-        }, 300); // Increased delay for stability
+        handleBranchField(obj[0]['branch']);
 		
 		let text = obj[0]['permission'];
 		const myArray = text.split("--");
@@ -176,13 +153,8 @@ function reset() {
   $(".id").val("");
   $('input').prop('checked', false);
   
-  // Clean up all Select2 instances using utility function
-  cleanSelect2('.select2');
-  
-  // Reinitialize all Select2 elements
-  setTimeout(function() {
-    initSelect2('.select2');
-  }, 100);
+  // Handle branch field reset specifically
+  handleBranchField(null);
 }
 
 // Message display function
@@ -243,57 +215,57 @@ function debugBranchData(id) {
   });
 }
 
-// Utility function to completely clean Select2
+// Utility function to properly clean Select2 without breaking functionality
 function cleanSelect2(selector) {
   $(selector).each(function() {
-    // Destroy Select2 if it exists
+    // Only destroy if it's actually a Select2 instance
     if ($(this).hasClass('select2-hidden-accessible')) {
       $(this).select2('destroy');
     }
     
-    // Remove any orphaned Select2 containers
+    // Remove orphaned containers, but be careful not to remove active ones
     $(this).siblings('.select2-container').remove();
     
-    // Show the original select element
+    // Ensure the original select is visible
     $(this).show();
-    
-    // Clear any previous values
-    $(this).val(null);
   });
 }
 
 // Utility function to reinitialize Select2 properly
 function initSelect2(selector, options = {}) {
-  cleanSelect2(selector);
-  
   const defaultOptions = {
     width: '100%',
     minimumResultsForSearch: 0,
     theme: 'bootstrap4',
-    dropdownParent: $(selector).closest('.modal').length ? $(selector).closest('.modal') : $(document.body)
+    allowClear: true
   };
   
   const finalOptions = $.extend({}, defaultOptions, options);
   
-  $(selector).select2(finalOptions);
+  $(selector).each(function() {
+    // Only initialize if not already initialized
+    if (!$(this).hasClass('select2-hidden-accessible')) {
+      // Set dropdownParent for modals
+      if ($(this).closest('.modal').length > 0) {
+        finalOptions.dropdownParent = $(this).closest('.modal');
+      }
+      
+      $(this).select2(finalOptions);
+    }
+  });
 }
 
-// Handle modal events to prevent Select2 duplication
-$('#edit_data').on('show.bs.modal', function (e) {
-  // Clean up any existing Select2 instances when modal opens
-  cleanSelect2('.select2');
-});
-
+// Handle modal events more carefully
 $('#edit_data').on('shown.bs.modal', function (e) {
-  // Initialize Select2 after modal is fully shown
-  setTimeout(function() {
-    initSelect2('.select2');
-  }, 100);
-});
-
-$('#edit_data').on('hidden.bs.modal', function (e) {
-  // Clean up when modal is hidden
-  cleanSelect2('.select2');
+  // Initialize branch field specifically
+  handleBranchField(null);
+  
+  // Initialize other Select2 fields if any
+  $('.select2:not(.branch)', this).each(function() {
+    if (!$(this).hasClass('select2-hidden-accessible')) {
+      initSelect2($(this));
+    }
+  });
 });
 
 // Additional cleanup to remove any orphaned Select2 elements
@@ -322,3 +294,35 @@ function removeOrphanedSelect2Elements() {
 
 // Call cleanup function periodically to prevent buildup
 setInterval(removeOrphanedSelect2Elements, 5000);
+
+// Function to handle branch field specifically
+function handleBranchField(branchData = null) {
+  const $branchField = $('.branch');
+  
+  // Ensure the field is visible and properly initialized
+  if (!$branchField.hasClass('select2-hidden-accessible')) {
+    $branchField.select2({
+      width: '100%',
+      minimumResultsForSearch: 0,
+      theme: 'bootstrap4',
+      allowClear: true,
+      placeholder: 'Select branches',
+      dropdownParent: $branchField.closest('.modal').length ? $branchField.closest('.modal') : $(document.body)
+    });
+  }
+  
+  // Set the branch data if provided
+  if (branchData) {
+    if (branchData.includes('--')) {
+      // Multiple branches
+      const branchArray = branchData.split("--").filter(item => item !== "" && item.trim() !== "");
+      $branchField.val(branchArray).trigger('change');
+    } else {
+      // Single branch
+      $branchField.val([branchData]).trigger('change');
+    }
+  } else {
+    // Clear selection
+    $branchField.val(null).trigger('change');
+  }
+}
