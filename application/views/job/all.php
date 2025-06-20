@@ -231,16 +231,20 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="<?=base_url('job/add_issue')?>" method="post" id="submit_issue" enctype="multipart/form-data">
+      <form action="<?=base_url('job/add_issue') ?>" method="post" id="submit_issue" enctype="multipart/form-data">
         <div class="modal-body">
-          <!-- ...form fields as before... -->
+          <input type="hidden" name="job" value="" class="job_id">
+          <div class="form-group">
+            <label>Add Issue</label>
+            <textarea name="issue_list" class="form-control issue_list" required></textarea>
+          </div>
+          <div class="issue_list"></div>
         </div>
         <div class="modal-footer justify-content-between">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Save changes</button>
         </div>
       </form>
-      <div class="issue_list"></div>
     </div>
   </div>
 </div>
