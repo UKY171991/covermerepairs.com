@@ -79,4 +79,21 @@ class Branch_model extends CI_Model {
 		$query = $this->db->get('user');
 		return $query->result();
 	}
+
+	public function get_branch()
+	{
+		return $this->all_branch();
+	}
+
+	public function get_branch_by_ids($ids)
+    {
+        if (empty($ids)) {
+            return array();
+        }
+        $this->db->select('id, name');
+        $this->db->from('user');
+        $this->db->where_in('id', $ids);
+        $query = $this->db->get();
+        return $query->result();
+    }
 }
