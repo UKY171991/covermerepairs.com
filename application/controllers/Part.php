@@ -148,11 +148,12 @@ class Part extends CI_Controller {
 				exit();
 			}
 		}
-	}
-	public function add_data(){
+	}	public function add_data(){
 		if($this->input->post()){
 
-			//print_r($_POST); exit();
+			// Debug: log the received data
+			// error_log('POST data: ' . print_r($_POST, true));
+			
 			$prem['branch'] = $this->input->post('branch');
 			$prem['brand'] = $this->input->post('brand');
 			$prem['model'] = $this->input->post('model');
@@ -162,20 +163,37 @@ class Part extends CI_Controller {
 			$prem['stock'] = $this->input->post('stock');
 			$prem['added_by'] = $this->session->userdata('user_id');
 			$id = $this->input->post('id');
+			
+			// Basic validation
+			if(empty($prem['branch']) || empty($prem['brand']) || empty($prem['model']) || empty($prem['type'])) {
+				echo json_encode(['status' => 'error', 'message' => 'Please fill all required fields.']);
+				exit();
+			}
+			
 			if($id !=''){
+				// Update existing part
 				$result = $this->part->update('part',$prem,$id);
-				if($result) {
+				
+				if($result !== false) {
 					echo json_encode(['status' => 'success', 'message' => 'Part updated successfully.']);
 				} else {
-					echo json_encode(['status' => 'error', 'message' => 'Failed to update part.']);
+					// Get database error if any
+					$db_error = $this->db->error();
+					$error_message = !empty($db_error['message']) ? $db_error['message'] : 'Failed to update part.';
+					echo json_encode(['status' => 'error', 'message' => $error_message]);
 				}
 				exit();
 			}else{
+				// Insert new part
 				$result = $this->part->insert('part',$prem);
+				
 				if($result) {
 					echo json_encode(['status' => 'success', 'message' => 'Part added successfully.']);
 				} else {
-					echo json_encode(['status' => 'error', 'message' => 'Failed to add part.']);
+					// Get database error if any
+					$db_error = $this->db->error();
+					$error_message = !empty($db_error['message']) ? $db_error['message'] : 'Failed to add part.';
+					echo json_encode(['status' => 'error', 'message' => $error_message]);
 				}
 				exit();
 			}

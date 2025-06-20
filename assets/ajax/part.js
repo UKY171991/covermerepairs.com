@@ -131,12 +131,16 @@ $("#submit_data").on('submit',function(e){
   var action = $(this).attr('action');
   var data = $(this).serialize();
 
+  // Debug: log the form data being sent
+  console.log('Form data being sent:', data);
+
   $.ajax({
     url:action,
     type:'post',
     data:data,
     dataType: 'json',
     success:function(res){
+      console.log('Server response:', res);
       if(res.status === 'success'){
         all_data();
         toastr.success(res.message);
@@ -148,7 +152,8 @@ $("#submit_data").on('submit',function(e){
       }
       $btn.prop('disabled', false);
     },
-    error: function() {
+    error: function(xhr, status, error) {
+      console.error('AJAX Error:', xhr.responseText);
       toastr.error('Server error occurred. Please try again.');
       $btn.prop('disabled', false);
     }
