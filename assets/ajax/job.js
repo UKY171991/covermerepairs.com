@@ -51,7 +51,11 @@ $("#submit_data").on('submit',function(e){
       data:data,
       success:function(res){
         all_data();
-        alert(res);
+        $(document).Toasts('create', {
+          class: 'bg-success',
+          title: 'Success',
+          body: res
+        });
         $("#submit_data")[0].reset();
         $(".id").val('');
         $btn.prop('disabled', false);
@@ -74,8 +78,11 @@ function del(id){
       data:{'id':id},
       success:function(res){
         all_data();
-        alert(res);
-        
+        $(document).Toasts('create', {
+          class: 'bg-success',
+          title: 'Deleted',
+          body: res
+        });
       }
     });
   }
@@ -124,7 +131,11 @@ function edit(id){
         },
       error: function(jqXHR, textStatus, errorThrown) {
         console.error("AJAX error in edit function:", textStatus, errorThrown);
-        alert("An error occurred while fetching job details.");
+        $(document).Toasts('create', {
+          class: 'bg-danger',
+          title: 'Error',
+          body: 'An error occurred while fetching job details.'
+        });
       }
     }); 
 }
@@ -179,10 +190,13 @@ $("#submit_issue").on('submit',function(e){
       type:'post',
       data:data,
       success:function(res){
-        alert(res);
+        $(document).Toasts('create', {
+          class: 'bg-success',
+          title: 'Success',
+          body: res
+        });
         $("#submit_issue")[0].reset();
         found_issue(job);
-        
       }
     });
 });
@@ -217,7 +231,11 @@ $("#assign_data").on('submit',function(e){
       type:'post',
       data:data,
       success:function(res){
-        alert(res);
+        $(document).Toasts('create', {
+          class: 'bg-success',
+          title: 'Success',
+          body: res
+        });
         $("#assign_data")[0].reset();
         all_data();  
       }
@@ -242,7 +260,11 @@ $("#status_data").on('submit',function(e){
       type:'post',
       data:data,
       success:function(res){
-        alert(res);
+        $(document).Toasts('create', {
+          class: 'bg-success',
+          title: 'Success',
+          body: res
+        });
         $("#status_data")[0].reset();
         all_data();  
       }
@@ -267,7 +289,11 @@ $("#couriere").on('submit',function(e){
       type:'post',
       data:data,
       success:function(res){
-        alert(res);
+        $(document).Toasts('create', {
+          class: 'bg-success',
+          title: 'Success',
+          body: res
+        });
         $("#couriere")[0].reset();
         found_couriereStatus(job); 
       }
