@@ -91,8 +91,8 @@ if (isset($all_branches) && isset($jobs[0]->branch)) {
         </tr>
         <tr>
           <td>Security Code: <?= $jobs[0]->security_code ?? '' ?></td>
+          <td>Exceeds: <?= $jobs[0]->exceeds ?? '' ?></td>
           <td>Order ID/Auction: <?= $jobs[0]->order_id ?? '' ?></td>
-          <td>Notify Exceeds: $<?= $jobs[0]->notify_exceeds ?? '500' ?></td>
         </tr>
         <tr>
           <td>Date: <?= date('d/m/Y') ?></td>

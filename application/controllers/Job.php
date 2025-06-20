@@ -72,6 +72,8 @@ class Job extends CI_Controller {
                 'inspection_fee_paid' => $this->input->post('inspection_fee_paid') ? 1 : 0,
                 'loan_device_details' => $this->input->post('loan_device_details'),
                 'imei_no' => $this->input->post('imei_no'),
+                'exceeds' => $this->input->post('exceeds'),
+                'security_code' => $this->input->post('security_code'),
             );
 
             $id = $this->input->post('id');
