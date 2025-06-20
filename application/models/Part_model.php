@@ -44,12 +44,13 @@ class Part_model extends CI_Model {
 
 	public function single_data_join($where)
 	{
-		$this->db->select('part.*, brand.name as brand_name, model.name as model_name, part_type.name as part_type_name, user.name as user_name');
+		$this->db->select('part.*, brand.name as brand_name, model.name as model_name, part_type.name as part_type_name, user.name as user_name, branch.name as branch_name');
 		$this->db->from('part');
 		$this->db->join('brand', 'brand.id = part.brand', 'left');
 		$this->db->join('model', 'model.id = part.model', 'left');
 		$this->db->join('part_type', 'part_type.id = part.type', 'left');
 		$this->db->join('user', 'user.id = part.added_by', 'left');
+		$this->db->join('user as branch', 'branch.id = part.branch', 'left');
 		$this->db->where($where);
 		$query = $this->db->get();
 		return $query->row();
