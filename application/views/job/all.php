@@ -117,7 +117,7 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label>Email</label>
-                <input type="text" name="email" class="form-control email" required>
+                <input type="text" name="email" class="form-control email">
               </div>
             </div>
             <div class="col-md-6">
@@ -135,13 +135,13 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label>Security Code</label>
-                <input type="text" name="security_code" class="form-control security_code">
+                <input type="text" name="security_code" class="form-control security_code" required>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                   <label>Brand</label>
-                  <select name="brand" class="form-control brand" required>
+                  <select name="brand" class="form-control brand">
                       <option value="">Select Brand</option>
                       <?php foreach($brand as $brands){ ?>
                         <option value="<?=$brands->id?>"><?=$brands->name?></option>
@@ -153,7 +153,7 @@
               <div class="form-group">
                 <label>Model</label>
                 <div class="d-flex align-items-center">
-                  <select name="model_no" class="form-control model_no" required style="flex:1;">
+                  <select name="model_no" class="form-control model_no" style="flex:1;">
                     <option value="">Select Model</option>
                   </select>
                   <a href="<?=base_url('part/model')?>" target="_blank" class="btn btn-outline-primary ml-2" title="Add Model" style="height:38px;">
@@ -165,7 +165,7 @@
             <div class="col-md-6">
               <div class="form-group">
                   <label>Assigned to</label>
-                  <select name="assigned_to" class="form-control assigned_to" required>
+                  <select name="assigned_to" class="form-control assigned_to">
                       <option value="">Select Technician</option>
                       <?php foreach($technicians as $technician){ ?>
                         <option value="<?=$technician->id?>"><?=$technician->name?></option>
@@ -176,19 +176,19 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label>From</label>
-                <input type="date" name="date_from" class="form-control date_from" required>
+                <input type="date" name="date_from" class="form-control date_from">
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label>To</label>
-                <input type="date" name="date_to" class="form-control date_to" required>
+                <input type="date" name="date_to" class="form-control date_to">
               </div>
             </div>
             <div class="col-md-12">
               <div class="form-group">
                 <label>Issue</label>
-                <textarea type="text" name="issue" class="form-control issue" required></textarea>
+                <textarea type="text" name="issue" class="form-control issue"></textarea>
               </div>
             </div>
             <div class="col-md-6">
