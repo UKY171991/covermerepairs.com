@@ -141,7 +141,7 @@
               </div>
           
          
-              <?php if($this->session->userdata('user_type') =='1'){ ?>
+              <?php if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){ ?>
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Branch</label>

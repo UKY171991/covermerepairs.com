@@ -47,7 +47,7 @@ class Technicians extends CI_Controller {
 			$prem['added_by'] = $this->session->userdata('user_id');
 			
 			// Handle branch assignment based on user type
-			if($this->session->userdata('user_id')== 1 ){
+			if($this->session->userdata('user_type')== 1 OR $this->session->userdata('user_type')== 4){
 				$branch_data = $this->input->post('branch');
 				if(is_array($branch_data)) {
 					$prem['branch'] = implode('--', $branch_data); 

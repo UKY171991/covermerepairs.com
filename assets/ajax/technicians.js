@@ -3,8 +3,17 @@ $(document).ready(function() {
  });
 
 $(document).ready(function() {
-    // Initialize branch field specifically
-    handleBranchField(null);
+    // Debug: Check if branch field exists
+    console.log('Branch field found:', $('.branch').length > 0);
+    console.log('Branch field element:', $('.branch'));
+    
+    // Initialize branch field specifically (only if it exists)
+    if ($('.branch').length > 0) {
+      console.log('Initializing branch field...');
+      handleBranchField(null);
+    } else {
+      console.log('Branch field not found - user may not have permission');
+    }
     
     // Initialize other Select2 fields
     $('.select2:not(.branch)').each(function() {
@@ -257,8 +266,16 @@ function initSelect2(selector, options = {}) {
 
 // Handle modal events more carefully
 $('#edit_data').on('shown.bs.modal', function (e) {
-  // Initialize branch field specifically
-  handleBranchField(null);
+  console.log('Modal shown event triggered');
+  console.log('Branch field exists in modal:', $('.branch', this).length > 0);
+  
+  // Initialize branch field specifically (only if it exists)
+  if ($('.branch').length > 0) {
+    console.log('Initializing branch field in modal...');
+    handleBranchField(null);
+  } else {
+    console.log('No branch field found in modal');
+  }
   
   // Initialize other Select2 fields if any
   $('.select2:not(.branch)', this).each(function() {
@@ -295,9 +312,15 @@ function removeOrphanedSelect2Elements() {
 // Call cleanup function periodically to prevent buildup
 setInterval(removeOrphanedSelect2Elements, 5000);
 
-// Function to handle branch field specifically
+// Function to handle branch field specifically (only if it exists)
 function handleBranchField(branchData = null) {
   const $branchField = $('.branch');
+  
+  // Check if branch field exists (only for admin users)
+  if ($branchField.length === 0) {
+    console.log('Branch field not found - user may not have permission to manage branches');
+    return;
+  }
   
   // Ensure the field is visible and properly initialized
   if (!$branchField.hasClass('select2-hidden-accessible')) {
