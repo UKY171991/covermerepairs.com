@@ -373,21 +373,45 @@ class Part extends CI_Controller {
    
     echo json_encode($output);
 
-	}
-	public function all_model_ajax(){
+	}	public function all_model_ajax(){
+		// Get DataTables parameters
+		$draw = intval($this->input->post('draw'));
+		$start = intval($this->input->post('start'));
+		$length = intval($this->input->post('length'));
+		$search_value = $this->input->post('search')['value'];
+		
+		// Column search parameters
 		$prem = array();
-		if($_POST['columns'][1]['search']['value'] !=''){
-			$prem['name'] = $_POST['columns'][1]['search']['value'];
+		if($this->input->post('columns')[1]['search']['value'] !=''){
+			$prem['name'] = $this->input->post('columns')[1]['search']['value'];
+		}
+		if($this->input->post('columns')[2]['search']['value'] !=''){
+			$prem['brand_name'] = $this->input->post('columns')[2]['search']['value'];
+		}
+		if($this->input->post('columns')[3]['search']['value'] !=''){
+			$prem['user_name'] = $this->input->post('columns')[3]['search']['value'];
+		}
+		
+		// Global search
+		if(!empty($search_value)){
+			$prem['global_search'] = $search_value;
 		}
 
-		if(count($prem) !='0'){
-			$all_data = $this->part->all_data('model','DESC',$prem);
+		// Get total records count (without filtering)
+		$total_records = $this->part->count_all_models();
+		
+		// Get filtered records count
+		$filtered_records = $this->part->count_filtered_models($prem);
+		
+		// Get paginated data
+		if(count($prem) > 0){
+			$all_data = $this->part->get_paginated_models($prem, $start, $length);
 		}else{
-			$all_data = $this->part->all_data('model','DESC');
+			$all_data = $this->part->get_paginated_models(array(), $start, $length);
 		}
-		//$all_data = $this->part->all_data('model','DESC');
-		$i =1;
+		
 		$data = array();
+		$i = $start + 1;
 		foreach($all_data as $key => $all_datas){
 			if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){
 				$action = "<button data-toggle='modal' data-target='#edit_data' onclick='return edit(".$all_datas->id.")' class='btn btn-info btn-xs m-1'><i class='fas fa-pencil-alt'></i></button>";
@@ -430,23 +454,22 @@ class Part extends CI_Controller {
 			}
 
 			$row = array();
-			$row[] =  $i++;
-			$row[] =  $all_datas->name;
-			$row[] =  $brand_id;
-			$row[] =  $username;
-			$row[] =  $action;
+			$row[] = $i++;
+			$row[] = $all_datas->name;
+			$row[] = $brand_id;
+			$row[] = $username;
+			$row[] = $action;
 			$data[] = $row;
 		}
 
 		$output = array(
-                   "draw" 				=> intval($_POST['draw']),
-                    "recordsTotal" 		=> $this->part->count_all('model','DESC'),
-                    "recordsFiltered" => $this->part->count_all('model','DESC'),
-                    "data" 						=> $data,
-            	);
+			"draw" => $draw,
+			"recordsTotal" => $total_records,
+			"recordsFiltered" => $filtered_records,
+			"data" => $data,
+		);
    
-    echo json_encode($output);
-
+		echo json_encode($output);
 	}
 
 	public function all_data_ajax(){

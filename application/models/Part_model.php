@@ -117,4 +117,71 @@ class Part_model extends CI_Model {
 		}
 		return $this->db->count_all_results('model');
 	}
+
+	// New methods for proper pagination
+	public function count_all_models() {
+		return $this->db->count_all('model');
+	}
+
+	public function count_filtered_models($search = []) {
+		$this->db->select('*');
+		$this->db->from('model');
+		
+		if (!empty($search['name'])) {
+			$this->db->like('name', $search['name']);
+		}
+		if (!empty($search['brand_name'])) {
+			$this->db->join('brand', 'brand.id = model.brand_id');
+			$this->db->like('brand.name', $search['brand_name']);
+		}
+		if (!empty($search['user_name'])) {
+			$this->db->join('user', 'user.id = model.added_by');
+			$this->db->like('user.name', $search['user_name']);
+		}
+		if (!empty($search['global_search'])) {
+			$this->db->group_start();
+			$this->db->like('model.name', $search['global_search']);
+			$this->db->or_like('brand.name', $search['global_search']);
+			$this->db->or_like('user.name', $search['global_search']);
+			$this->db->group_end();
+		}
+		
+		return $this->db->count_all_results();
+	}
+
+	public function get_paginated_models($search = [], $start = 0, $length = 10) {
+		$this->db->select('model.*');
+		$this->db->from('model');
+		
+		if (!empty($search['name'])) {
+			$this->db->like('model.name', $search['name']);
+		}
+		if (!empty($search['brand_name'])) {
+			$this->db->join('brand', 'brand.id = model.brand_id');
+			$this->db->like('brand.name', $search['brand_name']);
+		}
+		if (!empty($search['user_name'])) {
+			$this->db->join('user', 'user.id = model.added_by');
+			$this->db->like('user.name', $search['user_name']);
+		}
+		if (!empty($search['global_search'])) {
+			$this->db->group_start();
+			$this->db->like('model.name', $search['global_search']);
+			if (!isset($search['brand_name'])) {
+				$this->db->join('brand', 'brand.id = model.brand_id', 'left');
+			}
+			$this->db->or_like('brand.name', $search['global_search']);
+			if (!isset($search['user_name'])) {
+				$this->db->join('user', 'user.id = model.added_by', 'left');
+			}
+			$this->db->or_like('user.name', $search['global_search']);
+			$this->db->group_end();
+		}
+		
+		$this->db->order_by('model.id', 'DESC');
+		$this->db->limit($length, $start);
+		
+		$query = $this->db->get();
+		return $query->result();
+	}
 }
