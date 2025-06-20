@@ -36,23 +36,9 @@ $(document).ready(function() {
                 { data: 1 },
                 { data: 2 },
                 { data: 3 },
-                { data: 4 },
-                // Add more columns as needed
+                { data: 4 }
             ]
         });
-        //  Add individual column search inputs
-    $('#all_data thead tr').clone(true).appendTo('#all_data thead');
-    $('#all_data thead tr:eq(1) th').each(function(i) {
-        var title = $(this).text();
-        $(this).html('<input type="text" placeholder="Search ' + title + '" />');
-
-        $('input', this).on('keyup change', function() {
-          console.log(this.value);
-            if (dataTable.column(i).search() !== this.value) {
-                dataTable.column(i).search(this.value).draw();
-            }
-        });
-    });
     
     }
 
