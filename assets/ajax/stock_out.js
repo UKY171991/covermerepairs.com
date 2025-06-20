@@ -17,7 +17,25 @@ $(document).ready(function() {
                     $('#stockOutModal').modal('hide');
                     $('#stockOutForm')[0].reset();
                     reloadStockOutTable();
+                    $(document).Toasts('create', {
+                        class: 'bg-success',
+                        title: 'Success',
+                        body: res.message || 'Stock Out saved successfully.'
+                    });
+                } else {
+                    $(document).Toasts('create', {
+                        class: 'bg-danger',
+                        title: 'Error',
+                        body: res.message || 'Failed to save Stock Out.'
+                    });
                 }
+            },
+            error: function(xhr) {
+                $(document).Toasts('create', {
+                    class: 'bg-danger',
+                    title: 'Error',
+                    body: 'An error occurred while saving Stock Out.'
+                });
             }
         });
     });
@@ -82,8 +100,26 @@ function deleteStockOut(id, btn) {
             success: function(res) {
                 if(res.status === 'success') {
                     reloadStockOutTable();
+                    $(document).Toasts('create', {
+                        class: 'bg-success',
+                        title: 'Deleted',
+                        body: res.message || 'Stock Out deleted successfully.'
+                    });
+                } else {
+                    $(document).Toasts('create', {
+                        class: 'bg-danger',
+                        title: 'Error',
+                        body: res.message || 'Failed to delete Stock Out.'
+                    });
                 }
+            },
+            error: function(xhr) {
+                $(document).Toasts('create', {
+                    class: 'bg-danger',
+                    title: 'Error',
+                    body: 'An error occurred while deleting Stock Out.'
+                });
             }
         });
     }
-} 
+}

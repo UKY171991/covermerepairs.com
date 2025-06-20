@@ -17,7 +17,25 @@ $(document).ready(function() {
                     $('#stockInModal').modal('hide');
                     $('#stockInForm')[0].reset();
                     reloadStockInTable();
+                    $(document).Toasts('create', {
+                        class: 'bg-success',
+                        title: 'Success',
+                        body: res.message || 'Stock In saved successfully.'
+                    });
+                } else {
+                    $(document).Toasts('create', {
+                        class: 'bg-danger',
+                        title: 'Error',
+                        body: res.message || 'Failed to save Stock In.'
+                    });
                 }
+            },
+            error: function(xhr) {
+                $(document).Toasts('create', {
+                    class: 'bg-danger',
+                    title: 'Error',
+                    body: 'An error occurred while saving Stock In.'
+                });
             }
         });
     });
@@ -82,8 +100,26 @@ function deleteStockIn(id, btn) {
             success: function(res) {
                 if(res.status === 'success') {
                     reloadStockInTable();
+                    $(document).Toasts('create', {
+                        class: 'bg-success',
+                        title: 'Deleted',
+                        body: res.message || 'Stock In deleted successfully.'
+                    });
+                } else {
+                    $(document).Toasts('create', {
+                        class: 'bg-danger',
+                        title: 'Error',
+                        body: res.message || 'Failed to delete Stock In.'
+                    });
                 }
+            },
+            error: function(xhr) {
+                $(document).Toasts('create', {
+                    class: 'bg-danger',
+                    title: 'Error',
+                    body: 'An error occurred while deleting Stock In.'
+                });
             }
         });
     }
-} 
+}
