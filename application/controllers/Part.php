@@ -538,8 +538,8 @@ class Part extends CI_Controller {
 		if($this->input->post('columns')[3]['search']['value'] !=''){
 			$prem['part_type_name'] = $this->input->post('columns')[3]['search']['value'];
 		}
-		if($this->input->post('columns')[6]['search']['value'] !=''){
-			$prem['user_name'] = $this->input->post('columns')[6]['search']['value'];
+		if($this->input->post('columns')[7]['search']['value'] !=''){
+			$prem['user_name'] = $this->input->post('columns')[7]['search']['value'];
 		}
 		
 		// Global search
@@ -586,6 +586,7 @@ class Part extends CI_Controller {
 			$row[] = $all_datas->part_type_name;
 			$row[] = $all_datas->price_min;
 			$row[] = $all_datas->price_max;
+			$row[] = $all_datas->stock;
 			$row[] = $username;
 			$row[] = $action;
 			$data[] = $row;
