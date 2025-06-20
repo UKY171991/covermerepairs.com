@@ -132,7 +132,6 @@ class Part extends CI_Controller {
 			}
 		}
 	}
-
 	public function add_model(){
 		if($this->input->post()){
 			$prem['name'] = $this->input->post('name');
@@ -142,11 +141,11 @@ class Part extends CI_Controller {
 			$id = $this->input->post('id');
 			if($id !=''){
 				$last_id = $this->part->update('model',$prem,$id);
-				echo "Brand name updated succefully.";
+				echo json_encode(['status' => 'success', 'message' => 'Model updated successfully.']);
 				exit();
 			}else{
 				$last_id = $this->part->insert('model',$prem);
-				echo "Brand name added succefully.";
+				echo json_encode(['status' => 'success', 'message' => 'Model added successfully.']);
 				exit();
 			}
 		}
@@ -375,7 +374,6 @@ class Part extends CI_Controller {
     echo json_encode($output);
 
 	}
-
 	public function all_model_ajax(){
 		$prem = array();
 		if($_POST['columns'][1]['search']['value'] !=''){
@@ -392,19 +390,19 @@ class Part extends CI_Controller {
 		$data = array();
 		foreach($all_data as $key => $all_datas){
 			if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){
-				$action = "<button data-toggle='modal' data-target='#edit_data' onclick='return edit(".$all_datas->id.")' class='btn btn-info btn-xs'>Edit</button>";
-				$action .= "<button href='' onclick='return del(".$all_datas->id.")' class='btn btn-danger btn-xs'>Delete</button>"; 
+				$action = "<button data-toggle='modal' data-target='#edit_data' onclick='return edit(".$all_datas->id.")' class='btn btn-info btn-xs m-1'><i class='fas fa-pencil-alt'></i></button>";
+				$action .= "<button onclick='return del(".$all_datas->id.")' class='btn btn-danger btn-xs m-1'><i class='fa fa-trash'></i></button>"; 
 			}elseif($this->session->userdata('user_type') =='3'){
 				if($all_datas->added_by == $this->session->userdata('user_id')){
-					$action = "<button data-toggle='modal' data-target='#edit_data' onclick='return edit(".$all_datas->id.")' class='btn btn-info btn-xs'>Edit</button>";
-					$action .= "<button href='' onclick='return del(".$all_datas->id.")' class='btn btn-danger btn-xs'>Delete</button>"; 
+					$action = "<button data-toggle='modal' data-target='#edit_data' onclick='return edit(".$all_datas->id.")' class='btn btn-info btn-xs m-1'><i class='fas fa-pencil-alt'></i></button>";
+					$action .= "<button onclick='return del(".$all_datas->id.")' class='btn btn-danger btn-xs m-1'><i class='fa fa-trash'></i></button>"; 
 				}else{
-					$action = "<button  class='btn btn-info btn-xs' disabled>Edit</button>";
-					$action .= "<button class='btn btn-danger btn-xs' disabled>Delete</button>";
+					$action = "<button class='btn btn-info btn-xs m-1' disabled><i class='fas fa-pencil-alt'></i></button>";
+					$action .= "<button class='btn btn-danger btn-xs m-1' disabled><i class='fa fa-trash'></i></button>";
 			}
 			}else{
-				$action = "<button  class='btn btn-info btn-xs' disabled>Edit</button>";
-				$action .= "<button class='btn btn-danger btn-xs' disabled>Delete</button>";
+				$action = "<button class='btn btn-info btn-xs m-1' disabled><i class='fas fa-pencil-alt'></i></button>";
+				$action .= "<button class='btn btn-danger btn-xs m-1' disabled><i class='fa fa-trash'></i></button>";
 			}
 
 			$user = $this->part->single_data('user',$all_datas->added_by);
@@ -567,11 +565,10 @@ class Part extends CI_Controller {
 		$all_data = $this->part->single_data('brand',$id);
 		echo json_encode($all_data);
 	}
-
 	public function delete_model(){
 		$id = $this->input->post('id');
 		$this->part->delete('model',$id);
-		echo "Part deleted succefully.";
+		echo json_encode(['status' => 'success', 'message' => 'Model deleted successfully.']);
 		exit();
 	}
 	public function edit_model(){
