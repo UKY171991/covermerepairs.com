@@ -37,6 +37,9 @@ $(document).ready(function() {
           info: true,
           autoWidth: false,
           responsive: true,
+          stateSave: true,
+          pagingType: "full_numbers",
+          dom: 'lfrtip',
           language: {
             paginate: {
               first: "First",
@@ -45,9 +48,13 @@ $(document).ready(function() {
               previous: "Previous"
             },
             info: "Showing _START_ to _END_ of _TOTAL_ entries",
+            infoEmpty: "Showing 0 to 0 of 0 entries",
+            infoFiltered: "(filtered from _MAX_ total entries)",
             lengthMenu: "Show _MENU_ entries",
             search: "Search:",
-            processing: "Loading..."
+            processing: "Loading...",
+            zeroRecords: "No matching records found",
+            emptyTable: "No data available in table"
           },
             ajax: {
                 url: base_url+'part/all_model_ajax',

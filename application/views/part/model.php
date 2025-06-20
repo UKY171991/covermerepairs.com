@@ -1,5 +1,59 @@
 <?php $ajax = 'model'; ?>
 
+<!-- Custom CSS for DataTable Pagination -->
+<style>
+/* Enhanced DataTable Pagination Styling */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: 1.5em;
+    padding: 0.5em 1em;
+    margin-left: 2px;
+    text-align: center;
+    text-decoration: none !important;
+    cursor: pointer;
+    color: #333 !important;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    color: #333 !important;
+    border: 1px solid #999;
+    background: #f5f5f5;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    color: #fff !important;
+    border: 1px solid #007bff;
+    background: #007bff;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+    color: #999 !important;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: default;
+}
+
+.dataTables_wrapper .dataTables_info {
+    padding-top: 0.755em;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    width: 75px;
+    display: inline-block;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 4px 6px;
+    margin-left: 0.5em;
+}
+</style>
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
