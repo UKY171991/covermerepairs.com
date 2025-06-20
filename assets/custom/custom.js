@@ -1,4 +1,4 @@
- $(function () {
+$(function () {
     $("#example1").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
@@ -94,3 +94,14 @@ $('.toastsDefaultDanger').click(function() {
 //             });
 //     }
 // });
+
+$('#edit_data').on('shown.bs.modal', function () {
+  // Re-initialize Select2 for all select fields inside the modal
+  $('.select2').select2({
+    dropdownParent: $('#edit_data')
+  });
+  $('.select2bs4').select2({
+    theme: 'bootstrap4',
+    dropdownParent: $('#edit_data')
+  });
+});
