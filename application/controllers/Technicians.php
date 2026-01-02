@@ -141,14 +141,21 @@ class Technicians extends CI_Controller {
 		foreach($all_data as $key => $all_datas){
 			$row = array(); 
 
+			// Determine status based on user data
+			$status = 'Active';
+			if(isset($all_datas->status) && $all_datas->status == '0') {
+				$status = 'Inactive';
+			} elseif(isset($all_datas->status) && $all_datas->status == '2') {
+				$status = 'Suspended';
+			}
 
 			if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){
-				$action = "<button data-id='".$all_datas->id."' class='btn btn-primary btn-xs m-1 view_btn'><i class='fa fa-eye' aria-hidden='true'></i></button>";
-				$action .= "<button data-id='".$all_datas->id."' class='btn btn-info btn-xs m-1 edit_btn'><i class='fas fa-pencil-alt'></i></button>";
-				$action .= "<button data-id='".$all_datas->id."' class='btn btn-danger btn-xs m-1 del_btn'><i class='fa fa-trash' aria-hidden='true'></i></button>";
+				$action = "<button data-id='".$all_datas->id."' class='btn btn-view btn-sm view_btn' data-toggle='tooltip' title='View Details'><i class='fas fa-eye'></i></button>";
+				$action .= "<button data-id='".$all_datas->id."' class='btn btn-edit btn-sm edit_btn' data-toggle='tooltip' title='Edit Technician'><i class='fas fa-edit'></i></button>";
+				$action .= "<button data-id='".$all_datas->id."' class='btn btn-delete btn-sm del_btn' data-toggle='tooltip' title='Delete Technician'><i class='fas fa-trash'></i></button>";
 			}else{
-				$action = "<button  class='btn btn-info btn-xs m-1' disabled><i class='fas fa-pencil-alt'></i></button>";
-				$action .= "<button class='btn btn-danger btn-xs m-1' disabled><i class='fa fa-trash' aria-hidden='true'></i></button>";
+				$action = "<button class='btn btn-edit btn-sm' disabled><i class='fas fa-edit'></i></button>";
+				$action .= "<button class='btn btn-delete btn-sm' disabled><i class='fas fa-trash'></i></button>";
 			}
 
 			$wher = array('id'=>$all_datas->type);
@@ -164,7 +171,7 @@ class Technicians extends CI_Controller {
 			$row[] =  $all_datas->username;
 			$row[] =  $all_datas->email;
 			$row[] =  $all_datas->phone;
-			//$row[] =  $depname;
+			$row[] =  $status;
 			$row[] =  $action;
 			$data[] = $row;
 		}
