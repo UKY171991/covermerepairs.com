@@ -141,7 +141,7 @@ class Job extends CI_Controller {
             if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){
                 $action .= "<a href='".base_url('job/print/'.$all_datas->id)."' target='_blank' class='btn btn-primary btn-xs m-1'><i class='fa fa-print' aria-hidden='true'></i></a>";
                 //$action .= "<a href='#' onclick='return print(".$all_datas->id.")' class='btn btn-primary btn-xs m-1'><i class='fa fa-print' aria-hidden='true'></i></a>";
-                //$action .= "<button data-toggle='modal' data-target='#view_data' onclick='return view(".$all_datas->id.")' class='btn btn-success btn-xs m-1'><i class='fa fa-eye' aria-hidden='true'></i></button>";
+                $action .= "<button data-toggle='modal' data-target='#view_data' onclick='return view(".$all_datas->id.")' class='btn btn-success btn-xs m-1'><i class='fa fa-eye' aria-hidden='true'></i></button>";
                 $action .= "<button data-toggle='modal' data-target='#edit_data' onclick='return edit(".$all_datas->id.")' class='btn btn-info btn-xs m-1'><i class='fas fa-pencil-alt'></i></button>";
                 $action .= "<button href='' onclick='return del(".$all_datas->id.")' class='btn btn-danger btn-xs m-1'><i class='fa fa-trash' aria-hidden='true'></i></button>";
             }else{
