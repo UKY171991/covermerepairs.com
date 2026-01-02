@@ -114,6 +114,27 @@ class Part extends CI_Controller {
 			}
 		}
 	}
+	
+	public function edit_brand(){
+		if($this->input->post('id')){
+			$prem['brand.id'] = $this->input->post('id');
+			$data = $this->part->single_data_join_brand($prem);
+			echo json_encode($data);
+		}
+	}
+	
+	public function delete_brand(){
+		if($this->input->post('id')){
+			$id = $this->input->post('id');
+			$result = $this->part->delete('brand', $id);
+			if($result){
+				echo json_encode(['status' => 'success', 'message' => 'Brand deleted successfully.']);
+			} else {
+				echo json_encode(['status' => 'error', 'message' => 'Failed to delete brand.']);
+			}
+		}
+	}
+	
 	public function add_part_type(){
 		if($this->input->post()){
 			$prem['name'] = $this->input->post('name');

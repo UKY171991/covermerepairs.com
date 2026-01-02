@@ -382,4 +382,18 @@ class Part_model extends CI_Model {
 		return $query->result();
 	}
 
+	public function single_data_join_brand($where)
+	{
+		$this->db->select('brand.*, user.name as user_name, user.type as user_type');
+		$this->db->from('brand');
+		$this->db->join('user', 'user.id = brand.added_by', 'left');
+		
+		if(isset($where['brand.id'])){
+			$this->db->where('brand.id', $where['brand.id']);
+		}
+		
+		$query = $this->db->get();
+		return $query->result();
+	}
+
 }

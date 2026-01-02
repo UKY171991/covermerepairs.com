@@ -1,5 +1,8 @@
 <?php $ajax = 'brand'; ?>
 
+<!-- Brand Management JavaScript -->
+<script src="<?=base_url('assets/ajax/brand.js')?>"></script>
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
