@@ -330,19 +330,35 @@ function viewModel(id) {
         },
         success: function(response) {
             console.log('View response:', response);
-            // You can create a view modal or show details in an alert
-            // For now, showing in a simple modal
             if (response && response.length > 0) {
                 var model = response[0];
-                var details = `
-                    <p><strong>Model Name:</strong> ${model.name || 'N/A'}</p>
-                    <p><strong>Brand ID:</strong> ${model.brand_id || 'N/A'}</p>
-                    <p><strong>Added By:</strong> ${model.user_name || 'N/A'}</p>
-                    <p><strong>Created At:</strong> ${model.created_at || 'N/A'}</p>
-                `;
                 
-                // Create a simple view modal or use existing modal
-                alert('Model Details:\n\n' + details.replace(/<[^>]*>/g, ''));
+                // Populate modal fields
+                $('#view_model_name').text(model.name || 'N/A');
+                $('#view_brand_name').text(model.brand_name || 'N/A');
+                $('#view_user_name').text(model.user_name || 'N/A');
+                
+                // Format user type
+                var userType = '';
+                if (model.user_type == '1') userType = 'Admin';
+                else if (model.user_type == '2') userType = 'Staff';
+                else if (model.user_type == '3') userType = 'Technician';
+                else if (model.user_type == '4') userType = 'Branch';
+                else if (model.user_type == '5') userType = 'Part Controller';
+                else userType = 'Unknown';
+                
+                $('#view_user_type').text(userType);
+                
+                // Format created date
+                var createdAt = model.created_at || 'N/A';
+                if (createdAt && createdAt !== 'N/A') {
+                    var date = new Date(createdAt);
+                    createdAt = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                }
+                $('#view_created_at').text(createdAt);
+                
+                // Show modal
+                $('#view_modal').modal('show');
             } else {
                 showNotification('error', 'Model not found.');
             }
