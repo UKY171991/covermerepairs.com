@@ -1,58 +1,7 @@
 <?php $ajax = 'model'; ?>
 
-<!-- Custom CSS for DataTable Pagination -->
-<style>
-/* Enhanced DataTable Pagination Styling */
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-    box-sizing: border-box;
-    display: inline-block;
-    min-width: 1.5em;
-    padding: 0.5em 1em;
-    margin-left: 2px;
-    text-align: center;
-    text-decoration: none !important;
-    cursor: pointer;
-    color: #333 !important;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background: #fff;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-    color: #333 !important;
-    border: 1px solid #999;
-    background: #f5f5f5;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button.current {
-    color: #fff !important;
-    border: 1px solid #007bff;
-    background: #007bff;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
-    color: #999 !important;
-    border: 1px solid #ddd;
-    background: #fff;
-    cursor: default;
-}
-
-.dataTables_wrapper .dataTables_info {
-    padding-top: 0.755em;
-}
-
-.dataTables_wrapper .dataTables_length select {
-    width: 75px;
-    display: inline-block;
-}
-
-.dataTables_wrapper .dataTables_filter input {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 4px 6px;
-    margin-left: 0.5em;
-}
-</style>
+<!-- External CSS -->
+<link rel="stylesheet" href="<?=base_url('assets/custom/custom.css')?>">
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -150,28 +99,5 @@
     </div>
 </div>
 
-<!-- Model Management JavaScript -->
-<script>
-// Check if jQuery is loaded
-if (typeof jQuery === 'undefined') {
-    console.error('jQuery is not loaded');
-} else {
-    console.log('jQuery is loaded');
-    
-    // Check if DataTables is loaded
-    if (typeof jQuery.fn.DataTable === 'undefined') {
-        console.error('DataTables is not loaded');
-    } else {
-        console.log('DataTables is loaded');
-    }
-}
-
-// Load the model.js script
-$.getScript('<?=base_url('assets/js/model.js')?>')
-    .done(function(script, textStatus) {
-        console.log('Model JavaScript loaded successfully');
-    })
-    .fail(function(jqxhr, settings, exception) {
-        console.error('Error loading model JavaScript:', exception);
-    });
-</script>
+<!-- External JavaScript -->
+<script src="<?=base_url('assets/js/model.js')?>"></script>

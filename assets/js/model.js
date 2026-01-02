@@ -7,17 +7,6 @@
 $(document).ready(function() {
     console.log('Model JavaScript loaded');
     
-    // Check if required dependencies are available
-    if (typeof $ === 'undefined') {
-        console.error('jQuery is not available');
-        return;
-    }
-    
-    if (!$.fn.DataTable) {
-        console.error('DataTables plugin is not available');
-        return;
-    }
-    
     // Check if base_url is available
     var base_url = $(".base_url").val();
     if (!base_url) {
