@@ -328,7 +328,7 @@ $("#assign_data").on('submit',function(e){
 function assign(id) {
   $('.assign').val(id);
   // Find the current engineer from the table row and select it
-  var row = $("button[data-target='#assign'][data-id='"+id+"']").closest('tr');
+  var row = $("button[onclick*='assign("+id+")']").closest('tr');
   var techName = row.find('td').eq(7).text().trim();
   var found = false;
   $('.assigned_to option').each(function() {
