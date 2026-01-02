@@ -28,7 +28,7 @@ $(document).ready(function() {
  * Initialize DataTable for Models
  */
 function initializeModelDataTable() {
-    if ($.fn.dataTable.isDataTable('#all_data')) {
+    if ($.fn.DataTable.isDataTable('#all_data')) {
         $('#all_data').DataTable().destroy();
     }
     
@@ -44,6 +44,21 @@ function initializeModelDataTable() {
             error: function(xhr, error, thrown) {
                 console.error('DataTable Error:', error, xhr);
                 showNotification('error', 'Error loading model data. Please refresh the page.');
+            },
+            dataSrc: function(json) {
+                console.log('DataTable AJAX response:', json);
+                if (json.data && json.data.length > 0) {
+                    console.log('Data loaded successfully, rows:', json.data.length);
+                    // Check if action buttons are in the data
+                    json.data.forEach(function(row, index) {
+                        if (row[4] && row[4].indexOf('edit-btn') > -1) {
+                            console.log('Row ' + index + ' has action buttons');
+                        }
+                    });
+                } else {
+                    console.log('No data in response');
+                }
+                return json.data;
             }
         },
         columns: [
@@ -76,6 +91,13 @@ function initializeModelDataTable() {
         autoWidth: false,
         initComplete: function() {
             console.log('DataTable initialized successfully');
+            // Check if action buttons are present
+            setTimeout(function() {
+                $('#all_data tbody tr').each(function(index) {
+                    var actionButtons = $(this).find('.edit-btn, .delete-btn, .view-btn');
+                    console.log('Row ' + index + ' has ' + actionButtons.length + ' action buttons');
+                });
+            }, 500);
         }
     });
 }
@@ -107,32 +129,56 @@ function setupEventHandlers() {
     });
     
     // Edit and delete button event delegation
-    $('#all_data').on('click', '.edit-btn', function(e) {
+    $(document).on('click', '.edit-btn', function(e) {
         e.preventDefault();
         var id = $(this).data('id');
         console.log('Edit button clicked for ID:', id);
         if (id) {
             editModel(id);
+        } else {
+            console.log('No ID found on edit button');
         }
     });
     
-    $('#all_data').on('click', '.delete-btn', function(e) {
+    $(document).on('click', '.delete-btn', function(e) {
         e.preventDefault();
         var id = $(this).data('id');
         console.log('Delete button clicked for ID:', id);
         if (id) {
             deleteModel(id);
+        } else {
+            console.log('No ID found on delete button');
         }
     });
     
-    $('#all_data').on('click', '.view-btn', function(e) {
+    $(document).on('click', '.view-btn', function(e) {
         e.preventDefault();
         var id = $(this).data('id');
         console.log('View button clicked for ID:', id);
         if (id) {
             viewModel(id);
+        } else {
+            console.log('No ID found on view button');
         }
     });
+    
+    // Debug: Check if DataTable is loaded
+    setTimeout(function() {
+        console.log('Checking DataTable status...');
+        if ($.fn.DataTable.isDataTable('#all_data')) {
+            console.log('DataTable is initialized');
+            var table = $('#all_data').DataTable();
+            console.log('DataTable rows:', table.data().length);
+            
+            // Check if action buttons exist in the table
+            $('#all_data tbody tr').each(function(index) {
+                var actionButtons = $(this).find('.edit-btn, .delete-btn, .view-btn');
+                console.log('Row ' + index + ' action buttons:', actionButtons.length);
+            });
+        } else {
+            console.log('DataTable is NOT initialized');
+        }
+    }, 2000);
 }
 
 /**
