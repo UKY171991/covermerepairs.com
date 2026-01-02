@@ -4,6 +4,14 @@
  */
 
 $(document).ready(function() {
+    console.log('Model JavaScript loaded');
+    
+    // Check if base_url is available
+    if (!$(".base_url").val()) {
+        console.error('Base URL not found');
+        return;
+    }
+    
     // Initialize DataTable
     initializeModelDataTable();
     
@@ -20,6 +28,7 @@ function initializeModelDataTable() {
     }
     
     var base_url = $(".base_url").val();
+    console.log('Initializing DataTable with URL:', base_url + 'part/all_model_ajax');
     
     $('#all_data').DataTable({
         processing: true,
@@ -28,7 +37,7 @@ function initializeModelDataTable() {
             url: base_url + 'part/all_model_ajax',
             type: 'POST',
             error: function(xhr, error, thrown) {
-                console.error('DataTable Error:', error);
+                console.error('DataTable Error:', error, xhr);
                 showNotification('error', 'Error loading model data. Please refresh the page.');
             }
         },
@@ -59,7 +68,10 @@ function initializeModelDataTable() {
         },
         order: [[0, 'desc']],
         responsive: true,
-        autoWidth: false
+        autoWidth: false,
+        initComplete: function() {
+            console.log('DataTable initialized successfully');
+        }
     });
 }
 
@@ -67,8 +79,11 @@ function initializeModelDataTable() {
  * Setup event handlers
  */
 function setupEventHandlers() {
+    console.log('Setting up event handlers');
+    
     // Add model button click
     $('#add-model-btn').on('click', function() {
+        console.log('Add button clicked');
         resetModelForm();
         $('#modal-title').text('Add Model');
         $('#edit_data').modal('show');
@@ -77,6 +92,7 @@ function setupEventHandlers() {
     // Form submission
     $('#submit_data').on('submit', function(e) {
         e.preventDefault();
+        console.log('Form submitted');
         saveModel();
     });
     
@@ -86,22 +102,28 @@ function setupEventHandlers() {
     });
     
     // Edit and delete button event delegation
-    $('#all_data').on('click', '.edit-btn', function() {
+    $('#all_data').on('click', '.edit-btn', function(e) {
+        e.preventDefault();
         var id = $(this).data('id');
+        console.log('Edit button clicked for ID:', id);
         if (id) {
             editModel(id);
         }
     });
     
-    $('#all_data').on('click', '.delete-btn', function() {
+    $('#all_data').on('click', '.delete-btn', function(e) {
+        e.preventDefault();
         var id = $(this).data('id');
+        console.log('Delete button clicked for ID:', id);
         if (id) {
             deleteModel(id);
         }
     });
     
-    $('#all_data').on('click', '.view-btn', function() {
+    $('#all_data').on('click', '.view-btn', function(e) {
+        e.preventDefault();
         var id = $(this).data('id');
+        console.log('View button clicked for ID:', id);
         if (id) {
             viewModel(id);
         }
@@ -167,6 +189,7 @@ function saveModel() {
  * Edit model
  */
 function editModel(id) {
+    console.log('Editing model with ID:', id);
     resetModelForm();
     $('#modal-title').text('Edit Model');
     
@@ -178,10 +201,11 @@ function editModel(id) {
         data: { id: id },
         dataType: 'json',
         beforeSend: function() {
-            // Show loading state
+            console.log('Sending edit request for ID:', id);
             showNotification('info', 'Loading model data...');
         },
         success: function(data) {
+            console.log('Edit response:', data);
             if (data && data.length > 0) {
                 var model = data[0];
                 
@@ -196,7 +220,7 @@ function editModel(id) {
             }
         },
         error: function(xhr, status, error) {
-            console.error('Edit error:', error);
+            console.error('Edit error:', error, xhr);
             showNotification('error', 'Failed to load model data.');
         }
     });
@@ -206,6 +230,7 @@ function editModel(id) {
  * Delete model
  */
 function deleteModel(id) {
+    console.log('Deleting model with ID:', id);
     if (!confirm('Are you sure you want to delete this model? This action cannot be undone.')) {
         return;
     }
@@ -218,9 +243,11 @@ function deleteModel(id) {
         data: { id: id },
         dataType: 'json',
         beforeSend: function() {
+            console.log('Sending delete request for ID:', id);
             showNotification('info', 'Deleting model...');
         },
         success: function(response) {
+            console.log('Delete response:', response);
             if (response.status === 'success') {
                 initializeModelDataTable(); // Reload table
                 showNotification('success', response.message || 'Model deleted successfully.');
@@ -229,7 +256,7 @@ function deleteModel(id) {
             }
         },
         error: function(xhr, status, error) {
-            console.error('Delete error:', error);
+            console.error('Delete error:', error, xhr);
             showNotification('error', 'A server error occurred. Please try again.');
         }
     });
@@ -239,6 +266,7 @@ function deleteModel(id) {
  * View model details
  */
 function viewModel(id) {
+    console.log('Viewing model with ID:', id);
     var base_url = $(".base_url").val();
     
     $.ajax({
@@ -246,9 +274,11 @@ function viewModel(id) {
         type: 'POST',
         data: { id: id },
         beforeSend: function() {
+            console.log('Sending view request for ID:', id);
             showNotification('info', 'Loading model details...');
         },
         success: function(response) {
+            console.log('View response:', response);
             // You can create a view modal or show details in an alert
             // For now, showing in a simple modal
             if (response && response.length > 0) {
@@ -267,7 +297,7 @@ function viewModel(id) {
             }
         },
         error: function(xhr, status, error) {
-            console.error('View error:', error);
+            console.error('View error:', error, xhr);
             showNotification('error', 'Failed to load model details.');
         }
     });

@@ -89,6 +89,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
+                            <input type="hidden" class="base_url" value="<?= base_url() ?>" />
                             <div class="table-responsive">
                                 <table id="all_data" class="table table-bordered table-striped">
                                     <thead>
