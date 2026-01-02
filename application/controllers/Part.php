@@ -442,11 +442,101 @@ class Part extends CI_Controller {
 			"draw" => $draw,
 			"recordsTotal" => $total_records,
 			"recordsFiltered" => $filtered_records,
-			"data" => $data,		);
+			"data" => $data,
+		);
    
         echo json_encode($output);
     }
 
+    public function all_data_ajax(){
+        // Get DataTables parameters
+        $draw = intval($this->input->post('draw'));
+        $start = intval($this->input->post('start'));
+        $length = intval($this->input->post('length'));
+        $search_value = $this->input->post('search')['value'];
+        
+        // Get the current logged-in user's branch if they are a branch user
+        $user_branch = null;
+        if ($this->session->userdata('user_type') == '4') { // Branch user
+            $user_branch = $this->session->userdata('branch_id'); // Get branch_id from session
+        }
+
+        // Column search parameters
+        $prem = array();
+        if($this->input->post('columns')[1]['search']['value'] !=''){
+            $prem['brand_name'] = $this->input->post('columns')[1]['search']['value'];
+        }
+        if($this->input->post('columns')[2]['search']['value'] !=''){
+            $prem['model_name'] = $this->input->post('columns')[2]['search']['value'];
+        }
+        if($this->input->post('columns')[3]['search']['value'] !=''){
+            $prem['part_type_name'] = $this->input->post('columns')[3]['search']['value'];
+        }
+        if($this->input->post('columns')[7]['search']['value'] !=''){
+            $prem['user_name'] = $this->input->post('columns')[7]['search']['value'];
+        }
+        
+        // Global search
+        if(!empty($search_value)){
+            $prem['global_search'] = $search_value;
+        }
+
+        // Get total records count (without filtering)
+        $total_records = $this->part->count_all_parts($user_branch);
+        
+        // Get filtered records count
+        $filtered_records = $this->part->count_filtered_parts($prem, $user_branch);
+        
+        // Get paginated data
+        $all_data = $this->part->get_paginated_parts($prem, $start, $length, $user_branch);
+        
+        $data = array();
+        $i = $start + 1;
+        foreach($all_data as $key => $all_datas){
+            $action = "";
+            
+            // View button is always available
+            $action .= "<button data-toggle='modal' data-target='#view_modal' onclick='return view(".$all_datas->id.")' class='btn btn-success btn-xs m-1'><i class='fa fa-eye'></i></button>";
+            
+            // Edit and Delete buttons are available for Admin (1) and Part Controller (5)
+            if($this->session->userdata('user_type') == '1' || $this->session->userdata('user_type') == '5'){
+                $action .= "<button data-toggle='modal' data-target='#add_edit_modal' onclick='return edit(".$all_datas->id.")' class='btn btn-info btn-xs m-1'><i class='fas fa-pencil-alt'></i></button>";
+                $action .= "<button onclick='return del(".$all_datas->id.")' class='btn btn-danger btn-xs m-1'><i class='fa fa-trash'></i></button>"; 
+            }
+            $action .= "</div>";
+
+            $user_type_map = [
+                '1' => ' (Admin)',
+                '2' => ' (Staff)',
+                '3' => ' (Technician)',
+                '4' => ' (Branch)',
+                '5' => ' (Part Controller)'
+            ];
+            $user_type_label = isset($user_type_map[$all_datas->user_type]) ? $user_type_map[$all_datas->user_type] : ' (Unknown)';
+            $username = $all_datas->user_name . $user_type_label;
+
+            $row = array();
+            $row[] = $i++;
+            $row[] = $all_datas->brand_name;
+            $row[] = $all_datas->model_name;
+            $row[] = $all_datas->part_type_name;
+            $row[] = $all_datas->price_min;
+            $row[] = $all_datas->price_max;
+            $row[] = $all_datas->stock;
+            $row[] = $username;
+            $row[] = $action;
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => $draw,
+            "recordsTotal" => $total_records,
+            "recordsFiltered" => $filtered_records,
+            "data" => $data,
+        );
+   
+        echo json_encode($output);
+    }
     public function all_model_ajax(){
         // Get DataTables parameters
         $draw = intval($this->input->post('draw'));
