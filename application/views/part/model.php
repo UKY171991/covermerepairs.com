@@ -1,8 +1,5 @@
 <?php $ajax = 'model'; ?>
 
-<!-- Model Management JavaScript -->
-<script src="<?=base_url('assets/js/model.js')?>"></script>
-
 <!-- Custom CSS for DataTable Pagination -->
 <style>
 /* Enhanced DataTable Pagination Styling */
@@ -152,3 +149,29 @@
         </div>
     </div>
 </div>
+
+<!-- Model Management JavaScript -->
+<script>
+// Check if jQuery is loaded
+if (typeof jQuery === 'undefined') {
+    console.error('jQuery is not loaded');
+} else {
+    console.log('jQuery is loaded');
+    
+    // Check if DataTables is loaded
+    if (typeof jQuery.fn.DataTable === 'undefined') {
+        console.error('DataTables is not loaded');
+    } else {
+        console.log('DataTables is loaded');
+    }
+}
+
+// Load the model.js script
+$.getScript('<?=base_url('assets/js/model.js')?>')
+    .done(function(script, textStatus) {
+        console.log('Model JavaScript loaded successfully');
+    })
+    .fail(function(jqxhr, settings, exception) {
+        console.error('Error loading model JavaScript:', exception);
+    });
+</script>

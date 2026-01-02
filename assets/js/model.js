@@ -3,13 +3,29 @@
  * Handles CRUD operations for model management
  */
 
+// Wait for DOM to be ready
 $(document).ready(function() {
     console.log('Model JavaScript loaded');
     
-    // Check if base_url is available
-    if (!$(".base_url").val()) {
-        console.error('Base URL not found');
+    // Check if required dependencies are available
+    if (typeof $ === 'undefined') {
+        console.error('jQuery is not available');
         return;
+    }
+    
+    if (!$.fn.DataTable) {
+        console.error('DataTables plugin is not available');
+        return;
+    }
+    
+    // Check if base_url is available
+    var base_url = $(".base_url").val();
+    if (!base_url) {
+        console.error('Base URL not found in the page');
+        // Try to get base_url from common locations
+        base_url = window.location.origin + '/covermerepairs.com/';
+        console.log('Using fallback base URL:', base_url);
+        $(".base_url").val(base_url);
     }
     
     // Initialize DataTable
@@ -307,8 +323,11 @@ function viewModel(id) {
  * Show notification
  */
 function showNotification(type, message) {
-    // Configure toastr if available
+    console.log('Notification:', type, message);
+    
+    // Try toastr first
     if (typeof toastr !== 'undefined') {
+        // Configure toastr
         toastr.options = {
             closeButton: true,
             progressBar: true,
@@ -326,8 +345,13 @@ function showNotification(type, message) {
             toastr.success(message);
         }
     } else {
-        // Fallback to alert
-        alert(message);
+        // Fallback to console and alert
+        console.log('[' + type.toUpperCase() + '] ' + message);
+        
+        // Only show alert for important messages
+        if (type === 'error') {
+            alert('Error: ' + message);
+        }
     }
 }
 
@@ -345,5 +369,12 @@ var Utils = {
             clearTimeout(timeout);
             timeout = setTimeout(later, wait);
         };
+    },
+    
+    logError: function(error, context) {
+        console.error('Error in ' + context + ':', error);
+        if (error.stack) {
+            console.error('Stack trace:', error.stack);
+        }
     }
 };
