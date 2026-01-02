@@ -436,200 +436,130 @@ class Part extends CI_Controller {
 			"recordsFiltered" => $filtered_records,
 			"data" => $data,		);
    
-		echo json_encode($output);
-	}
+        echo json_encode($output);
+    }
 
-	public function all_model_ajax(){
-		// Get DataTables parameters
-		$draw = intval($this->input->post('draw'));
-		$start = intval($this->input->post('start'));
-		$length = intval($this->input->post('length'));
-		$search_value = $this->input->post('search')['value'];
-		
-		// Column search parameters
-		$prem = array();
-		if($this->input->post('columns')[1]['search']['value'] !=''){
-			$prem['name'] = $this->input->post('columns')[1]['search']['value'];
-		}
-		if($this->input->post('columns')[2]['search']['value'] !=''){
-			$prem['brand_name'] = $this->input->post('columns')[2]['search']['value'];
-		}
-		if($this->input->post('columns')[3]['search']['value'] !=''){
-			$prem['user_name'] = $this->input->post('columns')[3]['search']['value'];
-		}
-		
-		// Global search
-		if(!empty($search_value)){
-			$prem['global_search'] = $search_value;
-		}
+    public function all_model_ajax(){
+        // Get DataTables parameters
+        $draw = intval($this->input->post('draw'));
+        $start = intval($this->input->post('start'));
+        $length = intval($this->input->post('length'));
+        $search_value = $this->input->post('search')['value'];
+        
+        // Debug: Log incoming parameters
+        error_log('all_model_ajax called - draw: ' . $draw . ', start: ' . $start . ', length: ' . $length . ', search: ' . $search_value);
+        
+        // Column search parameters
+        $prem = array();
+        if($this->input->post('columns')[1]['search']['value'] !=''){
+            $prem['name'] = $this->input->post('columns')[1]['search']['value'];
+        }
+        if($this->input->post('columns')[2]['search']['value'] !=''){
+            $prem['brand_name'] = $this->input->post('columns')[2]['search']['value'];
+        }
+        if($this->input->post('columns')[3]['search']['value'] !=''){
+            $prem['user_name'] = $this->input->post('columns')[3]['search']['value'];
+        }
+        
+        // Global search
+        if(!empty($search_value)){
+            $prem['global_search'] = $search_value;
+        }
 
-		// Get total records count (without filtering)
-		$total_records = $this->part->count_all_models();
-		
-		// Get filtered records count
-		$filtered_records = $this->part->count_filtered_models($prem);
-		
-		// Get paginated data
-		if(count($prem) > 0){
-			$all_data = $this->part->get_paginated_models($prem, $start, $length);
-		}else{
-			$all_data = $this->part->get_paginated_models(array(), $start, $length);
-		}
-		
-		$data = array();
-		$i = $start + 1;
-		foreach($all_data as $key => $all_datas){
-			$action = "";
-			// View button is always available
-			$action .= "<button class='btn btn-success btn-xs m-1 view-btn' data-id='".$all_datas->id."'><i class='fa fa-eye'></i></button>";
-			
-			// Edit and Delete buttons are available for Admin (1) and Part Controller (4)
-			if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){
-				$action .= "<button class='btn btn-info btn-xs m-1 edit-btn' data-id='".$all_datas->id."'><i class='fas fa-pencil-alt'></i></button>";
-				$action .= "<button class='btn btn-danger btn-xs m-1 delete-btn' data-id='".$all_datas->id."'><i class='fa fa-trash'></i></button>"; 
-			}elseif($this->session->userdata('user_type') =='3'){
-				if($all_datas->added_by == $this->session->userdata('user_id')){
-					$action .= "<button class='btn btn-info btn-xs m-1 edit-btn' data-id='".$all_datas->id."'><i class='fas fa-pencil-alt'></i></button>";
-					$action .= "<button class='btn btn-danger btn-xs m-1 delete-btn' data-id='".$all_datas->id."'><i class='fa fa-trash'></i></button>"; 
-				}else{
-					$action = "<button class='btn btn-info btn-xs m-1' disabled><i class='fas fa-pencil-alt'></i></button>";
-					$action .= "<button class='btn btn-danger btn-xs m-1' disabled><i class='fa fa-trash'></i></button>";
-			}
-			}else{
-				$action = "<button class='btn btn-info btn-xs m-1' disabled><i class='fas fa-pencil-alt'></i></button>";
-				$action .= "<button class='btn btn-danger btn-xs m-1' disabled><i class='fa fa-trash'></i></button>";
-			}
+        // Get total records count (without filtering)
+        $total_records = $this->part->count_all_models();
+        
+        // Debug: Log total records
+        error_log('Total records: ' . $total_records);
+        
+        // Get filtered records count
+        $filtered_records = $this->part->count_filtered_models($prem);
+        
+        // Debug: Log filtered records
+        error_log('Filtered records: ' . $filtered_records);
+        
+        // Get paginated data
+        if(count($prem) > 0){
+            $all_data = $this->part->get_paginated_models($prem, $start, $length);
+        }else{
+            $all_data = $this->part->get_paginated_models(array(), $start, $length);
+        }
+        
+        // Debug: Log data count
+        error_log('Data count: ' . count($all_data));
+        
+        $data = array();
+        $i = $start + 1;
+        foreach($all_data as $key => $all_datas){
+            $action = "";
+            // View button is always available
+            $action .= "<button class='btn btn-success btn-xs m-1 view-btn' data-id='".$all_datas->id."'><i class='fa fa-eye'></i></button>";
+            
+            // Edit and Delete buttons are available for Admin (1) and Part Controller (4)
+            if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){
+                $action .= "<button class='btn btn-info btn-xs m-1 edit-btn' data-id='".$all_datas->id."'><i class='fas fa-pencil-alt'></i></button>";
+                $action .= "<button class='btn btn-danger btn-xs m-1 delete-btn' data-id='".$all_datas->id."'><i class='fa fa-trash'></i></button>"; 
+            }elseif($this->session->userdata('user_type') =='3'){
+                if($all_datas->added_by == $this->session->userdata('user_id')){
+                    $action .= "<button class='btn btn-info btn-xs m-1 edit-btn' data-id='".$all_datas->id."'><i class='fas fa-pencil-alt'></i></button>";
+                    $action .= "<button class='btn btn-danger btn-xs m-1 delete-btn' data-id='".$all_datas->id."'><i class='fa fa-trash'></i></button>"; 
+                }else{
+                    $action = "<button class='btn btn-info btn-xs m-1' disabled><i class='fas fa-pencil-alt'></i></button>";
+                    $action .= "<button class='btn btn-danger btn-xs m-1' disabled><i class='fa fa-trash'></i></button>";
+            }
+            }else{
+                $action = "<button class='btn btn-info btn-xs m-1' disabled><i class='fas fa-pencil-alt'></i></button>";
+                $action .= "<button class='btn btn-danger btn-xs m-1' disabled><i class='fa fa-trash'></i></button>";
+            }
 
-			$user = $this->part->single_data('user',$all_datas->added_by);
+            $user = $this->part->single_data('user',$all_datas->added_by);
 
-			$username ='';
-			foreach($user as $users){
-				if($users->type =='1'){
-					$user_type = " (Admin)";
-				}elseif($users->type =='2'){
-					$user_type = " (Staff)";
-				}elseif($users->type =='3'){
-					$user_type = " (Technician)";
-				}elseif($users->type =='4'){
-					$user_type = " (Branch)";
-				}elseif($users->type =='5'){
-					$user_type = " (Part Controller)";
-				}
-				$username = $users->name.$user_type;
-			}
+            $username ='';
+            foreach($user as $users){
+                if($users->type =='1'){
+                    $user_type = " (Admin)";
+                }elseif($users->type =='2'){
+                    $user_type = " (Staff)";
+                }elseif($users->type =='3'){
+                    $user_type = " (Technician)";
+                }elseif($users->type =='4'){
+                    $user_type = " (Branch)";
+                }elseif($users->type =='5'){
+                    $user_type = " (Part Controller)";
+                }
+                $username = $users->name.$user_type;
+            }
 
-			$brand_id = '';
-			$brand = $this->part->single_data('brand',$all_datas->brand_id);
-			foreach($brand as $brands){
-				$brand_id = $brands->name;
-			}
+            $brand_id = '';
+            $brand = $this->part->single_data('brand',$all_datas->brand_id);
+            foreach($brand as $brands){
+                $brand_id = $brands->name;
+            }
 
-			$row = array();
-			$row[] = $i++;
-			$row[] = $all_datas->name;
-			$row[] = $brand_id;
-			$row[] = $username;
-			$row[] = $action;
-			$data[] = $row;
-		}
+            $row = array();
+            $row[] = $i++;
+            $row[] = $all_datas->name;
+            $row[] = $brand_id;
+            $row[] = $username;
+            $row[] = $action;
+            $data[] = $row;
+            
+            // Debug: Log each row's action
+            error_log('Row ' . $i . ' action: ' . $action);
+        }
 
-		$output = array(
-			"draw" => $draw,
-			"recordsTotal" => $total_records,
-			"recordsFiltered" => $filtered_records,
-			"data" => $data,
-		);
-   		echo json_encode($output);
-	}
-	
-	public function all_data_ajax(){
-		// Get DataTables parameters
-		$draw = intval($this->input->post('draw'));
-		$start = intval($this->input->post('start'));
-		$length = intval($this->input->post('length'));
-		$search_value = $this->input->post('search')['value'];
-		
-		// Get the current logged-in user's branch if they are a branch user
-		$user_branch = null;
-		if ($this->session->userdata('user_type') == '4') { // Assuming '4' is the user type for Branch
-			$user_branch = $this->session->userdata('branch_id'); // Assuming branch_id is stored in session
-		}
-	
-		// Column search parameters
-		$prem = array();
-		if($this->input->post('columns')[1]['search']['value'] !=''){
-			$prem['brand_name'] = $this->input->post('columns')[1]['search']['value'];
-		}
-		if($this->input->post('columns')[2]['search']['value'] !=''){
-			$prem['model_name'] = $this->input->post('columns')[2]['search']['value'];
-		}
-		if($this->input->post('columns')[3]['search']['value'] !=''){
-			$prem['part_type_name'] = $this->input->post('columns')[3]['search']['value'];
-		}
-		if($this->input->post('columns')[7]['search']['value'] !=''){
-			$prem['user_name'] = $this->input->post('columns')[7]['search']['value'];
-		}
-		
-		// Global search
-		if(!empty($search_value)){
-			$prem['global_search'] = $search_value;
-		}
-
-		// Get total records count (without filtering)
-		$total_records = $this->part->count_all_parts($user_branch);
-		
-		// Get filtered records count
-		$filtered_records = $this->part->count_filtered_parts($prem, $user_branch);
-		
-		// Get paginated data
-		$all_data = $this->part->get_paginated_parts($prem, $start, $length, $user_branch);
-		
-		$data = array();
-		$i = $start + 1;
-		foreach($all_data as $key => $all_datas){
-			$action = "";
-			// View button is always available
-			$action .= "<button data-toggle='modal' data-target='#view_modal' onclick='return view(".$all_datas->id.")' class='btn btn-success btn-xs m-1'><i class='fa fa-eye'></i></button>";
-			
-			// Edit and Delete buttons are available for Admin (1) and Part Controller (5)
-			if($this->session->userdata('user_type') == '1' || $this->session->userdata('user_type') == '5'){
-				$action .= "<button data-toggle='modal' data-target='#add_edit_modal' onclick='return edit(".$all_datas->id.")' class='btn btn-info btn-xs m-1'><i class='fas fa-pencil-alt'></i></button>";
-				$action .= "<button onclick='return del(".$all_datas->id.")' class='btn btn-danger btn-xs m-1'><i class='fa fa-trash'></i></button>"; 
-			}
-			$action .= "</div>";
-
-			$user_type_map = [
-				'1' => ' (Admin)',
-				'2' => ' (Staff)',
-				'3' => ' (Technician)',
-				'4' => ' (Branch)',
-				'5' => ' (Part Controller)'
-			];
-			$user_type_label = isset($user_type_map[$all_datas->user_type]) ? $user_type_map[$all_datas->user_type] : ' (Unknown)';
-			$username = $all_datas->user_name . $user_type_label;
-
-			$row = array();
-			$row[] = $i++;
-			$row[] = $all_datas->brand_name;
-			$row[] = $all_datas->model_name;
-			$row[] = $all_datas->part_type_name;
-			$row[] = $all_datas->price_min;
-			$row[] = $all_datas->price_max;
-			$row[] = $all_datas->stock;
-			$row[] = $username;
-			$row[] = $action;
-			$data[] = $row;
-		}
-
-		$output = array(
-			"draw" => $draw,
-			"recordsTotal" => $total_records,
-			"recordsFiltered" => $filtered_records,
-			"data" => $data,
-		);
+        $output = array(
+            "draw" => $draw,
+            "recordsTotal" => $total_records,
+            "recordsFiltered" => $filtered_records,
+            "data" => $data,
+        );
+        
+        // Debug: Log output
+        error_log('Output: ' . json_encode($output));
    
-		echo json_encode($output);
-	}
+        echo json_encode($output);
+    }
 	
 	public function edit_data(){
 		if($this->input->post('id')){
