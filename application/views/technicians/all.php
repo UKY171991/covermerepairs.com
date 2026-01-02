@@ -218,3 +218,6 @@
       </div>
     </div>
   </div>
+
+<!-- Enhanced JavaScript -->
+<script src="<?=base_url('assets/js/technicians-enhanced.js')?>"></script>
