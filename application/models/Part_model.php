@@ -395,5 +395,19 @@ class Part_model extends CI_Model {
 		$query = $this->db->get();
 		return $query->result();
 	}
+	
+	public function single_data_join_part_type($where)
+	{
+		$this->db->select('part_type.*, user.name as user_name, user.type as user_type');
+		$this->db->from('part_type');
+		$this->db->join('user', 'user.id = part_type.added_by', 'left');
+		
+		if(isset($where['part_type.id'])){
+			$this->db->where('part_type.id', $where['part_type.id']);
+		}
+		
+		$query = $this->db->get();
+		return $query->result();
+	}
 
 }

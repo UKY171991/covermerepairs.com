@@ -124,6 +124,14 @@ class Part extends CI_Controller {
 			}
 		}
 	}
+	
+	public function edit_part_type(){
+		if($this->input->post('id')){
+			$prem['part_type.id'] = $this->input->post('id');
+			$data = $this->part->single_data_join_part_type($prem);
+			echo json_encode($data);
+		}
+	}
 	public function add_model(){
 		if($this->input->post()){
 			$prem['name'] = $this->input->post('name');

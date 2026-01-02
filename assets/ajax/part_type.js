@@ -151,17 +151,20 @@ function del(id){
 function edit(id){
   var base_url = $(".base_url").val();
   $('#modal-title').text('Edit Part Type');
+  reset(); // Reset form before populating
+  
   $.ajax({
     url:base_url+'part/edit_part_type',
     type:'post',
     data:{'id':id},
+    dataType: 'json',
     success:function(res){
-      try {
-        const obj = JSON.parse(res);
-        $('.id').val(obj[0]['id']);
-        $('.name').val(obj[0]['name']);
-      } catch (e) {
-        toastr.error('Error loading part type data.');
+      if (res && res.length > 0) {
+        $('.id').val(res[0].id);
+        $('.name').val(res[0].name);
+        $('#edit_data').modal('show');
+      } else {
+        toastr.error('Part type not found.');
       }
     },
     error: function() {
