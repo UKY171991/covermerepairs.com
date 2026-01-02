@@ -95,7 +95,7 @@
 <script src="<?= base_url();?>assets/ajax/part_type.js"></script>
 <?php } ?>
 <?php if(isset($ajax) && $ajax == 'model'){ ?>
-<script src="<?= base_url();?>assets/ajax/model.js"></script>
+<script src="<?= base_url();?>assets/js/model.js"></script>
 <?php } ?>
 <?php if(isset($ajax) && $ajax == 'billty'){ ?>
 <script src="<?= base_url();?>assets/ajax/billty.js"></script>

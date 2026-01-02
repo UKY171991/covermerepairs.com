@@ -98,6 +98,3 @@
         </div>
     </div>
 </div>
-
-<!-- External JavaScript -->
-<script src="<?=base_url('assets/js/model.js')?>"></script>
