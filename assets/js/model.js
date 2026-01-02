@@ -5,15 +5,11 @@
 
 // Wait for DOM to be ready
 $(document).ready(function() {
-    console.log('Model JavaScript loaded');
-    
     // Check if base_url is available
     var base_url = $(".base_url").val();
     if (!base_url) {
-        console.error('Base URL not found in the page');
         // Try to get base_url from common locations
         base_url = window.location.origin + '/covermerepairs.com/';
-        console.log('Using fallback base URL:', base_url);
         $(".base_url").val(base_url);
     }
     
@@ -33,7 +29,6 @@ function initializeModelDataTable() {
     }
     
     var base_url = $(".base_url").val();
-    console.log('Initializing DataTable with URL:', base_url + 'part/all_model_ajax');
     
     $('#all_data').DataTable({
         processing: true,
@@ -42,22 +37,9 @@ function initializeModelDataTable() {
             url: base_url + 'part/all_model_ajax',
             type: 'POST',
             error: function(xhr, error, thrown) {
-                console.error('DataTable Error:', error, xhr);
                 showNotification('error', 'Error loading model data. Please refresh the page.');
             },
             dataSrc: function(json) {
-                console.log('DataTable AJAX response:', json);
-                if (json.data && json.data.length > 0) {
-                    console.log('Data loaded successfully, rows:', json.data.length);
-                    // Check if action buttons are in the data
-                    json.data.forEach(function(row, index) {
-                        if (row[4] && row[4].indexOf('edit-btn') > -1) {
-                            console.log('Row ' + index + ' has action buttons');
-                        }
-                    });
-                } else {
-                    console.log('No data in response');
-                }
                 return json.data;
             }
         },
@@ -90,14 +72,7 @@ function initializeModelDataTable() {
         responsive: true,
         autoWidth: false,
         initComplete: function() {
-            console.log('DataTable initialized successfully');
-            // Check if action buttons are present
-            setTimeout(function() {
-                $('#all_data tbody tr').each(function(index) {
-                    var actionButtons = $(this).find('.edit-btn, .delete-btn, .view-btn');
-                    console.log('Row ' + index + ' has ' + actionButtons.length + ' action buttons');
-                });
-            }, 500);
+            // DataTable initialized successfully
         }
     });
 }
@@ -106,11 +81,8 @@ function initializeModelDataTable() {
  * Setup event handlers
  */
 function setupEventHandlers() {
-    console.log('Setting up event handlers');
-    
     // Add model button click
     $('#add-model-btn').on('click', function() {
-        console.log('Add button clicked');
         resetModelForm();
         $('#modal-title').text('Add Model');
         $('#edit_data').modal('show');
@@ -119,7 +91,6 @@ function setupEventHandlers() {
     // Form submission
     $('#submit_data').on('submit', function(e) {
         e.preventDefault();
-        console.log('Form submitted');
         saveModel();
     });
     
@@ -132,53 +103,18 @@ function setupEventHandlers() {
     $(document).on('click', '.edit-btn', function(e) {
         e.preventDefault();
         var id = $(this).data('id');
-        console.log('Edit button clicked for ID:', id);
         if (id) {
             editModel(id);
-        } else {
-            console.log('No ID found on edit button');
         }
     });
     
     $(document).on('click', '.delete-btn', function(e) {
         e.preventDefault();
         var id = $(this).data('id');
-        console.log('Delete button clicked for ID:', id);
         if (id) {
             deleteModel(id);
-        } else {
-            console.log('No ID found on delete button');
         }
     });
-    
-    $(document).on('click', '.view-btn', function(e) {
-        e.preventDefault();
-        var id = $(this).data('id');
-        console.log('View button clicked for ID:', id);
-        if (id) {
-            viewModel(id);
-        } else {
-            console.log('No ID found on view button');
-        }
-    });
-    
-    // Debug: Check if DataTable is loaded
-    setTimeout(function() {
-        console.log('Checking DataTable status...');
-        if ($.fn.DataTable.isDataTable('#all_data')) {
-            console.log('DataTable is initialized');
-            var table = $('#all_data').DataTable();
-            console.log('DataTable rows:', table.data().length);
-            
-            // Check if action buttons exist in the table
-            $('#all_data tbody tr').each(function(index) {
-                var actionButtons = $(this).find('.edit-btn, .delete-btn, .view-btn');
-                console.log('Row ' + index + ' action buttons:', actionButtons.length);
-            });
-        } else {
-            console.log('DataTable is NOT initialized');
-        }
-    }, 2000);
 }
 
 /**
@@ -227,7 +163,6 @@ function saveModel() {
             }
         },
         error: function(xhr, status, error) {
-            console.error('Save error:', error);
             showNotification('error', 'A server error occurred. Please try again.');
         },
         complete: function() {
@@ -240,7 +175,6 @@ function saveModel() {
  * Edit model
  */
 function editModel(id) {
-    console.log('Editing model with ID:', id);
     resetModelForm();
     $('#modal-title').text('Edit Model');
     
@@ -252,11 +186,9 @@ function editModel(id) {
         data: { id: id },
         dataType: 'json',
         beforeSend: function() {
-            console.log('Sending edit request for ID:', id);
             showNotification('info', 'Loading model data...');
         },
         success: function(data) {
-            console.log('Edit response:', data);
             if (data && data.length > 0) {
                 var model = data[0];
                 
@@ -271,7 +203,6 @@ function editModel(id) {
             }
         },
         error: function(xhr, status, error) {
-            console.error('Edit error:', error, xhr);
             showNotification('error', 'Failed to load model data.');
         }
     });
@@ -281,7 +212,6 @@ function editModel(id) {
  * Delete model
  */
 function deleteModel(id) {
-    console.log('Deleting model with ID:', id);
     if (!confirm('Are you sure you want to delete this model? This action cannot be undone.')) {
         return;
     }
@@ -294,11 +224,9 @@ function deleteModel(id) {
         data: { id: id },
         dataType: 'json',
         beforeSend: function() {
-            console.log('Sending delete request for ID:', id);
             showNotification('info', 'Deleting model...');
         },
         success: function(response) {
-            console.log('Delete response:', response);
             if (response.status === 'success') {
                 initializeModelDataTable(); // Reload table
                 showNotification('success', response.message || 'Model deleted successfully.');
@@ -307,65 +235,7 @@ function deleteModel(id) {
             }
         },
         error: function(xhr, status, error) {
-            console.error('Delete error:', error, xhr);
             showNotification('error', 'A server error occurred. Please try again.');
-        }
-    });
-}
-
-/**
- * View model details
- */
-function viewModel(id) {
-    console.log('Viewing model with ID:', id);
-    var base_url = $(".base_url").val();
-    
-    $.ajax({
-        url: base_url + 'part/view_model',
-        type: 'POST',
-        data: { id: id },
-        beforeSend: function() {
-            console.log('Sending view request for ID:', id);
-            showNotification('info', 'Loading model details...');
-        },
-        success: function(response) {
-            console.log('View response:', response);
-            if (response && response.length > 0) {
-                var model = response[0];
-                
-                // Populate modal fields
-                $('#view_model_name').text(model.name || 'N/A');
-                $('#view_brand_name').text(model.brand_name || 'N/A');
-                $('#view_user_name').text(model.user_name || 'N/A');
-                
-                // Format user type
-                var userType = '';
-                if (model.user_type == '1') userType = 'Admin';
-                else if (model.user_type == '2') userType = 'Staff';
-                else if (model.user_type == '3') userType = 'Technician';
-                else if (model.user_type == '4') userType = 'Branch';
-                else if (model.user_type == '5') userType = 'Part Controller';
-                else userType = 'Unknown';
-                
-                $('#view_user_type').text(userType);
-                
-                // Format created date
-                var createdAt = model.created_at || 'N/A';
-                if (createdAt && createdAt !== 'N/A') {
-                    var date = new Date(createdAt);
-                    createdAt = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-                }
-                $('#view_created_at').text(createdAt);
-                
-                // Show modal
-                $('#view_modal').modal('show');
-            } else {
-                showNotification('error', 'Model not found.');
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('View error:', error, xhr);
-            showNotification('error', 'Failed to load model details.');
         }
     });
 }
@@ -374,8 +244,6 @@ function viewModel(id) {
  * Show notification
  */
 function showNotification(type, message) {
-    console.log('Notification:', type, message);
-    
     // Try toastr first
     if (typeof toastr !== 'undefined') {
         // Configure toastr

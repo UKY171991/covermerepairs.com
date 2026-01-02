@@ -446,9 +446,6 @@ class Part extends CI_Controller {
         $length = intval($this->input->post('length'));
         $search_value = $this->input->post('search')['value'];
         
-        // Debug: Log incoming parameters
-        error_log('all_model_ajax called - draw: ' . $draw . ', start: ' . $start . ', length: ' . $length . ', search: ' . $search_value);
-        
         // Column search parameters
         $prem = array();
         if($this->input->post('columns')[1]['search']['value'] !=''){
@@ -469,14 +466,8 @@ class Part extends CI_Controller {
         // Get total records count (without filtering)
         $total_records = $this->part->count_all_models();
         
-        // Debug: Log total records
-        error_log('Total records: ' . $total_records);
-        
         // Get filtered records count
         $filtered_records = $this->part->count_filtered_models($prem);
-        
-        // Debug: Log filtered records
-        error_log('Filtered records: ' . $filtered_records);
         
         // Get paginated data
         if(count($prem) > 0){
@@ -485,15 +476,10 @@ class Part extends CI_Controller {
             $all_data = $this->part->get_paginated_models(array(), $start, $length);
         }
         
-        // Debug: Log data count
-        error_log('Data count: ' . count($all_data));
-        
         $data = array();
         $i = $start + 1;
         foreach($all_data as $key => $all_datas){
             $action = "";
-            // View button is always available
-            $action .= "<button class='btn btn-success btn-xs m-1 view-btn' data-id='".$all_datas->id."'><i class='fa fa-eye'></i></button>";
             
             // Edit and Delete buttons are available for Admin (1) and Part Controller (4)
             if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){
@@ -543,9 +529,6 @@ class Part extends CI_Controller {
             $row[] = $username;
             $row[] = $action;
             $data[] = $row;
-            
-            // Debug: Log each row's action
-            error_log('Row ' . $i . ' action: ' . $action);
         }
 
         $output = array(
@@ -554,9 +537,6 @@ class Part extends CI_Controller {
             "recordsFiltered" => $filtered_records,
             "data" => $data,
         );
-        
-        // Debug: Log output
-        error_log('Output: ' . json_encode($output));
    
         echo json_encode($output);
     }
