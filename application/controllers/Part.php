@@ -148,7 +148,37 @@ class Part extends CI_Controller {
 				exit();
 			}
 		}
-	}	public function add_data(){
+	}
+	
+	public function edit_model(){
+		if($this->input->post('id')){
+			$prem['model.id'] = $this->input->post('id');
+			$data = $this->part->single_data_join_model($prem);
+			echo json_encode($data);
+		}
+	}
+	
+	public function delete_model(){
+		if($this->input->post('id')){
+			$id = $this->input->post('id');
+			$result = $this->part->delete('model', $id);
+			if($result){
+				echo json_encode(['status' => 'success', 'message' => 'Model deleted successfully.']);
+			} else {
+				echo json_encode(['status' => 'error', 'message' => 'Failed to delete model.']);
+			}
+		}
+	}
+	
+	public function view_model(){
+		if($this->input->post('id')){
+			$prem['model.id'] = $this->input->post('id');
+			$data = $this->part->single_data_join_model($prem);
+			echo json_encode($data);
+		}
+	}
+	
+	public function add_data(){
 		if($this->input->post()){
 
 			// Debug: log the received data
@@ -456,13 +486,18 @@ class Part extends CI_Controller {
 		$data = array();
 		$i = $start + 1;
 		foreach($all_data as $key => $all_datas){
+			$action = "";
+			// View button is always available
+			$action .= "<button class='btn btn-success btn-xs m-1 view-btn' data-id='".$all_datas->id."'><i class='fa fa-eye'></i></button>";
+			
+			// Edit and Delete buttons are available for Admin (1) and Part Controller (4)
 			if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){
-				$action = "<button data-toggle='modal' data-target='#edit_data' onclick='return edit(".$all_datas->id.")' class='btn btn-info btn-xs m-1'><i class='fas fa-pencil-alt'></i></button>";
-				$action .= "<button onclick='return del(".$all_datas->id.")' class='btn btn-danger btn-xs m-1'><i class='fa fa-trash'></i></button>"; 
+				$action .= "<button class='btn btn-info btn-xs m-1 edit-btn' data-id='".$all_datas->id."'><i class='fas fa-pencil-alt'></i></button>";
+				$action .= "<button class='btn btn-danger btn-xs m-1 delete-btn' data-id='".$all_datas->id."'><i class='fa fa-trash'></i></button>"; 
 			}elseif($this->session->userdata('user_type') =='3'){
 				if($all_datas->added_by == $this->session->userdata('user_id')){
-					$action = "<button data-toggle='modal' data-target='#edit_data' onclick='return edit(".$all_datas->id.")' class='btn btn-info btn-xs m-1'><i class='fas fa-pencil-alt'></i></button>";
-					$action .= "<button onclick='return del(".$all_datas->id.")' class='btn btn-danger btn-xs m-1'><i class='fa fa-trash'></i></button>"; 
+					$action .= "<button class='btn btn-info btn-xs m-1 edit-btn' data-id='".$all_datas->id."'><i class='fas fa-pencil-alt'></i></button>";
+					$action .= "<button class='btn btn-danger btn-xs m-1 delete-btn' data-id='".$all_datas->id."'><i class='fa fa-trash'></i></button>"; 
 				}else{
 					$action = "<button class='btn btn-info btn-xs m-1' disabled><i class='fas fa-pencil-alt'></i></button>";
 					$action .= "<button class='btn btn-danger btn-xs m-1' disabled><i class='fa fa-trash'></i></button>";

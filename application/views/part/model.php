@@ -1,5 +1,8 @@
 <?php $ajax = 'model'; ?>
 
+<!-- Model Management JavaScript -->
+<script src="<?=base_url('assets/js/model.js')?>"></script>
+
 <!-- Custom CSS for DataTable Pagination -->
 <style>
 /* Enhanced DataTable Pagination Styling */
