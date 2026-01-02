@@ -250,6 +250,60 @@ class Job extends CI_Controller {
         echo json_encode($job);
     }
 
+    public function view_data() {
+        $id = $this->input->post('id');
+        $job = $this->job->single_data('jobs', $id);
+        echo json_encode($job);
+    }
+
+    public function get_brand_name() {
+        $id = $this->input->post('id');
+        $where = array('id' => $id);
+        $brand = $this->job->where_data('brand', $where);
+        if(count($brand) > 0) {
+            echo $brand[0]->name;
+        } else {
+            echo '';
+        }
+    }
+
+    public function get_brand_model_names() {
+        $brand_id = $this->input->post('brand_id');
+        $model_id = $this->input->post('model_id');
+        
+        $brand_name = '';
+        $model_name = '';
+        
+        if($brand_id) {
+            $where = array('id' => $brand_id);
+            $brand = $this->job->where_data('brand', $where);
+            if(count($brand) > 0) {
+                $brand_name = $brand[0]->name;
+            }
+        }
+        
+        if($model_id) {
+            $where = array('id' => $model_id);
+            $model = $this->job->where_data('model', $where);
+            if(count($model) > 0) {
+                $model_name = $model[0]->name;
+            }
+        }
+        
+        echo $brand_name . ($brand_name && $model_name ? ' / ' : '') . $model_name;
+    }
+
+    public function get_technician_name() {
+        $id = $this->input->post('id');
+        $where = array('id' => $id);
+        $technician = $this->job->where_data('user', $where);
+        if(count($technician) > 0) {
+            echo $technician[0]->name;
+        } else {
+            echo 'Not Assigned';
+        }
+    }
+
     public function single_model(){
         $bid = $this->input->post('bid');
         $id = $this->input->post('id');

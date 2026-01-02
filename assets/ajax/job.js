@@ -151,6 +151,77 @@ function edit(id){
     }); 
 }
 
+// View job
+function view(id){
+  var base_url = $(".base_url").val();
+    $.ajax({
+      url:base_url+'job/view_data',
+      type:'post',
+      data:{'id':id},
+      success: function(data){
+          var obj = JSON.parse(data);
+          if (obj && obj[0]) {
+            $('.view-job-code').text(obj[0]['id'] || '');
+            $('.view-customer-name').text(obj[0]['customer_name'] || '');
+            $('.view-mobile').text(obj[0]['mobile'] || '');
+            $('.view-email').text(obj[0]['email'] || '');
+            $('.view-imei-no').text(obj[0]['imei_no'] || '');
+            $('.view-security-code').text(obj[0]['security_code'] || '');
+            $('.view-date-from').text(obj[0]['date_from'] || '');
+            $('.view-date-to').text(obj[0]['date_to'] || '');
+            $('.view-issue').text(obj[0].hasOwnProperty('issue') ? obj[0]['issue'] : '');
+            $('.view-fault-frequency').text(obj[0].hasOwnProperty('fault_frequency') ? obj[0]['fault_frequency'] : '');
+            $('.view-specified-faults').text(obj[0].hasOwnProperty('specified_faults') ? obj[0]['specified_faults'] : '');
+            $('.view-description').text(obj[0].hasOwnProperty('description') ? obj[0]['description'] : '');
+            $('.view-inspection-fee').text(obj[0].hasOwnProperty('inspection_fee_paid') && (obj[0]['inspection_fee_paid'] == '1' || obj[0]['inspection_fee_paid'] == 1) ? 'Yes' : 'No');
+            $('.view-loan-device').text(obj[0].hasOwnProperty('loan_device_details') ? obj[0]['loan_device_details'] : '');
+            $('.view-exceeds').text(obj[0].hasOwnProperty('exceeds') ? obj[0]['exceeds'] : '');
+            $('.view-status').text(obj[0]['status'] || '');
+            
+            // Get brand and model names
+            var brandId = obj[0]['brand'];
+            var modelId = obj[0]['model_no'];
+            var assignedToId = obj[0]['assigned_to'];
+            
+            // Fetch brand and model names
+            if(brandId && modelId) {
+              $.ajax({
+                url: base_url + 'job/get_brand_model_names',
+                type: 'post',
+                data: {'brand_id': brandId, 'model_id': modelId},
+                success: function(brandModelRes) {
+                  $('.view-brand-model').text(brandModelRes || '');
+                }
+              });
+            } else {
+              $('.view-brand-model').text('');
+            }
+            
+            // Fetch assigned technician name
+            if(assignedToId) {
+              $.ajax({
+                url: base_url + 'job/get_technician_name',
+                type: 'post',
+                data: {'id': assignedToId},
+                success: function(techRes) {
+                  $('.view-assigned-to').text(techRes || '');
+                }
+              });
+            } else {
+              $('.view-assigned-to').text('Not Assigned');
+            }
+            
+          } else {
+            console.error("Received empty or invalid data for job view:", obj);
+          }
+        },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.error("AJAX error in view function:", textStatus, errorThrown);
+        toastr.error('An error occurred while fetching job details.');
+      }
+    }); 
+}
+
 // change  brand  and  show  list of  model
 $('.brand').on('change',function(){
   var base_url = $(".base_url").val();

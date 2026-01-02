@@ -239,6 +239,135 @@
   </div>
 </div>
 
+<!-- View Job Modal -->
+<div class="modal fade" id="view_data">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">View Job Details</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label><strong>Job Code:</strong></label>
+              <p class="form-control-static view-job-code"></p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label><strong>Customer Name:</strong></label>
+              <p class="form-control-static view-customer-name"></p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label><strong>Mobile:</strong></label>
+              <p class="form-control-static view-mobile"></p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label><strong>Email:</strong></label>
+              <p class="form-control-static view-email"></p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label><strong>IMEI No.:</strong></label>
+              <p class="form-control-static view-imei-no"></p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label><strong>Security Code:</strong></label>
+              <p class="form-control-static view-security-code"></p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label><strong>Brand/Model:</strong></label>
+              <p class="form-control-static view-brand-model"></p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label><strong>Assigned to:</strong></label>
+              <p class="form-control-static view-assigned-to"></p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label><strong>From Date:</strong></label>
+              <p class="form-control-static view-date-from"></p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label><strong>To Date:</strong></label>
+              <p class="form-control-static view-date-to"></p>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label><strong>Issue:</strong></label>
+              <p class="form-control-static view-issue"></p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label><strong>Fault Frequency:</strong></label>
+              <p class="form-control-static view-fault-frequency"></p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label><strong>Specified Faults:</strong></label>
+              <p class="form-control-static view-specified-faults"></p>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label><strong>Description:</strong></label>
+              <p class="form-control-static view-description"></p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label><strong>Inspection Fee Paid:</strong></label>
+              <p class="form-control-static view-inspection-fee"></p>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label><strong>Loan Device Details:</strong></label>
+              <p class="form-control-static view-loan-device"></p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label><strong>Exceeds:</strong></label>
+              <p class="form-control-static view-exceeds"></p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label><strong>Status:</strong></label>
+              <p class="form-control-static view-status"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Found Issue Modal -->
 <div class="modal fade" id="found_issue">
   <div class="modal-dialog modal-lg">
