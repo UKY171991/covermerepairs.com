@@ -2,9 +2,9 @@
     border-radius: 6%;
 }
 
- .brand-link .brand-image {
+.brand-link .brand-image {
     max-height: 42px;
-} 
+}
 
 
 /*.layout-fixed .main-sidebar {
@@ -24,7 +24,6 @@
     box-sizing: border-box;
     display: inline-block;
     min-width: 1.5em;
-    padding: 0.5em 1em;
     margin-left: 2px;
     text-align: center;
     text-decoration: none !important;
@@ -129,7 +128,7 @@
 } */
 
 
-    /* animation star */
+/* animation star */
 
 /* .job_details table{
   box-shadow: -1px 12px 12px -6px rgba(0,0,0,0.5);
