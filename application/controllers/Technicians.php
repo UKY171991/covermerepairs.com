@@ -143,16 +143,12 @@ class Technicians extends CI_Controller {
 
 
 			if($this->session->userdata('user_type') =='1' OR $this->session->userdata('user_type') =='4'){
-				$action = "<div class='text-center'>";
-				$action .= "<button data-id='".$all_datas->id."' class='btn-action btn-view view_btn' title='View'><i class='fa fa-eye'></i></button>";
-				$action .= "<button data-id='".$all_datas->id."' class='btn-action btn-edit edit_btn' title='Edit'><i class='fas fa-pencil-alt'></i></button>";
-				$action .= "<button data-id='".$all_datas->id."' class='btn-action btn-delete del_btn' title='Delete'><i class='fa fa-trash'></i></button>";
-				$action .= "</div>";
+				$action = "<button data-id='".$all_datas->id."' class='btn btn-primary btn-xs m-1 view_btn'><i class='fa fa-eye' aria-hidden='true'></i></button>";
+				$action .= "<button data-id='".$all_datas->id."' class='btn btn-info btn-xs m-1 edit_btn'><i class='fas fa-pencil-alt'></i></button>";
+				$action .= "<button data-id='".$all_datas->id."' class='btn btn-danger btn-xs m-1 del_btn'><i class='fa fa-trash' aria-hidden='true'></i></button>";
 			}else{
-				$action = "<div class='text-center'>";
-				$action .= "<button class='btn-action btn-edit disabled' title='Edit' disabled><i class='fas fa-pencil-alt'></i></button>";
-				$action .= "<button class='btn-action btn-delete disabled' title='Delete' disabled><i class='fa fa-trash'></i></button>";
-				$action .= "</div>";
+				$action = "<button  class='btn btn-info btn-xs m-1' disabled><i class='fas fa-pencil-alt'></i></button>";
+				$action .= "<button class='btn btn-danger btn-xs m-1' disabled><i class='fa fa-trash' aria-hidden='true'></i></button>";
 			}
 
 			$wher = array('id'=>$all_datas->type);
@@ -227,36 +223,14 @@ class Technicians extends CI_Controller {
 		}
 		
 		echo '
-			<div class="table-responsive">
-				<table class="table table-borderless">
-					<tbody>
-						<tr class="border-bottom">
-							<td class="font-weight-600 text-muted" width="30%"><i class="fas fa-user mr-2"></i> Name</td>
-							<td class="font-weight-bold text-dark">'.$all_data[0]->name.'</td>
-						</tr>
-						<tr class="border-bottom">
-							<td class="font-weight-600 text-muted"><i class="fas fa-envelope mr-2"></i> Email</td>
-							<td class="text-primary">'.$all_data[0]->email.'</td>
-						</tr>
-						<tr class="border-bottom">
-							<td class="font-weight-600 text-muted"><i class="fas fa-phone mr-2"></i> Phone</td>
-							<td>'.$all_data[0]->phone.'</td>
-						</tr>
-						<tr class="border-bottom">
-							<td class="font-weight-600 text-muted"><i class="fas fa-calendar-alt mr-2"></i> DOB</td>
-							<td>'.date("d M, Y", strtotime($all_data[0]->dob)).'</td>
-						</tr>
-						<tr class="border-bottom">
-							<td class="font-weight-600 text-muted"><i class="fas fa-map-marker-alt mr-2"></i> Address</td>
-							<td>'.$all_data[0]->address.'</td>
-						</tr>
-						<tr>
-							<td class="font-weight-600 text-muted"><i class="fas fa-building mr-2"></i> Branch</td>
-							<td><span class="badge badge-info px-3 py-2" style="border-radius: 8px;">'.$branch_display.'</span></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+			<table class="table table-bordered">
+				<tr><td>Name</td><td>'.$all_data[0]->name.'</td></tr>
+				<tr><td>Email</td><td>'.$all_data[0]->email.'</td></tr>
+				<tr><td>Phone</td><td>'.$all_data[0]->phone.'</td></tr>
+				<tr><td>DOB</td><td>'.$all_data[0]->dob.'</td></tr>
+				<tr><td>Address</td><td>'.$all_data[0]->address.'</td></tr>
+				<tr><td>Branch</td><td>'.$branch_display.'</td></tr>
+			</table>
 		';
 	}
 }
